@@ -24,9 +24,9 @@ theme.fg_focus      = "#ffffff"
 theme.fg_urgent     = "#ffffff"
 theme.fg_minimize   = "#ffffff"
 
-theme.useless_gap   = dpi(5)
+theme.useless_gap   = dpi(4)
 theme.gap_single_client = true
-theme.border_width  = dpi(2)
+theme.border_width  = dpi(0)
 theme.border_normal = "#000000"
 theme.border_focus  = "#535d6c"
 theme.border_marked = "#91231c"
@@ -58,6 +58,10 @@ theme.taglist_squares_unsel = theme_assets.taglist_squares_unsel(
 -- notification_[bg|fg]
 -- notification_[width|height|margin]
 -- notification_[border_color|border_width|shape|opacity]
+theme.notification_fon = "Cousine Nerd Font"
+theme.notification_icon_size = 40
+-- theme.notification_max_height = 50
+theme.notification_max_width = 400
 
 -- Variables set for theming the menu:
 -- menu_[bg|fg]_[normal|focus]

@@ -51,7 +51,7 @@ end
 -- Global Vars
 local awesome_dir = "~/.config/awesome"
 local script_dir = awesome_dir .. "/scripts"
-local terminal = "konsole"
+local terminal = "alacritty"
 local modkey = "Mod4"
 local altkey = "Mod1"
 -- local editor = os.getenv("EDITOR") or "nvim"
@@ -96,8 +96,8 @@ local taglist_buttons = gears.table.join(
         client.focus:toggle_tag(t)
     end
   end),
-  awful.button({ }, 4, function(t) awful.tag.viewnext(t.screen) end),
-  awful.button({ }, 5, function(t) awful.tag.viewprev(t.screen) end)
+  awful.button({ }, 5, function(t) awful.tag.viewnext(t.screen) end),
+  awful.button({ }, 4, function(t) awful.tag.viewprev(t.screen) end)
 )
 
 local tasklist_buttons = gears.table.join(
@@ -138,7 +138,7 @@ awful.screen.connect_for_each_screen(function(s)
   set_wallpaper(s)
 
   -- Each screen has its own tag table.
-  awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
+  awful.tag({ "1", "2", "3", "4" }, s, awful.layout.layouts[1])
 
   -- Create a promptbox for each screen
   s.mypromptbox = awful.widget.prompt()
@@ -243,27 +243,39 @@ awful.screen.connect_for_each_screen(function(s)
     layout = wibox.layout.align.horizontal,
     { -- Left widgets
       layout = wibox.layout.fixed.horizontal,
+      spacing = 12,
+      spacing_widget = {
+        -- shape = gears.shape.circle,
+        widget = wibox.widget.separator
+      },
       wibox.widget.textclock(),
-      -- mylauncher,
-      s.mypromptbox,
+      s.mytaglist,
+      s.mypromptbox
     },
     s.mytasklist, -- Middle widget
     { -- Right widgets
       layout = wibox.layout.fixed.horizontal,
-      -- mykeyboardlayout,
+      spacing = 12,
+      spacing_widget = {
+        -- shape = gears.shape.circle,
+        widget = wibox.widget.separator
+      },
       sensor_var,
-      s.mytaglist,
-      -- battery_widget(),
-      volume_widget({widget_type="icon"}),
-      wibox.widget.systray(),
-      s.mylayoutbox,
+      -- volume_widget({widget_type="icon"}),
+      {
+        layout = wibox.layout.fixed.horizontal,
+        spacing = 6,
+
+        wibox.widget.systray(),
+        s.mylayoutbox,
+      }
     },
   }
 end)
 
 -- {{{ Mouse bindings
 -- root.buttons(gears.table.join(
---     awful.button({ }, 3, function () mymainmenu:toggle() end),
+--     -- awful.button({ }, 3, function () mymainmenu:toggle() end),
 --     awful.button({ }, 4, awful.tag.viewnext),
 --     awful.button({ }, 5, awful.tag.viewprev)
 -- ))
@@ -283,7 +295,7 @@ local globalkeys = gears.table.join(
   awful.key({ modkey, "Control" }, "q", awesome.quit,
     {description = "quit awesome", group = "awesome"}
   ),
-  awful.key({ modkey }, "x",
+  awful.key({ modkey, "Shift" }, "x",
     function ()
       awful.prompt.run {
         prompt       = "Run Lua code: ",
@@ -312,7 +324,18 @@ local globalkeys = gears.table.join(
 
   awful.key({ modkey }, "F3",
     function()
-      awful.spawn.with_shell("pactl set-sink-mute @DEFAULT_SINK@ toggle")
+      local command = "sleep 0.09 ; pactl list sinks | grep Volume | grep -oaE '..[0-9]%' | awk 'FNR == 1 {print}'"
+      awful.spawn.easy_async_with_shell(command, function(out)
+        naughty.notify({
+          text = out,
+          timeout = 1,
+          position = "bottom_middle",
+          replaces_id = 1,
+          width = 500,
+          height = 500
+        })
+      end)
+      -- awful.spawn.with_shell("pactl set-sink-mute @DEFAULT_SINK@ toggle")
     end,
     {description = "toggle mute volume", group = "media"}
   ),
@@ -392,6 +415,12 @@ local globalkeys = gears.table.join(
     end,
     {description = "open a terminal", group = "launcher"}
   ),
+  awful.key({ modkey }, "space",
+    function()
+      awful.spawn("rofi -show drun")
+    end,
+    {description = "open rofi", group = "launcher"}
+  ),
   awful.key({ "Control", altkey }, "f",
     function ()
       awful.spawn("librewolf")
@@ -406,7 +435,7 @@ local globalkeys = gears.table.join(
   ),
   awful.key({ "Control", altkey }, "r",
     function ()
-      awful.spawn("dolphin")
+      awful.spawn.with_shell("XDG_CURRENT_DESKTOP=KDE dolphin")
     end,
     {description = "open dolphin", group = "launcher"}
   ),
@@ -500,15 +529,23 @@ local clientkeys = gears.table.join(
   ),
   awful.key({ modkey }, "m",
     function (c)
-        c.minimized = true
-    end ,
+      c.minimized = true
+    end,
     {description = "minimize", group = "client"}
   ),
   awful.key({ modkey }, "a",
     function (c)
+      local tb = awful.titlebar
+
+      if (not c.maximized) then
+        tb.hide(c)
+      elseif(c.floating) then
+        tb.show(c)
+      end
+
       c.maximized = not c.maximized
       c:raise()
-    end ,
+    end,
     {description = "(un)maximize", group = "client"}
   ),
   awful.key({ modkey }, "t",
@@ -516,7 +553,19 @@ local clientkeys = gears.table.join(
       c.ontop = not c.ontop
     end,
     {description = "toggle keep on top", group = "client"}
+  ),
+  awful.key({ modkey }, "x",
+    function(c)
+      awful.titlebar.toggle(c)
+    end,
+    {description = "toggle window borders", group = "client"}
   )
+  -- awful.key({ modkey }, "q", function (c)
+  --   c:emit_signal("request::activate", "mouse_click", {raise = true})
+  --   if c.floating then awful.mouse.client.resize(c) end
+  -- end,
+  -- {description = "resize windows", group = "client"})
+
     -- awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end,
     --           {description = "move to master", group = "client"}),
     -- awful.key({ modkey,           }, "o",      function (c) c:move_to_screen()               end,
@@ -526,7 +575,7 @@ local clientkeys = gears.table.join(
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it work on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
-for i = 1, 9 do
+for i = 1, 4 do
   globalkeys = gears.table.join(globalkeys,
     -- View tag only.
     awful.key({ modkey }, "#" .. i + 9,
@@ -579,15 +628,16 @@ end
 
 local clientbuttons = gears.table.join(
     awful.button({ }, 1, function (c)
-        c:emit_signal("request::activate", "mouse_click", {raise = true})
+      c:emit_signal("request::activate", "mouse_click", {raise = true})
     end),
     awful.button({ modkey }, 1, function (c)
-        c:emit_signal("request::activate", "mouse_click", {raise = true})
-        awful.mouse.client.move(c)
+      c:emit_signal("request::activate", "mouse_click", {raise = true})
+      awful.mouse.client.move(c)
     end),
     awful.button({ modkey }, 3, function (c)
-        c:emit_signal("request::activate", "mouse_click", {raise = true})
-        awful.mouse.client.resize(c)
+      c:emit_signal("request::activate", "mouse_click", {raise = true})
+      if c.floating then awful.mouse.client.resize(c) end
+      -- awful.mouse.client.resize(c)
     end)
 )
 
@@ -631,7 +681,9 @@ awful.rules.rules = {
         "Tor Browser", -- Needs a fixed window size to avoid fingerprinting by screen size.
         "Wpa_gui",
         "veromix",
-        "xtightvncviewer"
+        "xtightvncviewer",
+        "xdg-desktop-portal-kde",
+        "spectacle"
       },
 
       -- Note that the name property shown in xprop might be set slightly after creation of the client
@@ -645,7 +697,22 @@ awful.rules.rules = {
         "pop-up",       -- e.g. Google Chrome's (detached) Developer Tools.
       }
     },
-    properties = { floating = true }
+    properties = {
+      floating = true,
+      placement = awful.placement.centered
+    }
+  },
+  {
+    rule_any = {
+      name = {
+        "hydrus client media viewer"
+      }
+    },
+    properties = {
+      fullscreen = false,
+      maximized = true,
+      placement = awful.placement.centered
+    }
   },
 
   -- Add titlebars to normal clients and dialogs
@@ -674,13 +741,12 @@ client.connect_signal("manage", function (c)
       awful.placement.no_offscreen(c)
   end
   c.shape = function(cr, w, h)
-    gears.shape.rounded_rect(cr, w, h, 8)
+    gears.shape.rounded_rect(cr, w, h, 4)
   end
--- c.border_width = 2
 end)
 
 client.connect_signal("property::maximized", function(c)
-  c.border_width = c.maximized and 0 or beautiful.border_width
+  -- c.border_width = c.maximized and 0 or beautiful.border_width
 end)
 
 -- Add a titlebar if titlebars_enabled is set to true in the rules.
@@ -721,6 +787,11 @@ client.connect_signal("request::titlebars", function(c)
     },
     layout = wibox.layout.align.horizontal
   }
+end)
+
+client.connect_signal("property::floating", function(c)
+  local tb = awful.titlebar
+  if (c.floating and not c.maximized) then tb.show(c) else tb.hide(c) end
 end)
 
 -- Enable sloppy focus, so that focus follows mouse.
