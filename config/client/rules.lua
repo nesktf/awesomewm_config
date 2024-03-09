@@ -1,22 +1,6 @@
 local awful = require('awful')
 local ruled = require('ruled')
 
-
--- local clientbuttons = awful.util.table.join(
---     awful.button({ }, 1, function (c)
---       c:emit_signal("request::activate", "mouse_click", {raise = true})
---     end),
---     awful.button({ modkey }, 1, function (c)
---       c:emit_signal("request::activate", "mouse_click", {raise = true})
---       awful.mouse.client.move(c)
---     end),
---     awful.button({ modkey }, 3, function (c)
---       c:emit_signal("request::activate", "mouse_click", {raise = true})
---       if c.floating then awful.mouse.client.resize(c) end
---       -- awful.mouse.client.resize(c)
---     end)
--- )
---
 -- Rules to apply to new clients (through the "manage" signal).
 ruled.client.connect_signal("request::rules", function()
   ruled.client.append_rule {
@@ -89,6 +73,17 @@ ruled.client.connect_signal("request::rules", function()
       fullscreen = false,
       maximized = true,
       placement = awful.placement.centered
+    }
+  }
+end)
+
+ruled.notification.connect_signal("request::rules", function()
+  --- Rules for all notifications
+  ruled.notification.append_rule {
+    rule = {},
+    properties = {
+      screen = awful.screen.preferred,
+      implicit_timeout = 5
     }
   }
 end)
