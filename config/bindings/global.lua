@@ -2,6 +2,8 @@ local awful = require('awful')
 local naughty = require('naughty')
 local menubar = require("menubar")
 
+local apps = require('config.apps')
+
 require("awful.autofocus")
 
 -- Enable hotkeys help widget for VIM and other apps
@@ -12,8 +14,6 @@ require("awful.hotkeys_popup.keys")
 local mod = require('config.bindings.mod')
 local modkey = mod.mod_key
 local altkey = mod.alt_key
-
-local terminal = "alacritty"
 
 local global_bindings = {}
 
@@ -152,7 +152,7 @@ global_bindings.keys = awful.util.table.join(
   -- Launchers
   awful.key({ "Control", altkey }, "t",
     function ()
-      awful.spawn(terminal)
+      awful.spawn(apps.list.terminal)
     end,
     {description = "open a terminal", group = "launcher"}
   ),

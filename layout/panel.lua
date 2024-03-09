@@ -110,7 +110,7 @@ local panel = function(s)
     awful.button({ }, 5, function () awful.layout.inc(-1) end)
   ))
 
-  s.sensor_var = require('widget.sensor-bar')
+  s.sensor_var = require('layout.widget.sensor-bar')
 
   panel:setup {
     layout = wibox.layout.align.horizontal,

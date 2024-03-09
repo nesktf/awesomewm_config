@@ -1,4 +1,3 @@
-local menubar = require("menubar")
 local naughty = require("naughty")
 
 -- Error handling
@@ -10,14 +9,10 @@ naughty.connect_signal("request::display_error", function(message, startup)
   }
 end)
 
-local terminal = "alacritty"
-menubar.utils.terminal = terminal -- Set the terminal for applications that require it
+require('theme.init')
 
-require('theme')
+require('layout.init')
 
-require('layout')
+require('config.init')
 
-require('config')
-
-require('modules')
-
+require('module.init')
