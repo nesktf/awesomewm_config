@@ -5,8 +5,8 @@ local wibox = require('wibox')
 client.connect_signal("request::titlebars", function(c)
 
   local title_bar = awful.titlebar(c, {
-    size = 22,
-    bg_normal = "#303030"
+    -- size = 22,
+    -- bg_normal = "#303030"
   })
 
   -- buttons for the titlebar

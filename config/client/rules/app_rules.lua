@@ -16,7 +16,7 @@ local function app_rules()
       placement = awful.placement.centered,
     }
   }
-  -- Apps that should alway spawn floating
+  -- Apps that should always spawn floating
   ruled.client.append_rule {
     id = "always_floating",
     rule_any = {
@@ -28,7 +28,18 @@ local function app_rules()
       floating = true
     }
   }
-
+  -- Apps with no titlebar (GTK)
+  ruled.client.append_rule {
+    id = "no_titlebar",
+    rule_any = {
+      name = {
+        "Lutris"
+      }
+    },
+    properties = {
+      titlebars_enabled = false
+    }
+  }
 end
 
 return app_rules

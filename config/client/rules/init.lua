@@ -12,7 +12,7 @@ ruled.client.connect_signal("request::rules", function()
       raise = true,
       screen = awful.screen.preferred,
       placement = awful.placement.no_overlap+awful.placement.no_offscreen,
-      floating = true
+      floating = true -- Floating by default
     }
   }
   -- Setup tilebars for each window
@@ -20,9 +20,19 @@ ruled.client.connect_signal("request::rules", function()
     id = "titlebar_init",
     rule_any = {
       type = { "normal", "dialog" },
-      properties = {
-        titlebars_enabled = true
-      }
+    },
+    properties = {
+      titlebars_enabled = true
+    }
+  }
+  -- Dialog window prperties
+  ruled.client.append_rule {
+    id = "dialog_props",
+    rule = {
+      type = "dialog"
+    },
+    properties = {
+      placement = awful.placement.centered
     }
   }
 

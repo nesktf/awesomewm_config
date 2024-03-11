@@ -158,9 +158,9 @@ global_bindings.keys = awful.util.table.join(
   ),
   awful.key({ modkey }, "space",
     function()
-      awful.spawn("rofi -show drun")
+      awful.spawn(require('config.apps').list.launcher)
     end,
-    {description = "open rofi", group = "launcher"}
+    {description = "open launcher", group = "launcher"}
   ),
   awful.key({ "Control", altkey }, "f",
     function ()
