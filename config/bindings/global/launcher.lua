@@ -7,6 +7,12 @@ local altkey = mod.alt_key
 
 local launcher_bindings = awful.util.table.join(
   -- Launchers
+   awful.key({ modkey }, "p",
+    function()
+      menubar.show()
+    end,
+    {description = "show the menubar", group = "launcher"}
+  ),
   awful.key({ "Control", altkey }, "t",
     function ()
       awful.spawn(apps.list.terminal)
@@ -39,15 +45,15 @@ local launcher_bindings = awful.util.table.join(
   ),
   awful.key({ "Control", altkey }, "r",
     function ()
-      awful.spawn.with_shell(apps.list.file_manager)
+      awful.spawn(apps.list.file_manager)
     end,
     {description = "open file manager", group = "launcher"}
   ),
-  awful.key({ modkey }, "p",
+  awful.key({ "Control", altkey }, "y",
     function()
-      menubar.show()
+      awful.spawn(apps.list.yt_viewer)
     end,
-    {description = "show the menubar", group = "launcher"}
+    {description = "open yt viewer", group = "launcher"}
   )
 )
 

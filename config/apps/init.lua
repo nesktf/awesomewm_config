@@ -1,17 +1,18 @@
 local home_dir = "/home/nikos"
 local app_conf_dir = home_dir.."/.config/awesome/config/apps"
 
-local apps = {}
+local rofi_cmd = "rofi -config "..app_conf_dir.."/rofi/config.rasi"
 
+local apps = {}
 apps.list = {
   terminal = "konsole",
-  launcher = "rofi -config "..app_conf_dir.."/rofi/config.rasi -show drun",
+  launcher = rofi_cmd.." -show drun",
   file_manager = "dolphin",
   browser = "librewolf",
   browser_w = "librewolf --profile "..home_dir.."/.librewolf/80zhfr50.work/",
-  game_launcher = "lutris"
+  game_launcher = rofi_cmd.." -show lutris",
+  yt_viewer = "freetube"
 }
-
 apps.startup = {
   "picom -b --config "..app_conf_dir.."/picom/picom.conf",
   "nm-applet",
