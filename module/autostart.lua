@@ -25,13 +25,13 @@ local run_once = function(cmd)
       -- if not stderr or stderr == '' or not debug_mode then
       if not stderr or stderr == '' then return end
 
-      naughty.notification({
-        app_name = 'Start-up Applications',
-        title = '<b>Oof! Error detected when starting an application!</b>',
-        message = stderr:gsub('%\n', ''),
-        timeout = 20,
-        icon = require('beautiful').awesome_icon
-      })
+      -- naughty.notification({
+      --   app_name = 'Start-up Applications',
+      --   title = '<b>Oof! Error detected when starting an application!</b>',
+      --   message = stderr:gsub('%\n', ''),
+      --   timeout = 20,
+      --   icon = require('beautiful').awesome_icon
+      -- })
     end
   )
 end

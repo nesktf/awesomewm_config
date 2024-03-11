@@ -1,11 +1,11 @@
 local apps = {}
 
 apps.list = {
-  terminal = "alacritty"
+  terminal = "konsole"
 }
 
 apps.startup = {
-  "picom --backend glx --vsync",
+  "picom -b",
   "nm-applet",
   "/usr/lib/kdeconnectd",
   "kdeconnect-indicator",

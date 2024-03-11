@@ -1,5 +1,5 @@
 local naughty = require('naughty')
--- local awful = require('awful')
+local awful = require('awful')
 -- local gears = require('gears')
 
 require('config.client.titlebar')
@@ -9,15 +9,15 @@ naughty.connect_signal("request::display", function(n)
   naughty.layout.box { notification = n }
 end)
 
--- client.connect_signal("property::floating", function(c)
---   local tb = awful.titlebar
---   if (c.floating and not c.maximized) then tb.show(c) else tb.hide(c) end
--- end)
+client.connect_signal("property::floating", function(c)
+  local tb = awful.titlebar
+  if (c.floating and not c.maximized) then tb.show(c) else tb.hide(c) end
+end)
 
 -- Enable sloppy focus, so that focus follows mouse.
-client.connect_signal("mouse::enter", function(c)
-  c:emit_signal("request::activate", "mouse_enter", {raise = false})
-end)
+-- client.connect_signal("mouse::enter", function(c)
+--   c:emit_signal("request::activate", "mouse_enter", {raise = false})
+-- end)
 
 -- -- Signal function to execute when a new client appears.
 -- client.connect_signal("manage", function (c)
