@@ -3,6 +3,7 @@ local awful = require('awful')
 local global_bindings = require('config.bindings.global')
 local client_bindings = require('config.bindings.client')
 
+require("awful.autofocus")
 
 -- Set global bindings
 awful.mouse.append_global_mousebindings(global_bindings.mouse)
