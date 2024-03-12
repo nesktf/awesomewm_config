@@ -12,7 +12,6 @@ local function app_rules()
     },
     properties = {
       fullscreen = true,
-      titlebars_enabled = false,
       placement = awful.placement.centered,
     }
   }
