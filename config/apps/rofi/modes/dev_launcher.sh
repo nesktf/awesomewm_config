@@ -4,7 +4,7 @@ dev_root="/sdr/Files/Docs/Dev"
 editor_cmd="konsole --workdir=%s konsole -e nvim %s"
 
 if [ -z $ROFI_INFO ]; then
-  find "$dev_root" -type f -iname '.rofi_scan' -printf "%P\0"|
+  find -L "$dev_root" -type f -iname '.rofi_scan' -printf "%P\0"|
     while IFS= read -r -d '' file; do
       name="${file%%/.*}"
       source "$dev_root/$file"

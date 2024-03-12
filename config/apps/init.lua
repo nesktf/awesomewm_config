@@ -12,14 +12,15 @@ apps.list = {
   browser_w = "librewolf --profile "..home_dir.."/.librewolf/80zhfr50.work/",
   game_launcher = rofi_cmd.." -show lutris",
   yt_viewer = "freetube",
-  dev_launcher = rofi_cmd.." -show dev_launcher"
+  dev_launcher = rofi_cmd.." -show dev"
 }
 apps.startup = {
   "picom -b --config "..app_conf_dir.."/picom/picom.conf",
   "nm-applet",
   "/usr/lib/kdeconnectd",
   "kdeconnect-indicator",
-  "pasystray"
+  "pasystray",
+  "copyq"
 }
 
 return apps

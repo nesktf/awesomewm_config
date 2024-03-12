@@ -40,6 +40,17 @@ local function app_rules()
       titlebars_enabled = false
     }
   }
+  -- Copyq
+  ruled.client.append_rule {
+    id = "copyq_thing",
+    rule = {
+      class = "copyq"
+    },
+    properties = {
+      placement = awful.placement.top_right,
+      titlebars_enabled = false
+    }
+  }
 end
 
 return app_rules

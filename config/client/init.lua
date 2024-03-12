@@ -10,8 +10,8 @@ naughty.connect_signal("request::display", function(n)
 end)
 
 client.connect_signal("property::floating", function(c)
-  local tb = awful.titlebar
-  if (c.floating and not c.maximized) then tb.show(c) else tb.hide(c) end
+  -- local tb = awful.titlebar
+  -- if (c.floating and not c.maximized) then tb.show(c) else tb.hide(c) end
 end)
 
 -- Enable sloppy focus, so that focus follows mouse.
