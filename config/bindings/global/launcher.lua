@@ -54,6 +54,12 @@ local launcher_bindings = awful.util.table.join(
       awful.spawn(apps.list.yt_viewer)
     end,
     {description = "open yt viewer", group = "launcher"}
+  ),
+  awful.key({ "Control", altkey}, "d",
+    function()
+      awful.spawn(apps.list.dev_launcher)
+    end,
+    {description = "open dev launcher", group = "launcher"}
   )
 )
 

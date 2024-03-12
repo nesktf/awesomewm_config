@@ -11,7 +11,8 @@ apps.list = {
   browser = "librewolf",
   browser_w = "librewolf --profile "..home_dir.."/.librewolf/80zhfr50.work/",
   game_launcher = rofi_cmd.." -show lutris",
-  yt_viewer = "freetube"
+  yt_viewer = "freetube",
+  dev_launcher = rofi_cmd.." -show dev_launcher"
 }
 apps.startup = {
   "picom -b --config "..app_conf_dir.."/picom/picom.conf",
