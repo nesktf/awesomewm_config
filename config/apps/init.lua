@@ -5,7 +5,7 @@ local rofi_cmd = "rofi -config "..app_conf_dir.."/rofi/config.rasi"
 
 local apps = {}
 apps.list = {
-  terminal = "konsole",
+    terminal = "konsole",
   launcher = rofi_cmd.." -show drun",
   file_manager = "dolphin",
   browser = "librewolf",
@@ -20,7 +20,8 @@ apps.startup = {
   "/usr/lib/kdeconnectd",
   "kdeconnect-indicator",
   "pasystray",
-  "copyq"
+  "copyq",
+  "polkit-dumb-agent"
 }
 
 return apps

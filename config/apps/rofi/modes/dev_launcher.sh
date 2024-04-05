@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 dev_root="/sdr/Files/Docs/Dev"
-editor_cmd="konsole --workdir=%s konsole -e nvim %s"
+editor_cmd="konsole --workdir=%s -e nvim %s"
 
 if [ -z $ROFI_INFO ]; then
   find -L "$dev_root" -type f -iname '.rofi_scan' -printf "%P\0"|
