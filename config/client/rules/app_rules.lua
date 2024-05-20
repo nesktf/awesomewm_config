@@ -1,10 +1,7 @@
 local awful = require('awful')
-local ruled = require('ruled')
 
-local function app_rules()
-  -- Hydrus media viewer fullscreen override
-  ruled.client.append_rule {
-    id = "hydrus_viewer",
+local app_rules = {
+  { -- Hydrus media viewer fullscreen override
     rule_any = {
       name = {
         "hydrus client media viewer"
@@ -14,10 +11,8 @@ local function app_rules()
       fullscreen = true,
       placement = awful.placement.centered,
     }
-  }
-  -- Apps that should always spawn floating
-  ruled.client.append_rule {
-    id = "always_floating",
+  },
+  { -- Always floating
     rule_any = {
       name = {
         "Event Tester",  -- xev.
@@ -26,10 +21,8 @@ local function app_rules()
     properties = {
       floating = true
     }
-  }
-  -- Apps with no titlebar (GTK)
-  ruled.client.append_rule {
-    id = "no_titlebar",
+  },
+  { -- No titlebar (GTK)
     rule_any = {
       name = {
         "Lutris"
@@ -38,10 +31,8 @@ local function app_rules()
     properties = {
       titlebars_enabled = false
     }
-  }
-  -- Copyq
-  ruled.client.append_rule {
-    id = "copyq_thing",
+  },
+  { -- Copyq
     rule = {
       class = "copyq"
     },
@@ -49,7 +40,7 @@ local function app_rules()
       placement = awful.placement.top_right,
       titlebars_enabled = false
     }
-  }
-end
+  },
+}
 
 return app_rules

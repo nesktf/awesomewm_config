@@ -44,7 +44,9 @@ theme.border_marked = "#91231c"
 -- Example:
 --theme.taglist_bg_focus = "#ff0000"
 theme.titlebar_bg_focus = "#272727"
-theme.titlebar_bg_normal = "#1e1e1e"
+-- theme.titlebar_bg_normal = "#1e1e1e"
+theme.titlebar_bg_normal = "#303030"
+  --   -- bg_normal = "#303030"
 theme.titlebar_size = 22
 
 -- Generate taglist squares:

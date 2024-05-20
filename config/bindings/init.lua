@@ -1,7 +1,6 @@
 local awful = require('awful')
 
 local global_bindings = require('config.bindings.global')
-local client_bindings = require('config.bindings.client')
 
 require("awful.autofocus")
 

@@ -5,7 +5,7 @@ local rofi_cmd = "rofi -config "..app_conf_dir.."/rofi/config.rasi"
 
 local apps = {}
 apps.list = {
-    terminal = "konsole",
+  terminal = "konsole",
   launcher = rofi_cmd.." -show drun",
   file_manager = "dolphin",
   browser = "librewolf",
@@ -14,14 +14,17 @@ apps.list = {
   yt_viewer = "freetube",
   dev_launcher = rofi_cmd.." -show dev"
 }
-apps.startup = {
+apps.startup_bin = {
   "picom -b --config "..app_conf_dir.."/picom/picom.conf",
   "nm-applet",
-  "/usr/lib/kdeconnectd",
   "kdeconnect-indicator",
   "pasystray",
   "copyq",
   "polkit-dumb-agent"
+}
+apps.startup_shell = {
+  'setxkbmap es',
+  'xinput set-prop "USB OPTICAL MOUSE " "libinput Accel Profile Enabled" 0 1'
 }
 
 return apps

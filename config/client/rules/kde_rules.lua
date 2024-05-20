@@ -1,10 +1,7 @@
 local awful = require('awful')
-local ruled = require('ruled')
 
-local function kde_rules()
-  -- Center every kde dialog like app
-  ruled.client.append_rule {
-    id = "kde_windows",
+local kde_rules = {
+  { -- Center every kde dialog like window
     rule_any = {
       class = {
         "keditfiletype",
@@ -15,20 +12,16 @@ local function kde_rules()
     properties = {
       placement = awful.placement.centered
     }
-  }
-  -- Spawn konsole centered
-  ruled.client.append_rule {
-    id = "konsole_rules",
+  },
+  { -- Spawn konsole centered
     rule = {
       class = "konsole"
     },
     properties = {
       placement = awful.placement.centered
     }
-  }
-  -- -- Same for dolphin dialogs
-  -- ruled.client.append_rule {
-  --   id = "dolphin_dialogs",
+  },
+  -- { -- Same for dolphin dialogs
   --   rule = {
   --     type = "dialog",
   --     class = "dolphin"
@@ -37,6 +30,6 @@ local function kde_rules()
   --     placement = awful.placement.centered
   --   }
   -- }
-end
+}
 
 return kde_rules

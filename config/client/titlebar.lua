@@ -1,25 +1,12 @@
 local awful = require('awful')
 local wibox = require('wibox')
 
+local client_bindings = require('config.bindings.client')
+
 -- Add a titlebar if titlebars_enabled is set to true in the rules.
 client.connect_signal("request::titlebars", function(c)
-
-  local title_bar = awful.titlebar(c, {
-    -- size = 22,
-    -- bg_normal = "#303030"
-  })
-
-  -- buttons for the titlebar
-  local buttons = {
-    awful.button({ }, 1, function()
-      c:activate { context = "titlebar", action = "mouse_move" }
-    end),
-    awful.button({ }, 3, function()
-      c:activate { context = "titlebar", action = "mouse_resize" }
-    end)
-  }
-
-  title_bar.widget = {
+  -- title_bar.widget = {
+  awful.titlebar(c) : setup {
     { -- Left
       awful.titlebar.widget.stickybutton   (c),
       awful.titlebar.widget.ontopbutton    (c),
@@ -28,6 +15,7 @@ client.connect_signal("request::titlebars", function(c)
         awful.titlebar.widget.titlewidget(c),
         layout  = wibox.layout.fixed.horizontal,
       },
+      -- buttons = buttons,
       layout  = wibox.layout.fixed.horizontal
     },
     { -- Middle
@@ -35,7 +23,7 @@ client.connect_signal("request::titlebars", function(c)
       --     align  = "center",
       --     widget = awful.titlebar.widget.titlewidget(c)
       -- },
-      buttons = buttons,
+      buttons = client_bindings.titlebar_buttons(c),
       layout  = wibox.layout.flex.horizontal
     },
     { -- Right
