@@ -3,9 +3,7 @@ local wibox = require('wibox')
 
 local client_bindings = require('config.bindings.client')
 
--- Add a titlebar if titlebars_enabled is set to true in the rules.
-client.connect_signal("request::titlebars", function(c)
-  -- title_bar.widget = {
+return function(c)
   awful.titlebar(c) : setup {
     { -- Left
       awful.titlebar.widget.stickybutton   (c),
@@ -34,6 +32,4 @@ client.connect_signal("request::titlebars", function(c)
     },
     layout = wibox.layout.align.horizontal
   }
-end)
-
-
+end

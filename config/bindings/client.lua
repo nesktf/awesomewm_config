@@ -1,4 +1,5 @@
 local awful = require('awful')
+local gears = require('gears')
 
 local mod = require('config.bindings.mod')
 local modkey = mod.mod_key
@@ -7,7 +8,7 @@ local altkey = mod.alt_key
 local client_bindings = {}
 
 client_bindings.titlebar_buttons = function(c)
-  return awful.util.table.join(
+  return gears.table.join(
     awful.button({ }, 1, function()
       c:emit_signal("request::activate", "titlebar", {raise = true})
       awful.mouse.client.move(c)
@@ -19,7 +20,7 @@ client_bindings.titlebar_buttons = function(c)
   )
 end
 
-client_bindings.buttons = awful.util.table.join( -- Mouse bindings
+client_bindings.buttons = gears.table.join( -- Mouse bindings
   awful.button({ }, 1, function (c)
     c:emit_signal("request::activate", "mouse_click", {raise = true})
   end),
@@ -33,7 +34,7 @@ client_bindings.buttons = awful.util.table.join( -- Mouse bindings
   end)
 )
 
-client_bindings.keys = awful.util.table.join(
+client_bindings.keys = gears.table.join(
   awful.key({ modkey, "Shift" }, "f",
     function (c)
         c.fullscreen = not c.fullscreen

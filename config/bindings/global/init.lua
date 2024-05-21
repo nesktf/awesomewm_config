@@ -1,4 +1,6 @@
 local awful = require('awful')
+local gears = require('gears')
+
 local modkey = require('config.bindings.mod').mod_key
 
 -- Enable hotkeys help widget for VIM and other apps
@@ -7,11 +9,11 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 require("awful.hotkeys_popup.keys")
 
 local global_bindings = {}
-global_bindings.mouse = awful.util.table.join(
+global_bindings.mouse = gears.table.join(
   awful.button({ }, 4, awful.tag.viewnext),
   awful.button({ }, 5, awful.tag.viewprev)
 )
-global_bindings.keys = awful.util.table.join(
+global_bindings.keys = gears.table.join(
   -- AwesomeWM bindings
   awful.key({ modkey }, "s",
     function()
@@ -44,12 +46,11 @@ local media_bind = require('config.bindings.global.media')
 local layout_bind = require('config.bindings.global.layout')
 local launcher_bind = require('config.bindings.global.launcher')
 
-global_bindings.keys = awful.util.table.join(global_bindings.keys,
+global_bindings.keys = gears.table.join(global_bindings.keys,
   tag_bind,
   media_bind,
   layout_bind,
   launcher_bind
 )
-
 
 return global_bindings

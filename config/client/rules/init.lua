@@ -1,8 +1,10 @@
 local awful = require('awful')
+local gears = require('gears')
 
 local client_bindings = require('config.bindings.client')
 
-awful.rules.rules = {
+local app_rules = require('config.client.rules.app_rules')
+local general_rules =  {
   { -- Global rules
     rule = {},
     properties = {
@@ -29,9 +31,6 @@ awful.rules.rules = {
       placement = awful.placement.centered;
     }
   },
-  require('config.client.rules.kde_rules'),
-  require('config.client.rules.app_rules'),
-
   -- { -- Global notification rules
   --   rule = {},
   --   properties = {
@@ -40,6 +39,8 @@ awful.rules.rules = {
   --   }
   -- }
 }
+
+return gears.table.join(general_rules, app_rules)
 
 -- ruled.notification.connect_signal("request::rules", function()
 --   require('config.client.rules.notification_rules')()

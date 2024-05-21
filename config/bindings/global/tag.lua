@@ -1,4 +1,5 @@
 local awful = require('awful')
+local gears = require('gears')
 local mod = require('config.bindings.mod')
 local modkey = mod.mod_key
 local altkey = mod.alt_key
@@ -8,7 +9,7 @@ local tag_bindings = {}
 -- Be careful: we use keycodes to make it work on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
 for i = 1, 4 do
-  tag_bindings = awful.util.table.join(tag_bindings,
+  tag_bindings = gears.table.join(tag_bindings,
     -- View tag only.
     awful.key({ modkey }, "#" .. i + 9,
       function ()

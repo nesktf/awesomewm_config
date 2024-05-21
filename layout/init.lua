@@ -1,8 +1,8 @@
+-- Layout
+
 local awful = require('awful')
 local beautiful = require("beautiful")
 local gears = require("gears")
-
-local panel = require('layout.panel')
 
 -- Enabled Layouts
 awful.layout.layouts = {
@@ -21,6 +21,11 @@ awful.layout.layouts = {
     awful.layout.suit.corner.nw,
 }
 
+-- Theme things
+local awesome_dir = "~/.config/awesome"
+beautiful.init(awesome_dir .. "/theme/theme.lua")
+
+-- Wallpaper
 local function set_wallpaper(s)
   -- Wallpaper
   if beautiful.wallpaper then
@@ -33,6 +38,10 @@ local function set_wallpaper(s)
   end
 end
 
+-- Panel
+local panel = require('layout.panel')
+
+-- Bind panel & wallpaper
 awful.screen.connect_for_each_screen(function(s)
   set_wallpaper(s)
   s.panel = panel(s)

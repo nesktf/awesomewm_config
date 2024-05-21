@@ -26,10 +26,6 @@ do
   end)
 end
 
-require('theme.init')
-
 require('layout.init')
-
 require('config.init')
-
 require('module.init')

@@ -1,7 +1,8 @@
 local awful = require('awful')
+local gears = require('gears')
 local modkey = require('config.bindings.mod').mod_key
 
-local layout_bindings = awful.util.table.join(
+local layout_bindings = gears.table.join(
   -- Layout manipulation
   awful.key({ modkey, }, "r",
     function ()

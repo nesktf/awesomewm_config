@@ -35,10 +35,12 @@ local run_once = function(cmd)
   )
 end
 
-for _, app in ipairs(apps.startup_bin) do
-  run_once(app)
-end
+return function()
+  for _, app in ipairs(apps.startup_bin) do
+    run_once(app)
+  end
 
-for _, cmd in ipairs(apps.startup_shell) do
-  awful.spawn.easy_async_with_shell(cmd)
+  for _, cmd in ipairs(apps.startup_shell) do
+    awful.spawn.easy_async_with_shell(cmd)
+  end
 end

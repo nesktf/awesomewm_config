@@ -1,8 +1,9 @@
 local awful = require('awful')
+local gears = require('gears')
 local naughty = require('naughty')
 local modkey = require('config.bindings.mod').mod_key
 
-local media_bindings = awful.util.table.join(
+local media_bindings = gears.table.join(
   awful.key({ modkey }, "F1",
     function()
       awful.spawn.with_shell("pactl set-sink-volume @DEFAULT_SINK@ -1.328252939dB")

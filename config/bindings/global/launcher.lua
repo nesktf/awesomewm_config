@@ -1,11 +1,12 @@
 local awful = require('awful')
+local gears = require('gears')
 local menubar = require("menubar")
 local apps = require('config.apps')
 local mod = require('config.bindings.mod')
 local modkey = mod.mod_key
 local altkey = mod.alt_key
 
-local launcher_bindings = awful.util.table.join(
+local launcher_bindings = gears.table.join(
   -- Launchers
    awful.key({ modkey }, "p",
     function()
