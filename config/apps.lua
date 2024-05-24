@@ -1,10 +1,13 @@
-local home_dir = "/home/nikos"
-local app_conf_dir = home_dir.."/.config/awesome/config/apps"
+local const     = require("config.const")
+local home_dir  = const.path.home_dir
 
+local app_conf_dir = home_dir.."/.config/awesome/config/app_conf"
 local rofi_cmd = "rofi -config "..app_conf_dir.."/rofi/config.rasi"
 
 local apps = {}
+
 apps.list = {
+  shell = "bash",
   terminal = "konsole",
   launcher = rofi_cmd.." -show drun",
   file_manager = "dolphin",
@@ -14,6 +17,7 @@ apps.list = {
   yt_viewer = "freetube",
   dev_launcher = rofi_cmd.." -show dev"
 }
+
 apps.startup_bin = {
   "picom -b --config "..app_conf_dir.."/picom/picom.conf",
   "nm-applet",
@@ -22,6 +26,7 @@ apps.startup_bin = {
   "copyq",
   "polkit-dumb-agent"
 }
+
 apps.startup_shell = {
   'setxkbmap es',
   'xinput set-prop "USB OPTICAL MOUSE " "libinput Accel Profile Enabled" 0 1'

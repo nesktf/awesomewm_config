@@ -1,9 +1,9 @@
-local awful = require('awful')
-local gears = require('gears')
+local awful   = require('awful')
+local gears   = require('gears')
 
-local mod = require('config.bindings.mod')
-local modkey = mod.mod_key
-local altkey = mod.alt_key
+local keys    = require('config.const').keys
+local modkey  = keys.mod
+local altkey  = keys.alt
 
 local client_bindings = {}
 

@@ -1,7 +1,7 @@
-local awful = require('awful')
-local gears = require('gears')
+local awful   = require('awful')
+local gears   = require('gears')
 
-local modkey = require('config.bindings.mod').mod_key
+local modkey  = require('config.const').keys.mod
 
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:

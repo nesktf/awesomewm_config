@@ -1,7 +1,8 @@
-local awful = require('awful')
-local gears = require('gears')
+local awful   = require('awful')
+local gears   = require('gears')
 local naughty = require('naughty')
-local modkey = require('config.bindings.mod').mod_key
+
+local modkey  = require('config.const').keys.mod
 
 local media_bindings = gears.table.join(
   awful.key({ modkey }, "F1",
@@ -39,7 +40,7 @@ local media_bindings = gears.table.join(
 
   awful.key({ modkey }, "F4",
     function()
-      awful.spawn.with_shell("amixer -D pulse sset Master 100%,75%")
+      awful.spawn.with_shell("amixer -D pulse sset Master 70%,55%")
     end,
     {description = "reset volume", group = "media"}
   )

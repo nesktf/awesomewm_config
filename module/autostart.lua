@@ -2,8 +2,6 @@
 -- Run all the apps listed in configuration/apps.lua as run_on_start_up only once when awesome start
 
 local awful = require('awful')
-local apps = require('config.apps')
-
 -- local config = require('configuration.config')
 -- local debug_mode = config.module.auto_start.debug_mode or false
 
@@ -35,7 +33,7 @@ local run_once = function(cmd)
   )
 end
 
-return function()
+return function(apps)
   for _, app in ipairs(apps.startup_bin) do
     run_once(app)
   end

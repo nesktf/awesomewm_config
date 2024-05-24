@@ -1,8 +1,9 @@
-local awful = require('awful')
-local gears = require('gears')
-local mod = require('config.bindings.mod')
-local modkey = mod.mod_key
-local altkey = mod.alt_key
+local awful   = require('awful')
+local gears   = require('gears')
+
+local keys    = require('config.const').keys
+local modkey  = keys.mod
+local altkey  = keys.alt
 
 local tag_bindings = {}
 -- Bind all key numbers to tags.

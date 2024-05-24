@@ -69,7 +69,8 @@ local app_rules = {
     },
     properties = {
       placement = awful.placement.top_right,
-      titlebars_enabled = false
+      titlebars_enabled = false,
+      floating = true
     }
   },
 }
