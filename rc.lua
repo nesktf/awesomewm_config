@@ -67,7 +67,7 @@ awful.layout.layouts = {
 }
 
 -- Panel
-local create_panel = require('layout.panel')
+local create_panel = require('widget.panel')
 
 -- Bind panel & wallpaper
 awful.screen.connect_for_each_screen(function(s)

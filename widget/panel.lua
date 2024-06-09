@@ -110,7 +110,7 @@ local create_panel = function(s)
     awful.button({ }, 5, function () awful.layout.inc(-1) end)
   ))
 
-  s.sensor_var = require('layout.widget.sensor-bar')
+  s.sensor_var = require('widget.sensor-bar')
 
   panel:setup {
     layout = wibox.layout.align.horizontal,
@@ -145,35 +145,3 @@ local create_panel = function(s)
 end
 
 return create_panel
-
--- local awful = require('awful')
--- local wibox = require('wibox')
--- local gears = require('gears')
---
--- local coso = awful.popup({
---   widget = {
---     {
---       {
---         text = "dou",
---         widget = wibox.widget.textbox
---       },
---       layout = wibox.layout.fixed.vertical,
---     },
---     margins = 10,
---     widget = wibox.container.margin
---   },
---   border_color = '#00ff00',
---   border_width = 5,
---   placement = awful.placement.centered,
---   shape = gears.shape.rounded_rect,
---   ontop = true,
---   visible = true
--- })
---
--- gears.timer({
---   timeout = 1,
---   autostart = true,
---   callback = function()
---     coso.visible = false
---   end
--- })

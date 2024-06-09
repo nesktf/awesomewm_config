@@ -3,7 +3,9 @@
     "awesome",
     "client",
     "screen",
-    "root"
+    "root",
+    "mouse",
+    "keygrabber"
   ],
   "diagnostics.disable": [
     "lowercase-global",
