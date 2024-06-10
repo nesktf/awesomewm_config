@@ -1,8 +1,8 @@
 local awful   = require('awful')
 local gears   = require('gears')
 
-local modkey  = require('config.const').keys.mod
-local osd     = require('widget.osd')
+local modkey  = require('main.globals').keys.mod
+local osd     = require('ui.osd')
 
 local function show_volume()
   local cmd = "amixer -D pulse get Master | awk -F 'Left:|[][]' 'BEGIN {RS=\"\"}{ gsub(\"%\",\"\"); if ($5==\"on\") { print $3 } else { print \"0\" } }'"

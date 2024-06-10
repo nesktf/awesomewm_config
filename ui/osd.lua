@@ -3,7 +3,7 @@ local beautiful = require('beautiful')
 local wibox = require('wibox') 
 local mouse = mouse
 
-local theme_dir = require('config.const').path.theme_dir
+local theme_dir = require('main.globals').path.themes
 local icon_dir = theme_dir .. "/icons/"
 
 local _M = {}

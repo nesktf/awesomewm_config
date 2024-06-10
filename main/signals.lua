@@ -1,8 +1,12 @@
-local awful = require('awful')
-local gears = require('gears')
+local awful     = require('awful')
+local gears     = require('gears')
 local beautiful = require('beautiful')
 
-local signals = {
+local titlebar = require('ui.titlebar')
+
+local _M = {}
+
+_M.signals = {
   {
     id = "manage",
     fun = function(c)
@@ -37,7 +41,13 @@ local signals = {
     fun = function(c)
       c.border_color = beautiful.border_normal
     end
+  },
+  {
+    id = "request::titlebars",
+    fun = function(c)
+      titlebar.attach_floating(c)
+    end
   }
 }
 
-return signals
+return _M

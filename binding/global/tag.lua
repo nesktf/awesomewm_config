@@ -1,9 +1,9 @@
 local awful   = require('awful')
 local gears   = require('gears')
 
-local keys    = require('config.const').keys
-local modkey  = keys.mod
-local altkey  = keys.alt
+local keys    = require('main.globals').keys
+local mod  = keys.mod
+local alt  = keys.alt
 
 local tag_bindings = {}
 -- Bind all key numbers to tags.
@@ -12,7 +12,7 @@ local tag_bindings = {}
 for i = 1, 4 do
   tag_bindings = gears.table.join(tag_bindings,
     -- View tag only.
-    awful.key({ modkey }, "#" .. i + 9,
+    awful.key({ mod }, "#" .. i + 9,
       function ()
         local screen = awful.screen.focused()
         local tag = screen.tags[i]
@@ -23,7 +23,7 @@ for i = 1, 4 do
       {description = "view tag #"..i, group = "tag"}
     ),
     -- Toggle tag display.
-    awful.key({ modkey, "Control" }, "#" .. i + 9,
+    awful.key({ mod, "Control" }, "#" .. i + 9,
       function ()
         local screen = awful.screen.focused()
         local tag = screen.tags[i]
@@ -34,7 +34,7 @@ for i = 1, 4 do
       {description = "toggle tag #" .. i, group = "tag"}
     ),
     -- Move client to tag.
-    awful.key({ modkey, "Shift" }, "#" .. i + 9,
+    awful.key({ mod, "Shift" }, "#" .. i + 9,
       function ()
           if client.focus then
               local tag = client.focus.screen.tags[i]
@@ -46,7 +46,7 @@ for i = 1, 4 do
     {description = "move focused client to tag #"..i, group = "tag"}
     ),
     -- Toggle tag on focused client.
-    awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9,
+    awful.key({ mod, "Control", "Shift" }, "#" .. i + 9,
       function ()
         if client.focus then
           local tag = client.focus.screen.tags[i]
@@ -57,7 +57,7 @@ for i = 1, 4 do
       end,
       {description = "toggle focused client on tag #" .. i, group = "tag"}
     ),
-    awful.key({ altkey }, "Tab",
+    awful.key({ alt }, "Tab",
       function()
         -- require('module.switcher').switch(1, altkey, "Alt_L", "Shift", "Tab")
       end,

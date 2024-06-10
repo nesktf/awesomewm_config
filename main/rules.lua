@@ -1,7 +1,47 @@
 local awful = require('awful')
 
-local app_rules = {
-  -- kde rules
+local client_bindings = require('binding.client')
+
+local _M = {}
+
+_M.rules =  {
+  { -- Global rules
+    rule = {},
+    properties = {
+      focus = awful.client.focus.filter,
+      raise = true,
+      screen = awful.screen.preferred,
+      placement = awful.placement.no_overlap+awful.placement.no_offscreen,
+      buttons = client_bindings.buttons,
+      keys = client_bindings.keys,
+      -- floating = true, -- Floating by default
+    },
+  },
+
+  { -- Titlebar rule
+    rule_any = {
+      type = { "normal", "dialog" },
+    },
+    properties = { titlebars_enabled = true }
+  },
+
+  { -- Dialog window props
+    rule = {
+      type = "dialog"
+    },
+    properties = {
+      placement = awful.placement.centered;
+    }
+  },
+
+  -- { -- Global notification rules
+  --   rule = {},
+  --   properties = {
+  --     screen = awful.screen.preferred,
+  --     implicit_timeout = 5
+  --   }
+  -- }
+
   { -- Center every kde dialog like window
     rule_any = {
       class = {
@@ -22,15 +62,6 @@ local app_rules = {
       placement = awful.placement.centered
     }
   },
-  -- { -- Same for dolphin dialogs
-  --   rule = {
-  --     type = "dialog",
-  --     class = "dolphin"
-  --   },
-  --   properties = {
-  --     placement = awful.placement.centered
-  --   }
-  -- }
 
   { -- Hydrus media viewer fullscreen override
     rule_any = {
@@ -43,6 +74,7 @@ local app_rules = {
       placement = awful.placement.centered,
     }
   },
+
   { -- Always floating
     rule_any = {
       name = {
@@ -53,7 +85,8 @@ local app_rules = {
       floating = true
     }
   },
-  { -- No titlebar (GTK)
+
+  { -- No titlebar
     rule_any = {
       name = {
         "Lutris"
@@ -63,6 +96,7 @@ local app_rules = {
       titlebars_enabled = false
     }
   },
+
   { -- Copyq
     rule = {
       class = "copyq"
@@ -73,6 +107,7 @@ local app_rules = {
       floating = true
     }
   },
+
 }
 
-return app_rules
+return _M

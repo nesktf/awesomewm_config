@@ -1,12 +1,11 @@
 -- ~/.config/awesome/rc.lua
--- Libs
 local naughty   = require("naughty")
 local beautiful = require("beautiful")
 local awful     = require('awful')
 local gears     = require("gears")
 local menubar   = require("menubar")
 
-local const     = require("config.const")
+local globals   = require('main.globals')
 
 do -- Error handling
   if awesome.startup_errors then
@@ -33,75 +32,54 @@ do -- Error handling
 end
 
 -- Theme things
-beautiful.init(const.path.awesome_dir .. "/theme/theme.lua")
+local theme = require('themes.breeze-like')
+beautiful.init(theme.theme)
 awesome.set_preferred_icon_size(128) -- ?
 
--- Wallpaper
-local function set_wallpaper(s)
-  -- Wallpaper
+-- Layouts
+local layout = require('ui.layout')
+awful.layout.layouts = layout.layouts
+
+-- Bind panel & wallpaper
+local panel = require('ui.panel')
+awful.screen.connect_for_each_screen(function(screen)
   if beautiful.wallpaper then
     local wallpaper = beautiful.wallpaper
     -- If wallpaper is a function, call it with the screen
     if type(wallpaper) == "function" then
-      wallpaper = wallpaper(s)
+      wallpaper = wallpaper(screen)
     end
-    gears.wallpaper.maximized(wallpaper, s, true)
+    gears.wallpaper.maximized(wallpaper, screen, true)
   end
-end
 
--- Layouts
-awful.layout.layouts = {
-    awful.layout.suit.tile,
-    -- awful.layout.suit.tile.left,
-    -- awful.layout.suit.tile.bottom,
-    -- awful.layout.suit.tile.top,
-    awful.layout.suit.floating,
-    awful.layout.suit.fair,
-    -- awful.layout.suit.fair.horizontal,
-    awful.layout.suit.spiral,
-    -- awful.layout.suit.spiral.dwindle,
-    -- awful.layout.suit.max,
-    -- awful.layout.suit.max.fullscreen,
-    -- awful.layout.suit.magnifier,
-    -- awful.layout.suit.corner.nw,
-}
-
--- Panel
-local create_panel = require('widget.panel')
-
--- Bind panel & wallpaper
-awful.screen.connect_for_each_screen(function(s)
-  set_wallpaper(s)
-  s.panel = create_panel(s)
+  screen.panel = panel.setup(screen)
 end)
+
+-- Key bindings
+require("awful.hotkeys_popup.keys") -- Enable hotkeys help widget for vim-likes
+local global_bindings = require('binding.global')
+root.buttons(global_bindings.buttons)
+root.keys(global_bindings.keys)
 
 -- Autofocus
 require("awful.autofocus")
 
--- Global bindings
-local global_bindings = require('config.bindings.global')
-root.buttons(global_bindings.mouse)
-root.keys(global_bindings.keys)
-
--- Titlebar
-local create_titlebar = require('config.client.titlebar')
-client.connect_signal("request::titlebars", create_titlebar)
-
 -- Client rules
-local client_rules = require('config.client.rules')
-awful.rules.rules = client_rules
+local rules = require('main.rules')
+awful.rules.rules = rules.rules
 
 -- Signals
-local signals = require('config.client.signals')
-for _, signal in ipairs(signals) do
+local signals = require('main.signals')
+for _, signal in ipairs(signals.signals) do
   client.connect_signal(signal.id, signal.fun)
 end
 
 -- Misc
-local apps = require('config.apps')
-awful.util.shell        = apps.list.shell -- For autostart & other things
-menubar.utils.terminal  = apps.list.terminal -- Set the terminal for applications that require it
+awful.util.shell = globals.app.shell -- For autostart & other things
+menubar.utils.terminal = globals.app.terminal -- Set the terminal for applications that require it
 
 -- Autostart
-local autostart = require('module.autostart')
-autostart(apps)
+local autostart = require('main.autostart')
+autostart.on_startup(globals.autostart.on_startup)
+autostart.on_reload(globals.autostart.on_reload)
+

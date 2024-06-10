@@ -2,11 +2,11 @@ local awful   = require('awful')
 local gears   = require('gears')
 local menubar = require("menubar")
 
-local keys    = require('config.const').keys
+local keys    = require('main.globals').keys
 local modkey  = keys.mod
 local altkey  = keys.alt
 
-local apps    = require('config.apps')
+local apps    = require('main.globals').app
 
 local launcher_bindings = gears.table.join(
   -- Launchers
@@ -18,52 +18,52 @@ local launcher_bindings = gears.table.join(
   ),
   awful.key({ "Control", altkey }, "t",
     function ()
-      awful.spawn(apps.list.terminal)
+      awful.spawn(apps.terminal)
     end,
     {description = "open a terminal", group = "launcher"}
   ),
   awful.key({ modkey }, "space",
     function()
-      awful.spawn(apps.list.launcher)
+      awful.spawn(apps.launcher)
     end,
     {description = "open launcher", group = "launcher"}
   ),
   awful.key({ "Control", altkey }, "f",
     function ()
-      awful.spawn(apps.list.browser)
+      awful.spawn(apps.browser)
     end,
     {description = "open browser", group = "launcher"}
   ),
   awful.key({ "Control", altkey }, "w",
     function ()
-      awful.spawn(apps.list.browser_w)
+      awful.spawn(apps.browser_w)
     end,
     {description = "open work browser", group = "launcher"}
   ),
   awful.key({ "Control", altkey }, "g",
     function ()
-      awful.spawn(apps.list.game_launcher)
+      awful.spawn(apps.game_launcher)
     end,
     {description = "open game launcher", group = "launcher"}
   ),
   awful.key({ "Control", altkey }, "r",
     function ()
-      awful.spawn(apps.list.file_manager)
+      awful.spawn(apps.file_manager)
     end,
     {description = "open file manager", group = "launcher"}
   ),
   awful.key({ "Control", altkey }, "y",
     function()
-      awful.spawn(apps.list.yt_viewer)
+      awful.spawn(apps.yt_viewer)
     end,
     {description = "open yt viewer", group = "launcher"}
   ),
   awful.key({ "Control", altkey}, "d",
     function()
-      awful.spawn(apps.list.dev_launcher)
+      awful.spawn(apps.dev_launcher)
     end,
     {description = "open dev launcher", group = "launcher"}
   )
 )
 
-return launcher_bindings
+  return launcher_bindings

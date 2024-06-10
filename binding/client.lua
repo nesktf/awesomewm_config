@@ -1,63 +1,50 @@
 local awful   = require('awful')
 local gears   = require('gears')
 
-local keys    = require('config.const').keys
-local modkey  = keys.mod
-local altkey  = keys.alt
+local keys  = require('main.globals').keys
+local mod   = keys.mod
+local alt   = keys.alt
 
-local client_bindings = {}
+local _M = {}
 
-client_bindings.titlebar_buttons = function(c)
-  return gears.table.join(
-    awful.button({ }, 1, function()
-      c:emit_signal("request::activate", "titlebar", {raise = true})
-      awful.mouse.client.move(c)
-    end),
-    awful.button({ }, 3, function()
-      c:emit_signal("request::activate", "titlebar", {raise = true})
-      awful.mouse.client.resize(c)
-    end)
-  )
-end
-
-client_bindings.buttons = gears.table.join( -- Mouse bindings
+_M.buttons = gears.table.join( -- Mouse bindings
   awful.button({ }, 1, function (c)
     c:emit_signal("request::activate", "mouse_click", {raise = true})
   end),
-  awful.button({ modkey }, 1, function (c)
+  awful.button({ mod }, 1, function (c)
     c:emit_signal("request::activate", "mouse_click", {raise = true})
     awful.mouse.client.move(c)
   end),
-  awful.button({ modkey }, 3, function (c)
+  awful.button({ mod }, 3, function (c)
     c:emit_signal("request::activate", "mouse_click", {raise = true})
     awful.mouse.client.resize(c)
   end)
 )
 
-client_bindings.keys = gears.table.join(
-  awful.key({ modkey, "Shift" }, "f",
+_M.keys = gears.table.join(
+  awful.key({ mod, "Shift" }, "f",
     function (c)
         c.fullscreen = not c.fullscreen
         c:raise()
     end,
     {description = "toggle fullscreen", group = "client"}
   ),
-  awful.key({ "Control", altkey }, "q",
+  awful.key({ "Control", alt }, "q",
     function (c)
       c:kill()
     end,
     {description = "close window", group = "client"}
   ),
-  awful.key({ modkey }, "f", awful.client.floating.toggle,
+  awful.key({ mod }, "f", awful.client.floating.toggle,
     {description = "toggle floating", group = "client"}
   ),
-  awful.key({ modkey }, "m",
+  awful.key({ mod }, "m",
     function (c)
       c.minimized = true
     end,
     {description = "minimize", group = "client"}
   ),
-  awful.key({ modkey }, "a",
+  awful.key({ mod }, "a",
     function (c)
       local tb = awful.titlebar
 
@@ -72,13 +59,13 @@ client_bindings.keys = gears.table.join(
     end,
     {description = "(un)maximize", group = "client"}
   ),
-  awful.key({ modkey }, "t",
+  awful.key({ mod }, "t",
     function (c)
       c.ontop = not c.ontop
     end,
     {description = "toggle keep on top", group = "client"}
   ),
-  awful.key({ modkey }, "x",
+  awful.key({ mod }, "x",
     function(c)
       awful.titlebar.toggle(c)
     end,
@@ -86,4 +73,4 @@ client_bindings.keys = gears.table.join(
   )
 )
 
-return client_bindings
+return _M
