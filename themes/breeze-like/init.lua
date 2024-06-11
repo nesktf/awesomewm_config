@@ -19,7 +19,7 @@ _M.fg_focus      = "#ffffff"
 _M.fg_urgent     = "#ffffff"
 _M.fg_minimize   = "#ffffff"
 
-_M.useless_gap   = dpi(4)
+_M.useless_gap   = dpi(5)
 _M.gap_single_client = true
 _M.border_width  = dpi(0)
 _M.border_normal = "#000000"
@@ -130,6 +130,8 @@ _M.awesome_icon = theme_assets.awesome_icon(
 -- Define the icon theme for application icons. If not set then the icons
 -- from /usr/share/icons and /usr/share/icons/hicolor will be used.
 _M.icon_theme = nil
+
+_M.panel_size = dpi(26)
 
 return {theme = _M}
 

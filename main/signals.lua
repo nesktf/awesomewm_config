@@ -19,9 +19,9 @@ _M.signals = {
           -- Prevent clients from being unreachable after screen count changes.
           awful.placement.no_offscreen(c)
       end
-      c.shape = function(cr, w, h)
-        gears.shape.rounded_rect(cr, w, h, 4)
-      end
+      -- c.shape = function(cr, w, h)
+      --   gears.shape.rounded_rect(cr, w, h, 4)
+      -- end
     end
   },
   {

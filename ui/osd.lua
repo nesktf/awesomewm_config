@@ -22,10 +22,7 @@ _M.preview_wbox = wibox({
   ontop = true,
   visible = false,
   bg = beautiful.titlebar_bg_focus,
-  shape = function(cr, w, h)
-    gears.shape.rounded_rect(cr, w, h, 10)
-  end
-})
+ })
 
 _M.timer = nil
 

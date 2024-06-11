@@ -1,5 +1,6 @@
 configuration {
-	modes: "drun,lutris:~/.config/awesome/config/apps/rofi/modes/lutris.sh,dev:~/.config/awesome/config/apps/rofi/modes/dev_launcher.sh";
+  modes: "drun";
+	//modes: "drun,lutris:~/.config/awesome/config/apps/rofi/modes/lutris.sh,dev:~/.config/awesome/config/apps/rofi/modes/dev_launcher.sh";
 	show-icons: true;
 
   kb-row-down: "Control+[44]";
