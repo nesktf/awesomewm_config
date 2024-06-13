@@ -7,6 +7,7 @@ local modkey  = keys.mod
 local altkey  = keys.alt
 
 local apps    = require('main.globals').app
+local picom   = require('config.picom')
 
 local launcher_bindings = gears.table.join(
   -- Launchers
@@ -63,6 +64,12 @@ local launcher_bindings = gears.table.join(
       awful.spawn(apps.dev_launcher)
     end,
     {description = "open dev launcher", group = "launcher"}
+  ),
+  awful.key({ "Control", altkey }, "p",
+    function()
+      picom.toggle_picom()
+    end,
+  {description = "toggle compositor", group = "launcher"}
   )
 )
 

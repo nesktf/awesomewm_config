@@ -19,15 +19,27 @@ local layout_bindings = gears.table.join(
   ),
   awful.key({ modkey, "Control" }, "l",
     function ()
-      awful.tag.incmwfact(-0.05)
+      awful.tag.incmwfact(-0.025)
     end,
     {description = "decrease mater window width factor", group = "layout"}
   ),
   awful.key({ modkey, "Control" }, "h",
     function ()
-      awful.tag.incmwfact(0.05)
+      awful.tag.incmwfact(0.025)
     end,
     {description = "increase master window width factor", group = "layout"}
+  ),
+  awful.key({ modkey, "Control" }, "k", 
+    function()
+      awful.client.incwfact(-0.05)
+    end,
+    {description = "decrease master window height factor", group = "layout"}
+  ),
+  awful.key({ modkey, "Control" }, "j", 
+    function()
+      awful.client.incwfact(0.05)
+    end,
+    {description = "increase master window height factor", group = "layout"}
   ),
 
   awful.key({ modkey, "Control" }, "m",

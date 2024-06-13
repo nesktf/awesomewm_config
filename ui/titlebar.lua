@@ -6,7 +6,11 @@ local ui_bindings = require('binding.ui')
 local _M = {}
 
 _M.attach_floating = function(client)
-  awful.titlebar(client) : setup {
+  local titlebar_top = awful.titlebar(client, {
+    position = "top",
+    size = 22,
+  })
+  titlebar_top:setup({
     { -- Left
       awful.titlebar.widget.stickybutton(client),
       awful.titlebar.widget.ontopbutton(client),
@@ -33,7 +37,16 @@ _M.attach_floating = function(client)
       layout = wibox.layout.fixed.horizontal
     },
     layout = wibox.layout.align.horizontal
-  }
+  })
+
+  local titlebar_bottom = awful.titlebar(client, {
+    position = "bottom",
+    size = 4,
+  })
+  titlebar_bottom:setup({
+    layout = wibox.layout.align.horizontal,
+    widget = wibox.container.background,
+  })
 end
 
 return _M

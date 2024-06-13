@@ -15,8 +15,10 @@ _M.path = {
   home    = home_dir,
 }
 
-local _rofi   = "rofi -config ".._M.path.config.."/rofi/config.rasi"
-local _picom  = "picom -b --config ".._M.path.config.."/picom/picom.conf" 
+_M.cmd = {
+  rofi = "rofi -config ".._M.path.config.."/rofi/config.rasi",
+  picom = "picom -b --config ".._M.path.config.."/picom/picom.conf" 
+}
 
 _M.app = {
   shell = "bash",
@@ -25,14 +27,14 @@ _M.app = {
   browser = "librewolf",
   browser_w = "librewolf --profile "..home_dir.."/.librewolf/80zhfr50.work/",
   yt_viewer = "freetube",
-  launcher = _rofi .. " -show drun",
-  game_launcher = _rofi .. " -show lutris",
-  dev_launcher = _rofi .. " -show dev"
+  launcher = _M.cmd.rofi .. " -show drun",
+  game_launcher = _M.cmd.rofi .. " -show lutris",
+  dev_launcher = _M.cmd.rofi .. " -show dev"
 }
 
 _M.autostart = {
   on_startup = {
-    _picom,
+    _M.cmd.picom,
     "nm-applet",
     "kdeconnect-indicator",
     "pasystray",

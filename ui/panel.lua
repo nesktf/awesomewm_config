@@ -17,26 +17,26 @@ _M.sensor_bar = function()
   }
   local widget = wibox.widget {
     spacing = 4,
-    widget = wibox.layout.fixed.horizontal
-  }
+    layout = wibox.layout.fixed.horizontal, 
+   }
 
   for i,item in ipairs(cmd) do
-    local col = wibox.widget {
+    local col = wibox.widget({
       {
         text = item.name .. ":",
-        widget = wibox.widget.textbox
+        widget = wibox.widget.textbox,
       },
-      {
-        widget = awful.widget.watch('bash -c "' .. item.eval .. '"', 1)
-      },
+      awful.widget.watch('bash -c "' .. item.eval .. '"', 1),
       spacing = 2,
-      widget = wibox.layout.fixed.horizontal
-    }
+      layout = wibox.layout.fixed.horizontal,
+      bg = beautiful.bg_focus,
+      widget = wibox.container.background,
+    })
     if (i ~= #cmd) then
-      col:add(wibox.widget {
+      col:add(wibox.widget({
         text = "|",
-        widget = wibox.widget.textbox
-      })
+        widget = wibox.widget.textbox,
+      }))
     end
     widget:add(col)
   end
@@ -119,7 +119,7 @@ _M.setup = function(screen)
     height  = beautiful.panel_size,
     x       = geom.x + gap,
     y       = geom.y + gap,
-    bg      = beautiful.background,
+    bg      = beautiful.bg_normal,
     shape = function(cr, w, h)
       gears.shape.rounded_rect(cr, w, h, 4)
     end
@@ -158,7 +158,6 @@ _M.setup = function(screen)
       layout = wibox.layout.fixed.horizontal,
     },
     layout = wibox.layout.align.horizontal,
-    widget = wibox.container.background,
   })
 end
 
