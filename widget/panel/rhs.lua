@@ -1,5 +1,6 @@
-local awful = require('awful')
-local wibox = require('wibox')
+local awful     = require('awful')
+local wibox     = require('wibox')
+local beautiful = require('beautiful')
 
 local _sensor_cmd = {
   { name = "CPU",  eval = "top -bn2 -d 0.1 | awk '/Cpu/ {print $2}' | awk 'NR==2'" },
@@ -8,8 +9,8 @@ local _sensor_cmd = {
   { name = "SWAP", eval = "printf \"%sMiB\" $(free --mebi | awk 'NR==3{printf $3}')" }
 }
 
-local function build_widget()
-  local sensorbar = wibox.widget {
+local function build_widget(_)
+  local sensorbar = { 
     layout  = wibox.layout.fixed.horizontal,
     spacing = 10,
     spacing_widget = {
@@ -18,16 +19,15 @@ local function build_widget()
       halign = "center",
       {
         widget        = wibox.widget.separator,
-        forced_width  = 5,
-        forced_height = 24,
+        forced_height = beautiful.panel_size - 8,
         thickness     = 1,
-        color         = "#777777",
+        color         = "#707070",
       },
     },
   }
 
   for _,cmd in ipairs(_sensor_cmd) do
-    local sensor = wibox.widget {
+    local sensor = {
       layout  = wibox.layout.fixed.horizontal,
       spacing = 2,
       {
@@ -39,7 +39,7 @@ local function build_widget()
         layout = wibox.layout.fixed.horizontal,
       },
     }
-    sensorbar:add(sensor)
+    table.insert(sensorbar, sensor)
   end
 
   local widget = {

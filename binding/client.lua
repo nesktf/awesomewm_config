@@ -46,13 +46,8 @@ _M.keys = gears.table.join(
   ),
   awful.key({ mod }, "a",
     function (c)
-      local tb = awful.titlebar
-
-      if (not c.maximized) then
-        tb.hide(c)
-      elseif(c.floating) then
-        tb.show(c)
-      end
+      awful.titlebar.toggle(c, "top")
+      awful.titlebar.toggle(c, "bottom")
 
       c.maximized = not c.maximized
       c:raise()
@@ -67,7 +62,8 @@ _M.keys = gears.table.join(
   ),
   awful.key({ mod }, "x",
     function(c)
-      awful.titlebar.toggle(c)
+      awful.titlebar.toggle(c, "top")
+      awful.titlebar.toggle(c, "bottom")
     end,
     {description = "toggle window borders", group = "client"}
   )

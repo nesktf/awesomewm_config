@@ -1,8 +1,7 @@
 local awful     = require('awful')
-local gears     = require('gears')
 local beautiful = require('beautiful')
 
-local titlebar = require('ui.titlebar')
+local titlebar = require('widget.titlebar')
 
 local _M = {}
 
@@ -45,7 +44,9 @@ _M.signals = {
   {
     id = "request::titlebars",
     fun = function(c)
-      titlebar.attach_floating(c)
+      c.titlebar = titlebar { 
+        client = c
+      }
     end
   }
 }

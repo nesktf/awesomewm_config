@@ -36,12 +36,11 @@ local theme = require('themes.breeze-like')
 beautiful.init(theme.theme)
 awesome.set_preferred_icon_size(128) -- ?
 
--- Layouts
-local layout = require('ui.layout')
+-- Bind panel, wallpaper & layout
+local layout = require('main.layout')
 awful.layout.layouts = layout.layouts
 
--- Bind panel & wallpaper
-local panel = require('ui.panel')
+local panel = require('widget.panel')
 awful.screen.connect_for_each_screen(function(screen)
   if beautiful.wallpaper then
     local wallpaper = beautiful.wallpaper
@@ -52,7 +51,14 @@ awful.screen.connect_for_each_screen(function(screen)
     gears.wallpaper.maximized(wallpaper, screen, true)
   end
 
-  screen.panel = panel { screen = screen }
+  layout:setup({
+    screen    = screen,
+    floating  = true,
+    tag_count = 4,
+  })
+  screen.panel = panel { 
+    screen    = screen,
+  }
 end)
 
 -- Key bindings

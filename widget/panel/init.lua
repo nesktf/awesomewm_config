@@ -1,45 +1,42 @@
 local beautiful = require('beautiful')
 local wibox     = require('wibox')
 local gears     = require('gears')
-local dpi       = require("beautiful.xresources").apply_dpi
 
-local ui_bindings = require('binding.ui')
-
-local rhs     = require('ui.panel.rhs')
-local center  = require('ui.panel.center')
-local lhs     = require('ui.panel.lhs')
+local rhs     = require('widget.panel.rhs')
+local center  = require('widget.panel.center')
+local lhs     = require('widget.panel.lhs')
 
 local _M = {}
 
-local function getgap(is_floating) 
+local function _getgap(is_floating) 
   return is_floating and beautiful.panel_gap*2 or 0 
 end
 
-local function getshape(is_rounded)
+local function _getshape(is_rounded)
   return is_rounded and function(cr, w, h)
     gears.shape.rounded_rect(cr, w, h, beautiful.panel_radius)
   end or gears.shape.rectangle
 end
 
-local function build(args)
-  local screen    = args.screen or nil
+local function __build_widget(args)
+  assert(args.screen ~= nil)
+  local screen    = args.screen
   local floating  = args.floating or false
   local rounded   = args.rounded or false
-  assert(screen ~= nil)
 
   local geom  = screen.geometry
-  local gap   = getgap(floating)
+  local gap   = _getgap(floating)
 
   local widget = wibox {
     type    = 'dock',
     screen  = screen,
     visible = true,
-    width   = dpi(geom.width - 2*gap),
+    width   = geom.width - 2*gap,
     height  = beautiful.panel_size,
     x       = geom.x + gap,
     y       = geom.y + gap,
     bg      = beautiful.bg_normal,
-    shape   = getshape(rounded),
+    shape   = _getshape(rounded),
   }
   widget.floating = floating
   widget.rounded  = rounded
@@ -53,25 +50,18 @@ local function build(args)
 
   widget:setup {
     layout = wibox.layout.align.horizontal,
-    lhs(
-      screen,
-      ui_bindings.layoutbox_buttons,
-      ui_bindings.taglist_buttons
-    ),
-    center(
-      screen,
-      ui_bindings.tasklist_buttons
-    ),
-    rhs()
+    lhs(screen),
+    center(screen),
+    rhs(screen)
   }
 
   widget.set_floating = function(self, flag)
     local _geom = self.screen.geometry
-    local _gap  = getgap(flag)
+    local _gap  = _getgap(flag)
 
     self.x      = _geom.x + _gap
     self.y      = _geom.y + _gap
-    self.width  = dpi(_geom.width - 2*_gap)
+    self.width  = _geom.width - 2*_gap
 
     self:struts {
       top     = beautiful.panel_size+_gap,
@@ -84,11 +74,11 @@ local function build(args)
   end
 
   widget.set_rounded = function(self, flag)
-    self.shape    = getshape(flag)
+    self.shape    = _getshape(flag)
     self.rounded  = flag
   end
 
   return widget
 end
 
-return setmetatable(_M, { __call = function(_, ...) return build(...) end })
+return setmetatable(_M, { __call = function(_, ...) return __build_widget(...) end })
