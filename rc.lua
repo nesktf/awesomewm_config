@@ -52,7 +52,7 @@ awful.screen.connect_for_each_screen(function(screen)
     gears.wallpaper.maximized(wallpaper, screen, true)
   end
 
-  screen.panel = panel.setup(screen)
+  screen.panel = panel { screen = screen }
 end)
 
 -- Key bindings

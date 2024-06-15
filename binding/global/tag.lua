@@ -56,12 +56,6 @@ for i = 1, 4 do
         end
       end,
       {description = "toggle focused client on tag #" .. i, group = "tag"}
-    ),
-    awful.key({ alt }, "Tab",
-      function()
-        -- require('module.switcher').switch(1, altkey, "Alt_L", "Shift", "Tab")
-      end,
-      {description = "alttab", group = "awesome"}
     )
   )
 end

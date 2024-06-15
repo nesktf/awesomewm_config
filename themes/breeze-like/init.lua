@@ -20,6 +20,8 @@ _M.fg_urgent     = "#ffffff"
 _M.fg_minimize   = "#ffffff"
 
 _M.useless_gap   = dpi(5)
+_M.panel_gap     = dpi(5)
+_M.panel_radius  = dpi(4)
 _M.gap_single_client = true
 _M.border_width  = dpi(0)
 _M.border_normal = "#000000"
