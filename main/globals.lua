@@ -28,7 +28,8 @@ _M.app = {
   browser_w = "librewolf --profile "..home_dir.."/.librewolf/80zhfr50.work/",
   yt_viewer = "freetube",
   launcher = _M.cmd.rofi .. " -show drun",
-  game_launcher = _M.cmd.rofi .. " -show lutris",
+  game_launcher = "flatpak run net.lutris.Lutris",
+  -- game_launcher = _M.cmd.rofi .. " -show lutris",
   dev_launcher = _M.cmd.rofi .. " -show dev"
 }
 

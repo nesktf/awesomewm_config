@@ -18,14 +18,28 @@ _M.signals = {
           -- Prevent clients from being unreachable after screen count changes.
           awful.placement.no_offscreen(c)
       end
-      -- c.shape = function(cr, w, h)
-      --   gears.shape.rounded_rect(cr, w, h, 4)
-      -- end
+
+      if (c.floating or c.first_tag.layout.name == "floating") then
+        awful.titlebar.show(c, "top")
+        awful.titlebar.show(c, "bottom")
+        c.border_width = beautiful.border_width
+      else
+        awful.titlebar.hide(c, "top")
+        awful.titlebar.hide(c, "bottom")
+        c.border_width = beautiful.border_width_alt
+      end
     end
   },
   {
     id = "property::maximized",
     fun = function(c)
+      if (c.maximized) then
+        awful.titlebar.hide(c, "top")
+        awful.titlebar.hide(c, "bottom")
+      else
+        awful.titlebar.show(c, "top")
+        awful.titlebar.show(c, "bottom")
+      end
       c.border_width = c.maximized and 0 or beautiful.border_width
     end
   },
@@ -48,7 +62,21 @@ _M.signals = {
         client = c
       }
     end
-  }
+  },
+  {
+    id = "property::floating",
+    fun = function(c)
+      if (c.floating) then
+        awful.titlebar.show(c, "top")
+        awful.titlebar.show(c, "bottom")
+        c.border_width = beautiful.border_width
+      else
+        awful.titlebar.hide(c, "top")
+        awful.titlebar.hide(c, "bottom")
+        c.border_width = beautiful.border_width_alt
+      end
+    end
+  },
 }
 
 return _M

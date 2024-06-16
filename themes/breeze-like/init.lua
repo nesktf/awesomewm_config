@@ -26,8 +26,10 @@ _M.panel_radius  = dpi(4)
 _M.panel_size    = dpi(26)
 _M.gap_single_client = true
 _M.border_width  = dpi(0)
+_M.border_width_alt = dpi(2)
 _M.border_normal = "#000000"
-_M.border_focus  = "#535d6c"
+-- _M.border_focus  = "#535d6c"
+_M.border_focus = "#415167"
 _M.border_marked = "#91231c"
 
 -- There are other variable sets
@@ -107,7 +109,7 @@ _M.titlebar_maximized_button_focus_inactive  = icons_path.."/titlebar/go-up.png"
 _M.titlebar_maximized_button_normal_active = icons_path.."/titlebar/window-restore.png"
 _M.titlebar_maximized_button_focus_active  = icons_path.."/titlebar/window-restore.png"
 
-_M.wallpaper = theme_path.."/wallpaper/marisa.png"
+_M.wallpaper = theme_path.."/wallpaper/marisa2.png"
 
 -- You can use your own layout icons like this:
 _M.layout_fairh = icons_path.."/layouts/fairhw.png"

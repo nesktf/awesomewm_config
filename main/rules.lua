@@ -54,9 +54,12 @@ _M.rules =  {
       placement = awful.placement.centered
     }
   },
-  { -- Spawn konsole centered
-    rule = {
-      class = "konsole"
+  { -- Spawn terminal centered
+    rule_any = {
+      class = {
+        "konsole",
+        "Alacritty"
+      }
     },
     properties = {
       placement = awful.placement.centered

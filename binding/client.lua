@@ -1,5 +1,6 @@
-local awful   = require('awful')
-local gears   = require('gears')
+local awful     = require('awful')
+local gears     = require('gears')
+local beautiful = require('beautiful')
 
 local keys  = require('main.globals').keys
 local mod   = keys.mod
@@ -66,6 +67,15 @@ _M.keys = gears.table.join(
       awful.titlebar.toggle(c, "bottom")
     end,
     {description = "toggle window borders", group = "client"}
+  ),
+  awful.key({ mod }, "z",
+    function(c)
+      c.border_width =
+        (c.border_width == beautiful.border_width)
+      and beautiful.border_width_alt
+      or beautiful.border_width
+    end,
+    {description = "toggle tiling borders", group = "client"}
   )
 )
 

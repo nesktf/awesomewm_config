@@ -48,7 +48,7 @@ awful.screen.connect_for_each_screen(function(screen)
     if type(wallpaper) == "function" then
       wallpaper = wallpaper(screen)
     end
-    gears.wallpaper.maximized(wallpaper, screen, true)
+    gears.wallpaper.maximized(wallpaper, screen, false)
   end
 
   layout:setup({
@@ -79,6 +79,21 @@ local signals = require('main.signals')
 for _, signal in ipairs(signals.signals) do
   client.connect_signal(signal.id, signal.fun)
 end
+
+tag.connect_signal("property::layout", function(t)
+  local clients = t:clients()
+  for _,c in pairs(clients) do
+    if c.floating or c.first_tag.layout.name == "floating" then
+      awful.titlebar.show(c, "top")
+      awful.titlebar.show(c, "bottom")
+      c.border_width = beautiful.border_width
+    else
+      awful.titlebar.hide(c, "top")
+      awful.titlebar.hide(c, "bottom")
+      c.border_width = beautiful.border_width_alt
+    end
+  end
+end)
 
 -- Misc
 awful.util.shell = globals.app.shell -- For autostart & other things
