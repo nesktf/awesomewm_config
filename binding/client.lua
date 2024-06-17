@@ -25,8 +25,8 @@ _M.buttons = gears.table.join( -- Mouse bindings
 _M.keys = gears.table.join(
   awful.key({ mod, "Shift" }, "f",
     function (c)
-        c.fullscreen = not c.fullscreen
-        c:raise()
+      c.fullscreen = not c.fullscreen
+      c:raise()
     end,
     {description = "toggle fullscreen", group = "client"}
   ),
@@ -76,6 +76,18 @@ _M.keys = gears.table.join(
       or beautiful.border_width
     end,
     {description = "toggle tiling borders", group = "client"}
+  ),
+  awful.key({ mod, alt }, "l",
+    function(c)
+      c:move_to_screen(c.screen.index+1)
+    end,
+    {description = "move to next screen", group = "client"}
+  ),
+  awful.key({ mod, alt }, "h",
+    function(c)
+      c:move_to_screen(c.screen.index-1)
+    end,
+    {description = "move to previous screen", group = "client"}
   )
 )
 

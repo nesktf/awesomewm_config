@@ -1,5 +1,6 @@
 local awful     = require('awful')
 local beautiful = require('beautiful')
+local naughty   = require("naughty")
 
 local titlebar = require('widget.titlebar')
 
@@ -66,7 +67,11 @@ _M.signals = {
   {
     id = "property::floating",
     fun = function(c)
-      if (c.floating) then
+      local layout_check = 
+        c.first_tag ~= nil and
+        c.first_tag.layout.name == "floating"
+
+      if (c.floating or layout_check) then
         awful.titlebar.show(c, "top")
         awful.titlebar.show(c, "bottom")
         c.border_width = beautiful.border_width
