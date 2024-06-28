@@ -5,7 +5,7 @@ local awful     = require('awful')
 local gears     = require("gears")
 local menubar   = require("menubar")
 
-local globals   = require('main.globals')
+local globals   = require('config.globals')
 
 do -- Error handling
   if awesome.startup_errors then
@@ -64,7 +64,7 @@ end)
 -- Key bindings
 require("awful.hotkeys_popup.keys") -- Enable hotkeys help widget for vim-likes
 local global_bindings = require('binding.global')
-root.buttons(global_bindings.buttons)
+-- root.buttons(global_bindings.buttons)
 root.keys(global_bindings.keys)
 
 -- Autofocus
@@ -76,31 +76,18 @@ awful.rules.rules = rules.rules
 
 -- Signals
 local signals = require('main.signals')
-for _, signal in ipairs(signals.signals) do
-  client.connect_signal(signal.id, signal.fun)
+for _,signal in ipairs(signals.client) do
+  client.connect_signal(signal.id, signal.callback)
+end
+for _, signal in ipairs(signals.tag) do
+  tag.connect_signal(signal.id, signal.callback)
 end
 
-tag.connect_signal("property::layout", function(t)
-  local clients = t:clients()
-  for _,c in pairs(clients) do
-    if c.floating or c.first_tag.layout.name == "floating" then
-      awful.titlebar.show(c, "top")
-      awful.titlebar.show(c, "bottom")
-      c.border_width = beautiful.border_width
-    else
-      awful.titlebar.hide(c, "top")
-      awful.titlebar.hide(c, "bottom")
-      c.border_width = beautiful.border_width_alt
-    end
-  end
-end)
-
 -- Misc
-awful.util.shell = globals.app.shell -- For autostart & other things
-menubar.utils.terminal = globals.app.terminal -- Set the terminal for applications that require it
+awful.util.shell = globals.env.shell -- For autostart & other things
+menubar.utils.terminal = globals.env.term -- Set the terminal for applications that require it
 
 -- Autostart
-local autostart = require('main.autostart')
-autostart.on_startup(globals.autostart.on_startup)
-autostart.on_reload(globals.autostart.on_reload)
-
+local autostart = require('config.autostart')
+autostart.on_startup()
+autostart.on_reload()

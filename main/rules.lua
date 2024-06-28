@@ -81,11 +81,13 @@ _M.rules =  {
   { -- Always floating
     rule_any = {
       name = {
-        "Event Tester",  -- xev.
+        "Event Tester",  -- xev
+        "test",
       },
     },
     properties = {
-      floating = true
+      floating = true,
+      placement = awful.placement.centered,
     }
   },
 

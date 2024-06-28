@@ -2,7 +2,7 @@ local awful     = require('awful')
 local gears     = require('gears')
 local beautiful = require('beautiful')
 
-local keys  = require('main.globals').keys
+local keys = require('config.globals').keys
 local mod   = keys.mod
 local alt   = keys.alt
 

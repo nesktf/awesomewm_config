@@ -2,20 +2,22 @@ local theme_assets  = require("beautiful.theme_assets")
 local xresources    = require("beautiful.xresources")
 local dpi           = xresources.apply_dpi
 
-local theme_path = require('main.globals').path.themes .. "/breeze-like"
+local theme_path = require('config.globals').path.themes .. "/breeze-like"
 local icons_path = theme_path .. "/icons"
+local widgets_path = theme_path .. "/widgets"
 
 local _M = {}
 
-_M.font          = "sans 8"
+_M.font          = "Cousine Nerd Font 8"
 
 _M.bg_normal     = "#222222"
 _M.bg_focus      = "#535d6c"
 _M.bg_urgent     = "#ff0000"
 _M.bg_minimize   = "#444444"
-_M.bg_systray    = _M.bg_normal
+_M.bg_systray = "#272727"
+-- _M.bg_systray    = "#343434"
 
-_M.fg_normal     = "#aaaaaa"
+_M.fg_normal     = "#BBBBBB"
 _M.fg_focus      = "#ffffff"
 _M.fg_urgent     = "#ffffff"
 _M.fg_minimize   = "#ffffff"
@@ -23,13 +25,17 @@ _M.fg_minimize   = "#ffffff"
 _M.useless_gap   = dpi(5)
 _M.panel_gap     = _M.useless_gap
 _M.panel_radius  = dpi(4)
-_M.panel_size    = dpi(26)
+_M.panel_size    = dpi(24)
 _M.gap_single_client = true
+_M.panel = widgets_path.."/panel.png"
+
 _M.border_width  = dpi(0)
 _M.border_width_alt = dpi(2)
-_M.border_normal = "#000000"
+_M.border_normal = _M.bg_normal
+-- _M.border_normal = "#000000"
 -- _M.border_focus  = "#535d6c"
-_M.border_focus = "#415167"
+-- _M.border_focus = "#415167"
+_M.border_focus = "#454545"
 _M.border_marked = "#91231c"
 
 -- There are other variable sets
@@ -45,10 +51,13 @@ _M.border_marked = "#91231c"
 -- Example:
 --theme.taglist_bg_focus = "#ff0000"
 _M.titlebar_bg_focus = "#272727"
--- theme.titlebar_bg_normal = "#1e1e1e"
-_M.titlebar_bg_normal = "#303030"
+-- _M.titlebar_bg_focus = _M.bg_systray
+_M.titlebar_bg_normal = "#1e1e1e"
+-- _M.titlebar_bgimage_normal = _M.panel
+-- _M.titlebar_bgimage_focus = _M.panel
+-- _M.titlebar_bg_normal = "#303030"
   --   -- bg_normal = "#303030"
-_M.titlebar_top_size = 22
+_M.titlebar_top_size = dpi(22)
 _M.titlebar_bot_size = 4
 
 -- Generate taglist squares:
@@ -109,7 +118,7 @@ _M.titlebar_maximized_button_focus_inactive  = icons_path.."/titlebar/go-up.png"
 _M.titlebar_maximized_button_normal_active = icons_path.."/titlebar/window-restore.png"
 _M.titlebar_maximized_button_focus_active  = icons_path.."/titlebar/window-restore.png"
 
-_M.wallpaper = theme_path.."/wallpaper/marisa2.png"
+_M.wallpaper = theme_path.."/wallpaper/marisa1.png"
 
 -- You can use your own layout icons like this:
 _M.layout_fairh = icons_path.."/layouts/fairhw.png"
@@ -143,6 +152,15 @@ _M.volume_high = icons_path.."/audio-volume-high.png"
 _M.volume_medium = icons_path.."/audio-volume-medium.png"
 _M.volume_low = icons_path.."/audio-volume-low.png"
 _M.volume_mute = icons_path.."/audio-volume-muted.png"
+
+_M.tasklist_bg_image_normal = widgets_path.."/tasklist/normal.png"
+_M.tasklist_bg_image_focus = widgets_path.."/tasklist/focus.png"
+_M.tasklist_bg_image_urgent = widgets_path.."/tasklist/urgent.png"
+
+_M.widget_display_c = widgets_path.."/display/widget_display_c.png"
+_M.widget_display_l = widgets_path.."/display/widget_display_l.png"
+_M.widget_display_r = widgets_path.."/display/widget_display_r.png"
+_M.widget_display = widgets_path.."/display/widget_display.png"
 
 return {theme = _M}
 

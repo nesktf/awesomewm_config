@@ -2,8 +2,10 @@ local awful     = require('awful')
 local gears     = require('gears')
 local beautiful = require('beautiful')
 
-local modkey  = require('main.globals').keys.mod
-local osd     = require('widget.osd')
+local keys = require('config.globals').keys
+local mod  = keys.mod
+
+local osd = require('widget.osd')
 
 local function vol_icon(_vol)
   if (_vol > 0.66) then
@@ -30,7 +32,7 @@ local function show_volume()
 end
 
 local media_bindings = gears.table.join(
-  awful.key({ modkey }, "F1",
+  awful.key({ mod }, "F1",
     function()
       awful.spawn.with_shell("pactl set-sink-volume @DEFAULT_SINK@ -1.328252939dB")
       show_volume()
@@ -38,7 +40,7 @@ local media_bindings = gears.table.join(
     {description = "lower volume", group = "media"}
   ),
 
-  awful.key({ modkey }, "F2",
+  awful.key({ mod }, "F2",
     function()
       awful.spawn.with_shell("pactl set-sink-volume @DEFAULT_SINK@ +1.328252939dB")
       show_volume()
@@ -47,7 +49,7 @@ local media_bindings = gears.table.join(
   ),
 
 
-  awful.key({ modkey }, "F3",
+  awful.key({ mod }, "F3",
     function()
       awful.spawn.with_shell("pactl set-sink-mute @DEFAULT_SINK@ toggle")
       show_volume()
@@ -55,7 +57,7 @@ local media_bindings = gears.table.join(
     {description = "toggle mute volume", group = "media"}
   ),
 
-  awful.key({ modkey }, "F4",
+  awful.key({ mod }, "F4",
     function()
       awful.spawn.with_shell("amixer -D pulse sset Master 80%,57%")
       osd.text {

@@ -4,7 +4,7 @@ local beautiful = require('beautiful')
 
 local _sensor_cmd = {
   { name = "CPU",  eval = "top -bn2 -d 0.1 | awk '/Cpu/ {print $2}' | awk 'NR==2'" },
-  { name = "Temp", eval = "sensors | awk 'NR==10{printf $4}' | cut -d'+' -f2" },
+  { name = "Temp", eval = "sensors | awk 'NR==3{printf $2}' | cut -d'+' -f2" },
   { name = "RAM",  eval = "printf \"%sMiB\" $(free --mebi | awk 'NR==2{printf $3}')" },
   { name = "SWAP", eval = "printf \"%sMiB\" $(free --mebi | awk 'NR==3{printf $3}')" }
 }
@@ -12,31 +12,65 @@ local _sensor_cmd = {
 local function build_widget(_)
   local sensorbar = { 
     layout  = wibox.layout.fixed.horizontal,
-    spacing = 10,
+    spacing = 2,
     spacing_widget = {
       widget = wibox.container.place,
       valign = "center",
       halign = "center",
       {
-        widget        = wibox.widget.separator,
-        forced_height = beautiful.panel_size - 8,
+        widget = wibox.widget.imagebox,
+        -- image = beautiful.widget_display_c,
+        -- forced_height = 23,
+        -- widget        = wibox.widget.separator,
         thickness     = 1,
-        color         = "#707070",
+        color         = "#70707000",
       },
     },
   }
 
   for _,cmd in ipairs(_sensor_cmd) do
+    local watch = awful.widget.watch(
+      'bash -c "'..cmd.eval..'"', 1,
+      function(widget, stdout)
+        widget:set_text(stdout)
+      end,
+      wibox.widget{
+        widget = wibox.widget.textbox,
+        align = "center",
+        valign = "center",
+      }
+    )
+
     local sensor = {
-      layout  = wibox.layout.fixed.horizontal,
-      spacing = 2,
+      layout = wibox.layout.fixed.horizontal,
       {
-        widget  = wibox.widget.textbox,
-        text    = cmd.name .. ":",
+        widget = wibox.container.margin,
+        bottom = 2,
+        {
+          widget = wibox.widget.imagebox,
+          image = beautiful.widget_display_l
+        }
       },
       {
-        awful.widget.watch('bash -c "' .. cmd.eval .. '"', 1), 
-        layout = wibox.layout.fixed.horizontal,
+        widget = wibox.container.background,
+        bgimage = beautiful.widget_display,       
+        {
+          {
+            widget  = wibox.widget.textbox,
+            text    = cmd.name .. ":",
+          },
+          watch,
+          spacing = 4,
+          layout = wibox.layout.fixed.horizontal,
+        },
+      },
+      {
+        widget = wibox.container.margin,
+        bottom = 2,
+        {
+          widget = wibox.widget.imagebox,
+          image = beautiful.widget_display_r
+        }
       },
     }
     table.insert(sensorbar, sensor)
@@ -45,9 +79,14 @@ local function build_widget(_)
   local widget = {
     layout          = wibox.layout.fixed.horizontal,
     spacing         = 12,
-    spacing_widget  = wibox.widget.separator,
+    -- spacing_widget  = wibox.widget.separator,
     sensorbar,
-    wibox.widget.systray(),
+    {
+      wibox.widget.systray(),
+      top = 1,
+      bottom = 2,
+      widget = wibox.container.margin,
+    }
   }
 
   return widget

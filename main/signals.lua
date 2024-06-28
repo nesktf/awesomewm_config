@@ -1,15 +1,14 @@
 local awful     = require('awful')
 local beautiful = require('beautiful')
-local naughty   = require("naughty")
 
 local titlebar = require('widget.titlebar')
 
 local _M = {}
 
-_M.signals = {
+_M.client = {
   {
     id = "manage",
-    fun = function(c)
+    callback = function(c)
       -- Set the windows at the slave,
       -- i.e. put it at the end of others instead of setting it master.
       -- if not awesome.startup then awful.client.setslave(c) end
@@ -33,7 +32,7 @@ _M.signals = {
   },
   {
     id = "property::maximized",
-    fun = function(c)
+    callback = function(c)
       if (c.maximized) then
         awful.titlebar.hide(c, "top")
         awful.titlebar.hide(c, "bottom")
@@ -46,19 +45,19 @@ _M.signals = {
   },
   {
     id = "focus",
-    fun = function(c)
+    callback = function(c)
       c.border_color = beautiful.border_focus
     end
   },
   {
     id = "unfocus",
-    fun = function(c)
+    callback = function(c)
       c.border_color = beautiful.border_normal
     end
   },
   {
     id = "request::titlebars",
-    fun = function(c)
+    callback = function(c)
       c.titlebar = titlebar { 
         client = c
       }
@@ -66,7 +65,7 @@ _M.signals = {
   },
   {
     id = "property::floating",
-    fun = function(c)
+    callback = function(c)
       local layout_check = 
         c.first_tag ~= nil and
         c.first_tag.layout.name == "floating"
@@ -79,6 +78,26 @@ _M.signals = {
         awful.titlebar.hide(c, "top")
         awful.titlebar.hide(c, "bottom")
         c.border_width = beautiful.border_width_alt
+      end
+    end
+  },
+}
+
+_M.tag = {
+  {
+    id = "property::layout", 
+    callback = function(t)
+      local clients = t:clients()
+      for _,c in pairs(clients) do
+        if c.floating or c.first_tag.layout.name == "floating" then
+          awful.titlebar.show(c, "top")
+          awful.titlebar.show(c, "bottom")
+          c.border_width = beautiful.border_width
+        else
+          awful.titlebar.hide(c, "top")
+          awful.titlebar.hide(c, "bottom")
+          c.border_width = beautiful.border_width_alt
+        end
       end
     end
   },

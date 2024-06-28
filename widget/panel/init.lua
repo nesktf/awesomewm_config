@@ -35,7 +35,7 @@ local function __build_widget(args)
     height  = beautiful.panel_size,
     x       = geom.x + gap,
     y       = geom.y + gap,
-    bg      = beautiful.bg_normal,
+    bgimage = beautiful.panel,
     shape   = _getshape(rounded),
   }
   widget.floating = floating

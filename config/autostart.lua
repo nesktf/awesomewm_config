@@ -1,10 +1,24 @@
 local awful = require('awful')
--- local debug_mode = config.module.auto_start.debug_mode or false
+local picom = require('config.picom')
 
 local _M = {}
 
-_M.on_startup = function(autostart)
-  for _, cmd in ipairs(autostart) do
+local _on_init = {
+  picom.get_cmd(),
+  "nm-applet",
+  "kdeconnect-indicator",
+  "pasystray",
+  "copyq",
+  "polkit-dumb-agent"
+}
+
+local _on_reload = {
+  'setxkbmap es',
+  'xinput set-prop "USB OPTICAL MOUSE " "libinput Accel Profile Enabled" 0 1'
+}
+
+_M.on_startup = function()
+  for _, cmd in ipairs(_on_init) do
     local findme = cmd
     local firstspace = cmd:find(' ')
     if firstspace then
@@ -17,8 +31,7 @@ _M.on_startup = function(autostart)
     awful.spawn.easy_async_with_shell(
       string.format('pgrep -x %s &>/dev/null || pgrep -x -f %s >/dev/null || %s', findme, findme, cmd),
       function(_, stderr)
-        -- Debugger 
-        -- if not stderr or stderr == '' or not debug_mode then
+        -- Debugger if not stderr or stderr == '' or not debug_mode then
         if not stderr or stderr == '' then return end
 
         -- naughty.notification({
@@ -33,8 +46,8 @@ _M.on_startup = function(autostart)
   end
 end
 
-_M.on_reload = function(autostart)
-  for _, cmd in ipairs(autostart) do
+_M.on_reload = function()
+  for _, cmd in ipairs(_on_reload) do
     awful.spawn.easy_async_with_shell(cmd)
   end
 end

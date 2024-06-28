@@ -2,7 +2,7 @@ local awful = require('awful')
 local gears = require('gears')
 local wibox = require('wibox')
 
-local mod = require('main.globals').keys.mod
+local mod = require('config.globals').keys.mod
 
 local function build_lhs(screen)
   local layoutbox = awful.widget.layoutbox(screen)
@@ -37,7 +37,7 @@ local function build_lhs(screen)
   local widget = {
     layout          = wibox.layout.fixed.horizontal,
     spacing         = 6,
-    spacing_widget  = wibox.widget.separator,
+    -- spacing_widget  = wibox.widget.separator,
     wibox.widget.textclock(),
     {
       layout  = wibox.layout.fixed.horizontal,
