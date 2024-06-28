@@ -3,6 +3,7 @@ local gears   = require('gears')
 local menubar = require("menubar")
 
 local launcher  = require('config.launcher')
+local script    = require('config.script')
 local picom     = require('config.picom')
 
 local keys = require('config.globals').keys
@@ -35,7 +36,10 @@ local binds = gears.table.join(
     {description = "open yt viewer", group = "launcher"}
   ),
   awful.key({ "Control", alt }, "p", picom.toggle_picom,
-  {description = "toggle compositor", group = "launcher"}
+    {description = "toggle compositor", group = "launcher"}
+  ),
+  awful.key({ "Control", alt }, "u", script.toggle_crt,
+    {description = "toggle crt", group = "launcher"}
   )
 )
 
