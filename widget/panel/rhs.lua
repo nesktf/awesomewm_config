@@ -2,9 +2,19 @@ local awful     = require('awful')
 local wibox     = require('wibox')
 local beautiful = require('beautiful')
 
+local host = require('config.globals').env.host
+
+local function get_temp() 
+  if (host == "compy") then
+    return "sensors | awk 'NR==3{printf $2}' | cut -d'+' -f2"
+  elseif (host == "nobus") then
+    return "sensors | awk 'NR==20{printf $3}' | cut -d'+' -f2"
+  end
+end
+
 local _sensor_cmd = {
   { name = "CPU",  eval = "top -bn2 -d 0.1 | awk '/Cpu/ {print $2}' | awk 'NR==2'" },
-  { name = "Temp", eval = "sensors | awk 'NR==3{printf $2}' | cut -d'+' -f2" },
+  { name = "Temp", eval =  get_temp()},
   { name = "RAM",  eval = "printf \"%sMiB\" $(free --mebi | awk 'NR==2{printf $3}')" },
   { name = "SWAP", eval = "printf \"%sMiB\" $(free --mebi | awk 'NR==3{printf $3}')" }
 }
