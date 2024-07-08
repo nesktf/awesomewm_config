@@ -7,7 +7,6 @@ local _on_init = {
   picom.get_cmd(),
   "nm-applet",
   "kdeconnect-indicator",
-  "pasystray",
   "copyq",
   "polkit-dumb-agent"
 }

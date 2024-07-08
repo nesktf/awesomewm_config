@@ -28,21 +28,23 @@ local function __build_widget(args)
   local gap   = _getgap(floating)
 
   local widget = wibox {
-    type    = 'dock',
-    screen  = screen,
-    visible = true,
-    width   = geom.width - 2*gap,
-    height  = beautiful.panel_size,
-    x       = geom.x + gap,
-    y       = geom.y + gap,
-    bgimage = beautiful.panel,
+    type         = 'dock',
+    screen       = screen,
+    visible      = true,
+    width        = geom.width - 2*gap,
+    height       = beautiful.panel_size,
+    x            = geom.x + gap,
+    y            = geom.y + gap,
+    bg           = beautiful.panel_color,
+    border_width = beautiful.panel_border_w,
+    border_color = beautiful.panel_border,
     shape   = _getshape(rounded),
   }
   widget.floating = floating
   widget.rounded  = rounded
 
   widget:struts {
-    top     = beautiful.panel_size+gap,
+    top     = beautiful.panel_size+2*beautiful.panel_border_w+gap,
     bottom  = 0,
     left    = 0,
     right   = 0
@@ -64,7 +66,7 @@ local function __build_widget(args)
     self.width  = _geom.width - 2*_gap
 
     self:struts {
-      top     = beautiful.panel_size+_gap,
+      top     = beautiful.panel_size+2*beautiful.panel_border_w+_gap,
       bottom  = 0,
       left    = 0,
       right   = 0

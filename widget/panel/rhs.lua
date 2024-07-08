@@ -2,7 +2,9 @@ local awful     = require('awful')
 local wibox     = require('wibox')
 local beautiful = require('beautiful')
 
-local host = require('config.globals').env.host
+local host       = require('config.globals').env.host
+local tray_menu  = require('widget.tray_menu')
+local power_menu = require('widget.power_menu')
 
 local function get_temp() 
   if (host == "compy") then
@@ -22,16 +24,16 @@ local _sensor_cmd = {
 local function build_widget(_)
   local sensorbar = { 
     layout  = wibox.layout.fixed.horizontal,
-    spacing = 2,
+    spacing = 10,
     spacing_widget = {
       widget = wibox.container.place,
       valign = "center",
       halign = "center",
       {
-        widget = wibox.widget.imagebox,
+        -- widget = wibox.widget.imagebox,
         -- image = beautiful.widget_display_c,
         -- forced_height = 23,
-        -- widget        = wibox.widget.separator,
+        widget        = wibox.widget.separator,
         thickness     = 1,
         color         = "#70707000",
       },
@@ -54,16 +56,7 @@ local function build_widget(_)
     local sensor = {
       layout = wibox.layout.fixed.horizontal,
       {
-        widget = wibox.container.margin,
-        bottom = 2,
-        {
-          widget = wibox.widget.imagebox,
-          image = beautiful.widget_display_l
-        }
-      },
-      {
         widget = wibox.container.background,
-        bgimage = beautiful.widget_display,       
         {
           {
             widget  = wibox.widget.textbox,
@@ -74,14 +67,6 @@ local function build_widget(_)
           layout = wibox.layout.fixed.horizontal,
         },
       },
-      {
-        widget = wibox.container.margin,
-        bottom = 2,
-        {
-          widget = wibox.widget.imagebox,
-          image = beautiful.widget_display_r
-        }
-      },
     }
     table.insert(sensorbar, sensor)
   end
@@ -91,6 +76,8 @@ local function build_widget(_)
     spacing         = 12,
     -- spacing_widget  = wibox.widget.separator,
     sensorbar,
+    -- tray_menu.panel_widget { screen = screen },
+    -- power_menu.panel_widget { screen = screen },
     {
       wibox.widget.systray(),
       top = 1,

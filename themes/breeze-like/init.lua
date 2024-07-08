@@ -14,7 +14,7 @@ _M.bg_normal     = "#222222"
 _M.bg_focus      = "#535d6c"
 _M.bg_urgent     = "#ff0000"
 _M.bg_minimize   = "#444444"
-_M.bg_systray = "#272727"
+-- _M.bg_systray    = "#272727"
 -- _M.bg_systray    = "#343434"
 
 _M.fg_normal     = "#BBBBBB"
@@ -22,12 +22,17 @@ _M.fg_focus      = "#ffffff"
 _M.fg_urgent     = "#ffffff"
 _M.fg_minimize   = "#ffffff"
 
-_M.useless_gap   = dpi(5)
+-- _M.useless_gap   = dpi(5)
+_M.useless_gap   = dpi(2)
 _M.panel_gap     = _M.useless_gap
 _M.panel_radius  = dpi(4)
 _M.panel_size    = dpi(24)
 _M.gap_single_client = true
 _M.panel = widgets_path.."/panel.png"
+_M.panel_color   = "#15181AF0"
+_M.panel_border  = "#141516F0"
+_M.panel_border_w = dpi(1)
+_M.bg_systray    = _M.panel_color
 
 _M.border_width  = dpi(0)
 _M.border_width_alt = dpi(2)

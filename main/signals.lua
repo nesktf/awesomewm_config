@@ -1,4 +1,5 @@
 local awful     = require('awful')
+local naughty   = require('naughty')
 local beautiful = require('beautiful')
 
 local titlebar = require('widget.titlebar')
@@ -20,6 +21,7 @@ _M.client = {
       end
 
       if (c.floating or c.first_tag.layout.name == "floating") then
+        if (not c.titlebar_enable) then return end
         awful.titlebar.show(c, "top")
         awful.titlebar.show(c, "bottom")
         c.border_width = beautiful.border_width
@@ -66,6 +68,8 @@ _M.client = {
   {
     id = "property::floating",
     callback = function(c)
+      if (c.fullscreen) then return end
+
       local layout_check = 
         c.first_tag ~= nil and
         c.first_tag.layout.name == "floating"
@@ -89,7 +93,13 @@ _M.tag = {
     callback = function(t)
       local clients = t:clients()
       for _,c in pairs(clients) do
-        if c.floating or c.first_tag.layout.name == "floating" then
+        if (c.fullscreen) then return end
+
+        local layout_check = 
+          c.first_tag ~= nil and
+          c.first_tag.layout.name == "floating"
+
+        if (c.floating or layout_check) then
           awful.titlebar.show(c, "top")
           awful.titlebar.show(c, "bottom")
           c.border_width = beautiful.border_width

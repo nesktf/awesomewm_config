@@ -75,6 +75,7 @@ _M.rules =  {
     properties = {
       fullscreen = true,
       placement = awful.placement.centered,
+      floating = false,
     }
   },
 
