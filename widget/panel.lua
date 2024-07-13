@@ -6,6 +6,7 @@ local beautiful = require('beautiful')
 local host  = require('config.globals').env.host
 local mod   = require('config.globals').keys.mod
 local sound = require('widget.sound')
+local mpris = require('widget.mpris')
 
 local _M = {}
 
@@ -268,6 +269,14 @@ local function __build_panel(args)
       layout = wibox.layout.fixed.horizontal,
       spacing = 6,
       sensorbar,
+      panel_button {
+        content = mpris.new_worker{},
+        buttons = gears.table.join(
+          awful.button({ }, 2, function() mpris.toggle_pause() end),
+          awful.button({ }, 4, function() mpris.step_volume(0.05) end),
+          awful.button({ }, 5, function() mpris.step_volume(-0.05) end)
+        )
+      },
       panel_button {
         content = sound.new_worker(),
         buttons = gears.table.join(
