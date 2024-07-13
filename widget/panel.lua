@@ -3,8 +3,9 @@ local wibox     = require('wibox')
 local gears     = require('gears')
 local beautiful = require('beautiful')
 
-local host = require('config.globals').env.host
-local mod  = require('config.globals').keys.mod
+local host  = require('config.globals').env.host
+local mod   = require('config.globals').keys.mod
+local sound = require('widget.sound')
 
 local _M = {}
 
@@ -12,6 +13,7 @@ local function panel_button(args)
   local left = args.left or 0
   local right = args.right or 0
   local content = args.content
+  local buttons = args.buttons
 
   local base = {
     widget = wibox.container.margin,
@@ -33,14 +35,16 @@ local function panel_button(args)
       content
     }
   }
-  back:connect_signal("mouse::enter", function()
-    back.bg = focus_bg
-  end)
-  back:connect_signal("mouse::leave", function()
-    back.bg = unfocus_bg
-  end)
-  back:connect_signal("button::press", function(_, _, button)
-  end)
+
+  if (buttons) then
+    back:buttons(buttons)
+    back:connect_signal("mouse::enter", function()
+      back.bg = focus_bg
+    end)
+    back:connect_signal("mouse::leave", function()
+      back.bg = unfocus_bg
+    end)
+  end
   table.insert(base, back)
 
   return base
@@ -264,6 +268,13 @@ local function __build_panel(args)
       layout = wibox.layout.fixed.horizontal,
       spacing = 6,
       sensorbar,
+      panel_button {
+        content = sound.new_worker(),
+        buttons = gears.table.join(
+          awful.button({ }, 4, function() sound.step_volume(0.05) end),
+          awful.button({ }, 5, function() sound.step_volume(-0.05) end)
+        )
+      },
       panel_button {
         right = 3,
         content = wibox.widget.systray()
