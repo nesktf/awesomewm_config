@@ -37,7 +37,7 @@ _M.bg_systray    = _M.panel_color_alt
 _M.systray_icon_spacing = 5
 
 _M.border_width  = dpi(0)
-_M.border_width_alt = dpi(2)
+_M.border_width_tiling = dpi(2)
 _M.border_normal = _M.bg_normal
 -- _M.border_normal = "#000000"
 -- _M.border_focus  = "#535d6c"

@@ -2,9 +2,10 @@ local awful     = require('awful')
 local gears     = require('gears')
 local beautiful = require('beautiful')
 
-local keys = require('config.globals').keys
-local mod   = keys.mod
-local alt   = keys.alt
+local titlebar = require('widget.titlebar')
+local keys     = require('config.globals').keys
+local mod      = keys.mod
+local alt      = keys.alt
 
 local _M = {}
 
@@ -47,10 +48,21 @@ _M.keys = gears.table.join(
   ),
   awful.key({ mod }, "a",
     function (c)
-      awful.titlebar.toggle(c, "top")
-      awful.titlebar.toggle(c, "bottom")
+      if (c.fullscreen) then return end
 
+      local maximize_action = function(maximized)
+        if (maximized) then
+          awful.titlebar.hide(c, "top")
+          awful.titlebar.hide(c, "bottom")
+          c.border_width = 0
+        else
+          titlebar.update_titlebars(c)
+        end
+      end
+
+      maximize_action(not c.maximized)
       c.maximized = not c.maximized
+      maximize_action(c.maximized) -- Have to do this twice for some reason
       c:raise()
     end,
     {description = "(un)maximize", group = "client"}
@@ -70,10 +82,9 @@ _M.keys = gears.table.join(
   ),
   awful.key({ mod }, "z",
     function(c)
-      c.border_width =
-        (c.border_width == beautiful.border_width)
-      and beautiful.border_width_alt
-      or beautiful.border_width
+      c.border_width = (c.border_width == beautiful.border_width)
+        and beautiful.border_width_tiling
+        or beautiful.border_width
     end,
     {description = "toggle tiling borders", group = "client"}
   ),

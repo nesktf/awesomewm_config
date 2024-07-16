@@ -8,7 +8,7 @@ _M.terminal = function()
 end
 
 _M.files = function()
-  awful.spawn("dolphin")
+  awful.spawn("pcmanfm-qt")
 end
 
 _M.browser_main = function() 

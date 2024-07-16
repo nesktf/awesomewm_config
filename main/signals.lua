@@ -1,5 +1,4 @@
 local awful     = require('awful')
-local naughty   = require('naughty')
 local beautiful = require('beautiful')
 
 local titlebar = require('widget.titlebar')
@@ -20,29 +19,7 @@ _M.client = {
           awful.placement.no_offscreen(c)
       end
 
-      if (c.floating or c.first_tag.layout.name == "floating") then
-        if (not c.titlebar_enable) then return end
-        awful.titlebar.show(c, "top")
-        awful.titlebar.show(c, "bottom")
-        c.border_width = beautiful.border_width
-      else
-        awful.titlebar.hide(c, "top")
-        awful.titlebar.hide(c, "bottom")
-        c.border_width = beautiful.border_width_alt
-      end
-    end
-  },
-  {
-    id = "property::maximized",
-    callback = function(c)
-      if (c.maximized) then
-        awful.titlebar.hide(c, "top")
-        awful.titlebar.hide(c, "bottom")
-      else
-        awful.titlebar.show(c, "top")
-        awful.titlebar.show(c, "bottom")
-      end
-      c.border_width = c.maximized and 0 or beautiful.border_width
+      titlebar.update_titlebars(c)
     end
   },
   {
@@ -60,29 +37,14 @@ _M.client = {
   {
     id = "request::titlebars",
     callback = function(c)
-      c.titlebar = titlebar { 
-        client = c
-      }
+      c.titlebar = titlebar.create(c)
     end
   },
   {
     id = "property::floating",
     callback = function(c)
       if (c.fullscreen) then return end
-
-      local layout_check = 
-        c.first_tag ~= nil and
-        c.first_tag.layout.name == "floating"
-
-      if (c.floating or layout_check) then
-        awful.titlebar.show(c, "top")
-        awful.titlebar.show(c, "bottom")
-        c.border_width = beautiful.border_width
-      else
-        awful.titlebar.hide(c, "top")
-        awful.titlebar.hide(c, "bottom")
-        c.border_width = beautiful.border_width_alt
-      end
+      titlebar.update_titlebars(c)
     end
   },
 }
@@ -94,20 +56,7 @@ _M.tag = {
       local clients = t:clients()
       for _,c in pairs(clients) do
         if (c.fullscreen) then return end
-
-        local layout_check = 
-          c.first_tag ~= nil and
-          c.first_tag.layout.name == "floating"
-
-        if (c.floating or layout_check) then
-          awful.titlebar.show(c, "top")
-          awful.titlebar.show(c, "bottom")
-          c.border_width = beautiful.border_width
-        else
-          awful.titlebar.hide(c, "top")
-          awful.titlebar.hide(c, "bottom")
-          c.border_width = beautiful.border_width_alt
-        end
+        titlebar.update_titlebars(c)
       end
     end
   },

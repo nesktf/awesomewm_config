@@ -5,9 +5,24 @@ local beautiful = require('beautiful')
 
 local _M = {}
 
-local function __build_widget(args)
-  assert(args.client ~= nil)
-  local client = args.client
+function _M.update_titlebars(c)
+  local function is_floating()
+    return (c.floating or (c.first_tag ~= nil and c.first_tag.layout.name == "floating"))
+  end
+
+  if (is_floating()) then
+    awful.titlebar.show(c, "top")
+    awful.titlebar.show(c, "bottom")
+    c.border_width = beautiful.border_width
+  else
+    awful.titlebar.hide(c, "top")
+    awful.titlebar.hide(c, "bottom")
+    c.border_width = beautiful.border_width_tiling
+  end
+end
+
+function _M.create(client)
+  assert(client ~= nil)
 
   local titlebar = {
     top = awful.titlebar(client, {
@@ -57,4 +72,4 @@ local function __build_widget(args)
   return titlebar
 end
 
-return setmetatable(_M, { __call = function(_, ...) return __build_widget(...) end })
+return _M
