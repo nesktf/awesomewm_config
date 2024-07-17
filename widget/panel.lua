@@ -13,6 +13,8 @@ local _M = {}
 local function panel_button(args)
   local left = args.left or 0
   local right = args.right or 0
+  local left_cont = args.left_cont or 5
+  local right_cont = args.right_cont or 5
   local content = args.content
   local buttons = args.buttons
 
@@ -32,7 +34,8 @@ local function panel_button(args)
     end,
     {
       widget = wibox.container.margin,
-      left = 5, right = 5,
+      left = left_cont,
+      right = right_cont,
       content
     }
   }
@@ -123,7 +126,7 @@ local function __build_panel(args)
   -- Taglist
   local taglist = awful.widget.taglist {
     screen  = screen,
-    filter  = awful.widget.taglist.filter.selected,
+    filter  = awful.widget.taglist.filter.all,
     buttons = gears.table.join(
       awful.button({ }, 1, function(t) t:view_only() end),
       awful.button({ mod }, 1, function(t)
@@ -143,14 +146,33 @@ local function __build_panel(args)
     layout = {
       layout = wibox.layout.fixed.horizontal,
       spacing = 4,
-      spacing_widget = {
-        color = "#DDDDDD",
-        widget = wibox.widget.separator,
-      },
     },
     style = {
-      bg_focus = "#00000000",
-      bg_normal = "#00000000",
+      bg_focus = "#393C3EF0",
+    },
+    widget_template = {
+      id     = 'background_role',
+      widget = wibox.container.background,
+      {
+        widget = wibox.container.margin,
+        left  = 4,
+        right = 7,
+        {
+          layout = wibox.layout.fixed.horizontal,
+          {
+            margins = 2,
+            widget  = wibox.container.margin,
+            {
+              id     = 'icon_role',
+              widget = wibox.widget.imagebox,
+            },
+          },
+          {
+            id     = 'text_role',
+            widget = wibox.widget.textbox,
+          },
+        },
+      },
     },
   }
 
@@ -274,7 +296,7 @@ local function __build_panel(args)
         content = wibox.widget.textclock()
       },
       panel_button {
-        content = taglist
+        content = taglist,
       },
       -- taglist,
       panel_button {
