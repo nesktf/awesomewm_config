@@ -58,6 +58,13 @@ _M.tag = {
         if (c.fullscreen) then return end
         titlebar.update_titlebars(c)
       end
+      if (t.layout.name == "floating") then
+        t.screen.panel:set_floating(false)
+        t.screen.panel:set_rounded(false)
+      else
+        t.screen.panel:set_floating(true)
+        t.screen.panel:set_rounded(true)
+      end
     end
   },
 }

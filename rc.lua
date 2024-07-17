@@ -37,7 +37,7 @@ beautiful.init(theme.theme)
 awesome.set_preferred_icon_size(128) -- ?
 
 -- Bind panel, wallpaper & layout
-local layout = require('main.layout')
+local layout = require('layout')
 awful.layout.layouts = layout.layouts
 
 local panel = require('widget.panel')
@@ -73,11 +73,11 @@ root.keys(global_bindings.keys)
 require("awful.autofocus")
 
 -- Client rules
-local rules = require('main.rules')
+local rules = require('rules')
 awful.rules.rules = rules.rules
 
 -- Signals
-local signals = require('main.signals')
+local signals = require('signals')
 for _,signal in ipairs(signals.client) do
   client.connect_signal(signal.id, signal.callback)
 end
