@@ -82,9 +82,7 @@ local function __build_panel(args)
     bg           = beautiful.panel_color,
     border_width = beautiful.panel_border_w,
     border_color = beautiful.panel_border,
-    shape   = panel_shape(rounded),
-    floating = floating,
-    rounded = rounded,
+    shape        = panel_shape(rounded),
   }
   widget:struts {
     top     = beautiful.panel_size+2*beautiful.panel_border_w+gap,
@@ -92,13 +90,16 @@ local function __build_panel(args)
     left    = 0,
     right   = 0
   }
-  widget.set_floating = function(self, flag)
-    local _geom = self.screen.geometry
-    local _gap  = panel_gap(flag)
+  widget.floating = floating
+  widget.rounded = rounded
 
-    self.x      = _geom.x + _gap
-    self.y      = _geom.y + _gap
-    self.width  = _geom.width - 2*_gap
+  function widget:set_floating(flag)
+    local _geom = self.screen.geometry
+    local _gap = panel_gap(flag)
+
+    self.x     = _geom.x + _gap
+    self.y     = _geom.y + _gap
+    self.width = _geom.width - 2*_gap
 
     self:struts {
       top     = beautiful.panel_size+2*beautiful.panel_border_w+_gap,
@@ -109,9 +110,10 @@ local function __build_panel(args)
 
     self.floating = flag
   end
-  widget.set_rounded = function(self, flag)
-    self.shape    = panel_shape(flag)
-    self.rounded  = flag
+
+  function widget:set_rounded(flag)
+    self.shape = panel_shape(flag)
+    self.rounded = flag
   end
 
   -- Taglist

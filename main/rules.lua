@@ -14,17 +14,14 @@ _M.rules =  {
       placement = awful.placement.no_overlap+awful.placement.no_offscreen,
       buttons = client_bindings.buttons,
       keys = client_bindings.keys,
-      -- floating = true, -- Floating by default
     },
   },
-
   { -- Titlebar rule
     rule_any = {
       type = { "normal", "dialog" },
     },
     properties = { titlebars_enabled = true }
   },
-
   { -- Dialog window props
     rule = {
       type = "dialog"
@@ -33,15 +30,6 @@ _M.rules =  {
       placement = awful.placement.centered;
     }
   },
-
-  -- { -- Global notification rules
-  --   rule = {},
-  --   properties = {
-  --     screen = awful.screen.preferred,
-  --     implicit_timeout = 5
-  --   }
-  -- }
-
   { -- Center every kde dialog like window
     rule_any = {
       class = {
@@ -65,7 +53,6 @@ _M.rules =  {
       placement = awful.placement.centered
     }
   },
-
   { -- Hydrus media viewer fullscreen override
     rule_any = {
       name = {
@@ -78,7 +65,6 @@ _M.rules =  {
       floating = false,
     }
   },
-
   { -- Always floating
     rule_any = {
       name = {
@@ -91,18 +77,14 @@ _M.rules =  {
       placement = awful.placement.centered,
     }
   },
-
   { -- No titlebar
     rule_any = {
       name = {
         "Lutris"
       }
     },
-    properties = {
-      titlebars_enabled = false
-    }
+    properties = { titlebars_enabled = false }
   },
-
   { -- Copyq
     rule = {
       class = "copyq"
@@ -113,7 +95,6 @@ _M.rules =  {
       floating = true
     }
   },
-
 }
 
 return _M
