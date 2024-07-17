@@ -4,6 +4,7 @@ local beautiful = require('beautiful')
 local titlebar = require('widget.titlebar')
 
 local function toggle_panel_floating(t)
+  if (not t.screen.panel) then return end
   if (t.layout.name == "floating") then
     t.screen.panel:set_floating(false)
     t.screen.panel:set_rounded(false)

@@ -38,7 +38,7 @@ awesome.set_preferred_icon_size(128) -- ?
 
 -- Bind panel, wallpaper & layout
 local tags = require('tags')
-tags:init({ "Main", "Browser", "Gaems", "Media" })
+tags:init({ "1", "2", "3", "4" })
 
 local panel = require('widget.panel')
 awful.screen.connect_for_each_screen(function(screen)
