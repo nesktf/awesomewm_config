@@ -4,7 +4,6 @@ local gears   = require('gears')
 local mod     = require('config.globals').keys.mod
 local popup   = require("awful.hotkeys_popup")
 
-local tag_bind      = require('binding.global.tag')
 local media_bind    = require('binding.global.media')
 local layout_bind   = require('binding.global.layout')
 local launcher_bind = require('binding.global.launcher')
@@ -43,7 +42,6 @@ _M.keys = gears.table.join(
     {description = "togle floating panel", group = "awesome"}
   ),
 
-  tag_bind,
   media_bind,
   layout_bind,
   launcher_bind

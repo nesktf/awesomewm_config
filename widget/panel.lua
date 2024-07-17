@@ -94,6 +94,8 @@ local function __build_panel(args)
   widget.rounded = rounded
 
   function widget:set_floating(flag)
+    if (flag == self.floating) then return end
+
     local _geom = self.screen.geometry
     local _gap = panel_gap(flag)
 
@@ -112,6 +114,8 @@ local function __build_panel(args)
   end
 
   function widget:set_rounded(flag)
+    if (flag == self.rounded) then return end
+
     self.shape = panel_shape(flag)
     self.rounded = flag
   end
@@ -119,7 +123,7 @@ local function __build_panel(args)
   -- Taglist
   local taglist = awful.widget.taglist {
     screen  = screen,
-    filter  = awful.widget.taglist.filter.all,
+    filter  = awful.widget.taglist.filter.selected,
     buttons = gears.table.join(
       awful.button({ }, 1, function(t) t:view_only() end),
       awful.button({ mod }, 1, function(t)
@@ -135,7 +139,19 @@ local function __build_panel(args)
       end),
       awful.button({ }, 5, function(t) awful.tag.viewnext(t.screen) end),
       awful.button({ }, 4, function(t) awful.tag.viewprev(t.screen) end)
-    )
+    ),
+    layout = {
+      layout = wibox.layout.fixed.horizontal,
+      spacing = 4,
+      spacing_widget = {
+        color = "#DDDDDD",
+        widget = wibox.widget.separator,
+      },
+    },
+    style = {
+      bg_focus = "#00000000",
+      bg_normal = "#00000000",
+    },
   }
 
   -- Layoutbox
@@ -257,7 +273,10 @@ local function __build_panel(args)
         left = 3,
         content = wibox.widget.textclock()
       },
-      taglist,
+      panel_button {
+        content = taglist
+      },
+      -- taglist,
       panel_button {
         content = layoutbox,
       },

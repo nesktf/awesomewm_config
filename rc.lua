@@ -37,8 +37,8 @@ beautiful.init(theme.theme)
 awesome.set_preferred_icon_size(128) -- ?
 
 -- Bind panel, wallpaper & layout
-local layout = require('layout')
-awful.layout.layouts = layout.layouts
+local tags = require('tags')
+tags:init({ "Main", "Browser", "Gaems", "Media" })
 
 local panel = require('widget.panel')
 awful.screen.connect_for_each_screen(function(screen)
@@ -51,10 +51,9 @@ awful.screen.connect_for_each_screen(function(screen)
     gears.wallpaper.maximized(wallpaper, screen, false)
   end
 
-  layout:setup({
-    screen    = screen,
-    floating  = true,
-    tag_count = 4,
+  tags:setup_for_screen({
+    screen   = screen,
+    floating = false,
   })
   screen.panel = panel { 
     screen    = screen,
@@ -67,7 +66,8 @@ end)
 require("awful.hotkeys_popup.keys") -- Enable hotkeys help widget for vim-likes
 local global_bindings = require('binding.global')
 -- root.buttons(global_bindings.buttons)
-root.keys(global_bindings.keys)
+local keys = gears.table.join(global_bindings.keys, tags:create_bindings())
+root.keys(keys)
 
 -- Autofocus
 require("awful.autofocus")

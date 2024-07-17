@@ -3,6 +3,16 @@ local beautiful = require('beautiful')
 
 local titlebar = require('widget.titlebar')
 
+local function toggle_panel_floating(t)
+  if (t.layout.name == "floating") then
+    t.screen.panel:set_floating(false)
+    t.screen.panel:set_rounded(false)
+  else
+    t.screen.panel:set_floating(true)
+    t.screen.panel:set_rounded(true)
+  end
+end
+
 local _M = {}
 
 _M.client = {
@@ -58,15 +68,17 @@ _M.tag = {
         if (c.fullscreen) then return end
         titlebar.update_titlebars(c)
       end
-      if (t.layout.name == "floating") then
-        t.screen.panel:set_floating(false)
-        t.screen.panel:set_rounded(false)
-      else
-        t.screen.panel:set_floating(true)
-        t.screen.panel:set_rounded(true)
-      end
+      toggle_panel_floating(t)
     end
   },
+  {
+    id = "property::selected",
+    callback = function(t)
+      if (t.selected) then
+        toggle_panel_floating(t)
+      end
+    end,
+  }
 }
 
 return _M

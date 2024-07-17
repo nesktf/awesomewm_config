@@ -17,10 +17,10 @@ _M.bg_minimize   = "#444444"
 -- _M.bg_systray    = "#272727"
 -- _M.bg_systray    = "#343434"
 
-_M.fg_normal     = "#BBBBBB"
-_M.fg_focus      = "#ffffff"
-_M.fg_urgent     = "#ffffff"
-_M.fg_minimize   = "#ffffff"
+_M.fg_normal     = "#CCCCCC"
+_M.fg_focus      = _M.fg_normal
+_M.fg_urgent     = "#FFFFFF"
+_M.fg_minimize   = "#999999"
 
 -- _M.useless_gap   = dpi(5)
 _M.useless_gap   = dpi(2)
