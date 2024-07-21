@@ -4,7 +4,7 @@ local dpi           = xresources.apply_dpi
 
 local theme_path = require('config.globals').path.themes .. "/breeze-like"
 local icons_path = theme_path .. "/icons"
-local widgets_path = theme_path .. "/widgets"
+-- local widgets_path = theme_path .. "/widgets"
 
 local _M = {}
 
@@ -28,7 +28,7 @@ _M.panel_gap     = _M.useless_gap
 _M.panel_radius  = dpi(4)
 _M.panel_size    = dpi(24)
 _M.gap_single_client = true
-_M.panel = widgets_path.."/panel.png"
+-- _M.panel = widgets_path.."/panel.png"
 _M.panel_color   = "#15181AF0"
 _M.panel_color_alt = "#25282AF0"
 _M.panel_border  = "#141516F0"
@@ -89,7 +89,7 @@ _M.notification_max_width = 400
 -- Variables set for theming the menu:
 -- menu_[bg|fg]_[normal|focus]
 -- menu_[border_color|border_width]
-_M.menu_submenu_icon = theme_path.."/submenu.png"
+-- _M.menu_submenu_icon = theme_path.."/submenu.png"
 _M.menu_height = dpi(15)
 _M.menu_width  = dpi(100)
 
@@ -160,15 +160,15 @@ _M.volume_medium = icons_path.."/audio-volume-medium.png"
 _M.volume_low = icons_path.."/audio-volume-low.png"
 _M.volume_mute = icons_path.."/audio-volume-muted.png"
 
-_M.tasklist_bg_image_normal = widgets_path.."/tasklist/normal.png"
-_M.tasklist_bg_image_focus = widgets_path.."/tasklist/focus.png"
-_M.tasklist_bg_image_urgent = widgets_path.."/tasklist/urgent.png"
+-- _M.tasklist_bg_image_normal = widgets_path.."/tasklist/normal.png"
+-- _M.tasklist_bg_image_focus = widgets_path.."/tasklist/focus.png"
+-- _M.tasklist_bg_image_urgent = widgets_path.."/tasklist/urgent.png"
 
-_M.widget_display_c = widgets_path.."/display/widget_display_c.png"
-_M.widget_display_l = widgets_path.."/display/widget_display_l.png"
-_M.widget_display_r = widgets_path.."/display/widget_display_r.png"
-_M.widget_display = widgets_path.."/display/widget_display.png"
-
+-- _M.widget_display_c = widgets_path.."/display/widget_display_c.png"
+-- _M.widget_display_l = widgets_path.."/display/widget_display_l.png"
+-- _M.widget_display_r = widgets_path.."/display/widget_display_r.png"
+-- _M.widget_display = widgets_path.."/display/widget_display.png"
+--
 return {theme = _M}
 
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80
