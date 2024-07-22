@@ -53,7 +53,7 @@ awful.screen.connect_for_each_screen(function(screen)
 
   tags:setup_for_screen({
     screen   = screen,
-    floating = false,
+    floating = true,
   })
   screen.panel = panel { 
     screen    = screen,

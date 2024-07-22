@@ -69,15 +69,15 @@ _M.tag = {
         if (c.fullscreen) then return end
         titlebar.update_titlebars(c)
       end
-      toggle_panel_floating(t)
+      -- toggle_panel_floating(t)
     end
   },
   {
     id = "property::selected",
     callback = function(t)
-      if (t.selected) then
-        toggle_panel_floating(t)
-      end
+      -- if (t.selected) then
+      --   toggle_panel_floating(t)
+      -- end
     end,
   }
 }
