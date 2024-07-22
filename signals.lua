@@ -31,6 +31,10 @@ _M.client = {
       end
 
       titlebar.update_titlebars(c)
+      if (c.fullscreen and c.y ~= c.screen.y) then -- >:c
+        c.y = c.screen.geometry.y
+        c.height = c.screen.geometry.height
+      end
     end
   },
   {
@@ -54,7 +58,6 @@ _M.client = {
   {
     id = "property::floating",
     callback = function(c)
-      if (c.fullscreen) then return end
       titlebar.update_titlebars(c)
     end
   },
@@ -66,20 +69,18 @@ _M.tag = {
     callback = function(t)
       local clients = t:clients()
       for _,c in pairs(clients) do
-        if (c.fullscreen) then return end
         titlebar.update_titlebars(c)
       end
-      -- toggle_panel_floating(t)
     end
   },
-  {
-    id = "property::selected",
-    callback = function(t)
-      -- if (t.selected) then
-      --   toggle_panel_floating(t)
-      -- end
-    end,
-  }
+  -- {
+  --   id = "property::selected",
+  --   callback = function(t)
+  --     if (t.selected) then
+  --       toggle_panel_floating(t)
+  --     end
+  --   end,
+  -- }
 }
 
 return _M
