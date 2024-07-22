@@ -30,7 +30,7 @@ _M.rules =  {
       placement = awful.placement.centered;
     }
   },
-  { -- Center every kde dialog like window
+  { -- Center every dialog like window
     rule_any = {
       class = {
         "keditfiletype",
@@ -70,7 +70,11 @@ _M.rules =  {
       name = {
         "Event Tester",  -- xev
         "test",
+        "Network Connections",
       },
+      class = {
+        "nm-connection-editor",
+      }
     },
     properties = {
       floating = true,

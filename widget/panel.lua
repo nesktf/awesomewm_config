@@ -202,41 +202,52 @@ local function __build_panel(args)
       awful.button({ }, 5, function() awful.client.focus.byidx(-1) end)
     ),
     style = {
-      bg_focus = "#00000000",
-      bg_normal = "#00000000",
-      bg_minimize = "#00000000",
-      bg_image_normal = beautiful.tasklist_bg_image_normal,
-      bg_image_minimize = beautiful.tasklist_bg_image_normal,
-      bg_image_focus = beautiful.tasklist_bg_image_focus,
+      shape = function(cr, w, h)
+        gears.shape.rounded_rect(cr, w, h, 3)
+      end,
+      bg_normal = "#202426F0",
+      bg_focus = "#292C2EF0",
+      bg_minimize = "#181B1DF0"
     },
     widget_template = {
-      id            = "background_role",
-      widget        = wibox.container.background,
-      forced_width  = 200,
+      widget = wibox.container.margin,
+      top = 3, bottom = 3,
+      right = 6,
       {
-        widget  = wibox.container.margin,
-        left    = 0,
-        right   = 10,
+        id            = "background_role",
+        widget        = wibox.container.background,
+        forced_width = 180,
         {
-          layout = wibox.layout.fixed.horizontal,
+          widget  = wibox.container.margin,
+          left    = 3,
+          right   = 10,
           {
-            widget  = wibox.container.margin,
-            margins = 2,
+            layout = wibox.layout.fixed.horizontal,
             {
-              id     = "icon_role",
-              widget = wibox.widget.imagebox,
+              widget  = wibox.container.margin,
+              top = 1, bottom = 1,
+              right = 3,
+              {
+                id     = "icon_role",
+                widget = wibox.widget.imagebox,
+              },
             },
-          },
-          {
-            id     = "text_role",
-            widget = wibox.widget.textbox,
+            -- {
+              -- widget = wibox.container.constraint,
+              -- width = 180,
+              -- strategy = "max",
+              {
+                id     = "text_role",
+                widget = wibox.widget.textbox,
+              },
+            -- }
           },
         },
-      },
+      }
     },
     layout = {
       layout  = wibox.layout.fixed.horizontal,
-      spacing = 1,
+      spacing = 0,
     },
   } 
 
@@ -292,16 +303,15 @@ local function __build_panel(args)
       layout = wibox.layout.fixed.horizontal,
       spacing = 6,
       panel_button {
-        left = 3,
+        left = 5,
         content = wibox.widget.textclock()
       },
       panel_button {
         content = taglist,
       },
-      -- taglist,
-      panel_button {
-        content = layoutbox,
-      },
+      -- panel_button {
+      --   content = layoutbox,
+      -- },
       {
         id      = "prompt",
         widget  = wibox.widget.textbox
@@ -312,15 +322,16 @@ local function __build_panel(args)
       layout = wibox.layout.fixed.horizontal,
       spacing = 6,
       sensorbar,
+      -- panel_button {
+      --   content = mpris.new_worker{},
+      --   buttons = gears.table.join(
+      --     awful.button({ }, 2, function() mpris.toggle_pause() end),
+      --     awful.button({ }, 4, function() mpris.step_volume(0.05) end),
+      --     awful.button({ }, 5, function() mpris.step_volume(-0.05) end)
+      --   )
+      -- },
       panel_button {
-        content = mpris.new_worker{},
-        buttons = gears.table.join(
-          awful.button({ }, 2, function() mpris.toggle_pause() end),
-          awful.button({ }, 4, function() mpris.step_volume(0.05) end),
-          awful.button({ }, 5, function() mpris.step_volume(-0.05) end)
-        )
-      },
-      panel_button {
+        -- right = 5,
         content = sound.new_worker(),
         buttons = gears.table.join(
           awful.button({ }, 4, function() sound.step_volume(0.05) end),
@@ -328,8 +339,9 @@ local function __build_panel(args)
         )
       },
       panel_button {
-        right = 3,
-        content = wibox.widget.systray()
+        right = 5,
+        content = layoutbox,
+        -- content = wibox.widget.systray()
       },
     },
   }
