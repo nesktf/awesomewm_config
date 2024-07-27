@@ -22,8 +22,7 @@ _M.fg_focus      = _M.fg_normal
 _M.fg_urgent     = "#FFFFFF"
 _M.fg_minimize   = "#999999"
 
--- _M.useless_gap   = dpi(5)
-_M.useless_gap   = dpi(2)
+_M.useless_gap   = dpi(3)
 _M.panel_gap     = _M.useless_gap
 _M.panel_radius  = dpi(4)
 _M.panel_size    = dpi(24)
@@ -37,12 +36,12 @@ _M.bg_systray    = _M.panel_color_alt
 _M.systray_icon_spacing = 5
 
 _M.border_width  = dpi(0)
-_M.border_width_tiling = dpi(2)
+_M.border_width_tiling = dpi(1)
 _M.border_normal = _M.bg_normal
 -- _M.border_normal = "#000000"
 -- _M.border_focus  = "#535d6c"
 -- _M.border_focus = "#415167"
-_M.border_focus = "#454545"
+_M.border_focus = "#656565"
 _M.border_marked = "#91231c"
 
 -- There are other variable sets

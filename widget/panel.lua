@@ -30,7 +30,7 @@ local function panel_button(args)
     widget = wibox.container.background,
     bg = unfocus_bg,
     shape = function(cr, w, h)
-      gears.shape.rounded_rect(cr, w, h, 3)
+      gears.shape.rounded_rect(cr, w, h, 2)
     end,
     {
       widget = wibox.container.margin,
@@ -203,7 +203,7 @@ local function __build_panel(args)
     ),
     style = {
       shape = function(cr, w, h)
-        gears.shape.rounded_rect(cr, w, h, 3)
+        gears.shape.rounded_rect(cr, w, h, 2)
       end,
       bg_normal = "#202426F0",
       bg_focus = "#292C2EF0",

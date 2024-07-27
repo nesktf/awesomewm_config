@@ -71,6 +71,7 @@ _M.tag = {
       for _,c in pairs(clients) do
         titlebar.update_titlebars(c)
       end
+      -- toggle_panel_floating(t)
     end
   },
   -- {

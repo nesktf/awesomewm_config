@@ -5,6 +5,8 @@ local keys = require('config.globals').keys
 local mod  = keys.mod
 local alt  = keys.alt
 
+local thing = require("widget.switcher")
+
 local wwmfact = 0.025
 local hwmfact = 0.05
 
@@ -75,6 +77,12 @@ local binds = gears.table.join(
       end
     end,
     {description = "restore minimized", group = "client"}
+  ),
+  awful.key({ alt }, "Tab",
+    function()
+      thing.switch(1)
+    end,
+    {description = "switch", group = "client"}
   )
 )
 
