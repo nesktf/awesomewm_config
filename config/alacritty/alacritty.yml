@@ -1,0 +1,73 @@
+window:
+  dimensions:
+    columns: 100
+    lines: 30
+
+  class:
+    instance: 'Alacritty'
+    general: 'Alacritty'
+
+  opacity: 0.9
+  decorations: 'Full'
+  startup_mode: "Windowed"
+  title: "Alacritty"
+  dynamic_title: true
+
+font:
+  normal:
+    family: 'Cousine Nerd Font Mono'
+    style: 'Regular'
+
+  bold:
+    family: 'Cousine Nerd Font Mono'
+    style: 'Bold'
+
+  italic:
+    family: 'Cousine Nerd Font Mono'
+    style: 'Italic'
+
+  bold_italic:
+    family: 'Cousine Nerd Font Mono'
+    style: 'Bold Italic'
+
+  size: 10
+
+# Stolen from MateriaDark :DDD
+colors:
+  primary:
+    background: '0x121212'
+    dim_background: '0x121212'
+    bright_background: '0x121212'
+    foreground: '0xDFDFDF'
+    dim_foreground: '0xDFDFDF'
+    bright_foreground: '0xFFFFFF'
+
+  normal:
+    black: '0x474747'
+    red: '0xF44336'
+    green: '0x4CAF50'
+    yellow: '0xFF9800'
+    blue: '0x1A73E8'
+    magenta: '0x9C27B0'
+    cyan: '0x0097A7'
+    white: '0xFFFFFF'
+    
+  dim:
+    black: '0x474747'
+    red: '0xF44336'
+    green: '0x4CAF50'
+    yellow: '0xFF9800'
+    blue: '0x1A73E8'
+    magenta: '0x9C27B0'
+    cyan: '0x0097A7'
+    white: '0xFFFFFF'
+
+  bright:
+    black: '0x474747'
+    red: '0xF44336'
+    green: '0x4CAF50'
+    yellow: '0xFF9800'
+    blue: '0x1A73E8'
+    magenta: '0x9C27B0'
+    cyan: '0x0097A7'
+    white: '0xFFFFFF'

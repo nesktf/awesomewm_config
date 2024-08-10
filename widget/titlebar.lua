@@ -6,19 +6,19 @@ local beautiful = require('beautiful')
 local _M = {}
 
 function _M.update_titlebars(c)
-  -- local function is_floating()
-  --   return (c.floating or (c.first_tag ~= nil and c.first_tag.layout.name == "floating"))
-  -- end
+  local function is_floating()
+    return (c.floating or (c.first_tag ~= nil and c.first_tag.layout.name == "floating"))
+  end
 
-  -- if (is_floating()) then
-  --   awful.titlebar.show(c, "top")
-  --   awful.titlebar.show(c, "bottom")
-  --   c.border_width = beautiful.border_width
-  -- else
+  if (is_floating()) then
+    awful.titlebar.show(c, "top")
+    awful.titlebar.show(c, "bottom")
+    c.border_width = beautiful.border_width
+  else
     awful.titlebar.hide(c, "top")
     awful.titlebar.hide(c, "bottom")
     c.border_width = beautiful.border_width_tiling
-  -- end
+  end
 end
 
 function _M.create(client)
@@ -38,11 +38,15 @@ function _M.create(client)
   titlebar.top:setup {
     layout = wibox.layout.align.horizontal,
     { -- Left
-      layout  = wibox.layout.fixed.horizontal,
-      awful.titlebar.widget.stickybutton(client),
-      awful.titlebar.widget.ontopbutton(client),
-      awful.titlebar.widget.floatingbutton(client),
-      awful.titlebar.widget.titlewidget(client),
+      widget = wibox.container.margin,
+      top = 3, bottom = 3, left = 3, right = 5,
+      {
+        layout  = wibox.layout.fixed.horizontal,
+        spacing = 4,
+        awful.titlebar.widget.stickybutton(client),
+        awful.titlebar.widget.ontopbutton(client),
+        awful.titlebar.widget.floatingbutton(client),
+      }
     },
     { -- Middle
       layout  = wibox.layout.flex.horizontal,
@@ -56,12 +60,18 @@ function _M.create(client)
           awful.mouse.client.resize(client)
         end)
       ),
+      awful.titlebar.widget.titlewidget(client),
     },
     { -- Right
-      layout = wibox.layout.fixed.horizontal,
-      awful.titlebar.widget.minimizebutton(client),
-      awful.titlebar.widget.maximizedbutton(client),
-      awful.titlebar.widget.closebutton(client),
+      widget = wibox.container.margin,
+      top = 3, bottom = 3, right = 3,
+      {
+        layout = wibox.layout.fixed.horizontal,
+        spacing = 4,
+        awful.titlebar.widget.minimizebutton(client),
+        awful.titlebar.widget.maximizedbutton(client),
+        awful.titlebar.widget.closebutton(client),
+      } 
     },
   }
 

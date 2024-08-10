@@ -1,14 +1,15 @@
 local awful   = require('awful')
 local globals = require('config.globals')
+local alacritty = require('config.alacritty')
 
 local _M = {}
 
 _M.terminal = function() 
-  awful.spawn(globals.env.term)
+  awful.spawn(alacritty.get_cmd())
 end
 
 _M.files = function()
-  awful.spawn("pcmanfm-qt")
+  awful.spawn("dolphin")
 end
 
 _M.browser_main = function() 

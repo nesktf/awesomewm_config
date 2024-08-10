@@ -57,8 +57,8 @@ awful.screen.connect_for_each_screen(function(screen)
   })
   screen.panel = panel { 
     screen    = screen,
-    floating = true,
-    rounded = true,
+    -- floating = true,
+    -- rounded = true,
   }
 end)
 

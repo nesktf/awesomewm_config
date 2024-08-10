@@ -31,6 +31,12 @@ local media_bindings = gears.table.join(
       sound.set_balance(1.4)
     end,
     {description = "reset volume", group = "media"}
+  ),
+  awful.key({ mod }, "F5",
+    function()
+      sound.set_balance(1)
+    end,
+    {description = "balance", group = "media"}
   )
 )
 

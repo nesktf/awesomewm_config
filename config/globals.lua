@@ -15,7 +15,8 @@ _M.path = {
 _M.env = {
   host  = hostname,
   shell = "bash",
-  term  = hostname == "compy" and "konsole" or "alacritty",
+  term = "alacritty",
+  -- term  = hostname == "compy" and "konsole" or "alacritty",
 }
 
 _M.keys = {

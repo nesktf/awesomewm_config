@@ -339,9 +339,11 @@ local function __build_panel(args)
         )
       },
       panel_button {
-        right = 5,
         content = layoutbox,
-        -- content = wibox.widget.systray()
+      },
+      panel_button {
+        right = 5,
+        content = wibox.widget.systray()
       },
     },
   }
