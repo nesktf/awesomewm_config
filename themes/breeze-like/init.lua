@@ -33,7 +33,7 @@ _M.panel_color_alt = "#25282AF0"
 _M.panel_border  = "#141516F0"
 _M.panel_border_w = dpi(0)
 _M.bg_systray    = _M.panel_color_alt
-_M.systray_icon_spacing = 5
+_M.systray_icon_spacing = 6
 
 _M.border_width  = dpi(0)
 _M.border_width_tiling = dpi(1)
@@ -124,7 +124,7 @@ _M.titlebar_maximized_button_focus_inactive  = icons_path.."/titlebar/go-up.png"
 _M.titlebar_maximized_button_normal_active = icons_path.."/titlebar/window-restore.png"
 _M.titlebar_maximized_button_focus_active  = icons_path.."/titlebar/window-restore.png"
 
-_M.wallpaper = theme_path.."/wallpaper/marisa1.png"
+_M.wallpaper = theme_path.."/wallpaper/marisa0.png"
 
 -- You can use your own layout icons like this:
 _M.layout_fairh = icons_path.."/layouts/fairhw.png"

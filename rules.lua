@@ -46,7 +46,8 @@ _M.rules =  {
     rule_any = {
       class = {
         "konsole",
-        "Alacritty"
+        "Alacritty",
+        "mpv",
       }
     },
     properties = {

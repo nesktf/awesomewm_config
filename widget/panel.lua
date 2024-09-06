@@ -6,9 +6,68 @@ local beautiful = require('beautiful')
 local host  = require('config.globals').env.host
 local mod   = require('config.globals').keys.mod
 local sound = require('widget.sound')
-local mpris = require('widget.mpris')
+-- local mpris = require('widget.mpris')
 
-local _M = {}
+
+local tray_manager = {
+  timeout = 5,
+  workers = {},
+  tray = wibox.widget.systray(),
+}
+
+function tray_manager:update_screen()
+  local screen = awful.screen.focused()
+  for _, worker in pairs(self.workers) do
+    worker:set_tray_visibility(false)
+  end
+  self.workers[screen.index]:set_tray_visibility(true)
+  self.tray:set_screen(screen)
+
+  if (self.timer ~= nil) then
+    self.timer:stop()
+  end
+
+  self.timer = gears.timer { timeout = self.timeout }
+  self.timer:connect_signal("timeout", function()
+    self.workers[screen.index]:set_tray_visibility(false)
+  end)
+  self.timer:start()
+end
+
+function tray_manager:new_worker(screen)
+  assert(screen ~= nil)
+
+  local tray_holder = wibox.widget {
+    widget = wibox.container.background,
+    visible = false,
+    self.tray
+  }
+
+  local button = wibox.widget {
+    widget = wibox.widget.imagebox,
+    image = beautiful.volume_high,
+    visible = true,
+    buttons = gears.table.join(
+      awful.button({ }, 1, function() self:update_screen() end)
+    )
+  }
+
+  local worker = wibox.widget {
+    layout = wibox.layout.fixed.horizontal,
+    tray_holder,
+    button,
+  }
+
+  function worker:set_tray_visibility(flag)
+    tray_holder.visible = flag
+    button.visible = not flag
+  end
+
+  self.workers[screen.index] = worker
+
+  return worker
+end
+
 
 local function panel_button(args)
   local left = args.left or 0
@@ -54,21 +113,22 @@ local function panel_button(args)
   return base
 end
 
-local function panel_gap(is_floating) 
-  return is_floating and beautiful.panel_gap*2 or 0 
-end
-
-local function panel_shape(is_rounded)
-  return is_rounded and function(cr, w, h)
-    gears.shape.rounded_rect(cr, w, h, beautiful.panel_radius)
-  end or gears.shape.rectangle
-end
 
 local function __build_panel(args)
   assert(args.screen ~= nil)
   local screen    = args.screen
   local floating  = args.floating or false
   local rounded   = args.rounded or false
+
+  local function panel_gap(is_floating) 
+    return is_floating and beautiful.panel_gap*2 or 0 
+  end
+
+  local function panel_shape(is_rounded)
+    return is_rounded and function(cr, w, h)
+      gears.shape.rounded_rect(cr, w, h, beautiful.panel_radius)
+    end or gears.shape.rectangle
+  end
 
   local geom  = screen.geometry
   local gap   = panel_gap(floating)
@@ -309,9 +369,6 @@ local function __build_panel(args)
       panel_button {
         content = taglist,
       },
-      -- panel_button {
-      --   content = layoutbox,
-      -- },
       {
         id      = "prompt",
         widget  = wibox.widget.textbox
@@ -331,23 +388,31 @@ local function __build_panel(args)
       --   )
       -- },
       panel_button {
-        -- right = 5,
-        content = sound.new_worker(),
-        buttons = gears.table.join(
-          awful.button({ }, 4, function() sound.step_volume(0.05) end),
-          awful.button({ }, 5, function() sound.step_volume(-0.05) end)
-        )
-      },
-      panel_button {
-        content = layoutbox,
-      },
-      panel_button {
         right = 5,
-        content = wibox.widget.systray()
+        content = {
+          layout = wibox.layout.fixed.horizontal,
+          {
+            widget = wibox.container.margin,
+            right = 1, top = 1, bottom = 1, left = 1,
+            {
+              layout = wibox.layout.fixed.horizontal,
+              spacing = 5,
+              layoutbox,
+              {
+                widget = sound.new_worker(),
+                buttons = gears.table.join(
+                  awful.button({ }, 4, function() sound.step_volume(0.05) end),
+                  awful.button({ }, 5, function() sound.step_volume(-0.05) end)
+                )
+              },
+              tray_manager:new_worker(screen),
+            },
+          },
+        }
       },
     },
   }
   return widget
 end
 
-return setmetatable(_M, { __call = function(_, ...) return __build_panel(...) end })
+return setmetatable({}, { __call = function(_, ...) return __build_panel(...) end })
