@@ -33,7 +33,11 @@ end
 
 -- Theme things
 local theme = require('themes.breeze-like')
-beautiful.init(theme.theme)
+beautiful.init(theme.settings_with{
+  font       = "Cousine Nerd Font 8",
+  icon_theme = "Tela black dark",
+  wallpaper  = "marisa0",
+})
 awesome.set_preferred_icon_size(128) -- ?
 
 -- Bind panel, wallpaper & layout
@@ -55,12 +59,13 @@ awful.screen.connect_for_each_screen(function(screen)
     screen   = screen,
     floating = true,
   })
-  screen.panel = panel { 
-    screen    = screen,
-    -- floating = true,
-    -- rounded = true,
+  screen.panel = panel.panel_with{ 
+    screen   = screen,
+    floating = true,
+    rounded  = true,
   }
 end)
+panel.post_init()
 
 -- Key bindings
 require("awful.hotkeys_popup.keys") -- Enable hotkeys help widget for vim-likes

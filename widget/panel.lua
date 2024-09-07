@@ -9,73 +9,13 @@ local sound = require('widget.sound')
 -- local mpris = require('widget.mpris')
 
 
-local tray_manager = {
-  timeout = 5,
-  workers = {},
-  tray = wibox.widget.systray(),
-}
-
-function tray_manager:update_screen()
-  local screen = awful.screen.focused()
-  for _, worker in pairs(self.workers) do
-    worker:set_tray_visibility(false)
-  end
-  self.workers[screen.index]:set_tray_visibility(true)
-  self.tray:set_screen(screen)
-
-  if (self.timer ~= nil) then
-    self.timer:stop()
-  end
-
-  self.timer = gears.timer { timeout = self.timeout }
-  self.timer:connect_signal("timeout", function()
-    self.workers[screen.index]:set_tray_visibility(false)
-  end)
-  self.timer:start()
-end
-
-function tray_manager:new_worker(screen)
-  assert(screen ~= nil)
-
-  local tray_holder = wibox.widget {
-    widget = wibox.container.background,
-    visible = false,
-    self.tray
-  }
-
-  local button = wibox.widget {
-    widget = wibox.widget.imagebox,
-    image = beautiful.icon_arrow_left,
-    visible = true,
-    buttons = gears.table.join(
-      awful.button({ }, 1, function() self:update_screen() end)
-    )
-  }
-
-  local worker = wibox.widget {
-    layout = wibox.layout.fixed.horizontal,
-    tray_holder,
-    button,
-  }
-
-  function worker:set_tray_visibility(flag)
-    tray_holder.visible = flag
-    button.visible = not flag
-  end
-
-  self.workers[screen.index] = worker
-
-  return worker
-end
-
-
-local function panel_button(args)
-  local left = args.left or 0
-  local right = args.right or 0
-  local left_cont = args.left_cont or 5
-  local right_cont = args.right_cont or 5
-  local content = args.content
-  local buttons = args.buttons
+local function panel_button(panel_args)
+  local left = panel_args.left or 0
+  local right = panel_args.right or 0
+  local left_cont = panel_args.left_cont or 5
+  local right_cont = panel_args.right_cont or 5
+  local content = panel_args.content
+  local buttons = panel_args.buttons
 
   local base = {
     widget = wibox.container.margin,
@@ -114,7 +54,128 @@ local function panel_button(args)
 end
 
 
-local function __build_panel(args)
+local tray_manager = {
+  timeout = 5,
+  workers = {},
+  tray = wibox.widget.systray(),
+}
+
+function tray_manager:reset_timer()
+  if (self.timer ~= nil) then
+    self.timer:stop()
+  end
+
+  self.timer = gears.timer { timeout = self.timeout }
+  self.timer:connect_signal("timeout", function()
+    self.workers[screen.index]:set_tray_visibility(false)
+  end)
+  self.timer:start()
+end
+
+function tray_manager:update_screen()
+  local screen = awful.screen.focused()
+  for _, worker in pairs(self.workers) do
+    worker:set_tray_visibility(false)
+  end
+  self.workers[screen.index]:set_tray_visibility(true)
+  self.tray:set_screen(screen)
+  -- self:reset_timer()
+end
+
+function tray_manager:new_worker(screen)
+  assert(screen ~= nil)
+
+  local tray_holder = wibox.widget {
+    widget = wibox.container.margin,
+    left = 4,
+    visible = false,
+    self.tray
+  }
+
+  local button = wibox.widget {
+    widget = wibox.widget.imagebox,
+    image = beautiful.icon_arrow_left,
+    visible = true,
+    buttons = gears.table.join(
+      awful.button({ }, 1, function() self:update_screen() end)
+    )
+  }
+
+  local worker = wibox.widget {
+    layout = wibox.layout.fixed.horizontal,
+    tray_holder,
+    button,
+  }
+
+  function worker:set_tray_visibility(flag)
+    tray_holder.visible = flag
+    button.visible = not flag
+  end
+
+  self.workers[screen.index] = worker
+
+  return worker
+end
+
+
+local sensor_manager = {
+  workers = {}
+}
+
+function sensor_manager:new_worker()
+  local function get_temp() 
+    if (host == "compy") then
+      return "sensors | awk 'NR==3{printf $2}' | cut -d'+' -f2"
+    elseif (host == "nobus") then
+      return "sensors | awk 'NR==20{printf $3}' | cut -d'+' -f2"
+    end
+  end
+
+  local sensor_cmd = {
+    { name = "CPU",  eval = "top -bn2 -d 0.1 | awk '/Cpu/ {print $2}' | awk 'NR==2{print $1\\\"%\\\"}'" },
+    { name = "Temp", eval =  get_temp()},
+    { name = "RAM",  eval = "printf \"%sMiB\" $(free --mebi | awk 'NR==2{printf $3}')" },
+    { name = "SWAP", eval = "printf \"%sMiB\" $(free --mebi | awk 'NR==3{printf $3}')" }
+  }
+
+  local sensorbar = { 
+    layout  = wibox.layout.fixed.horizontal,
+    spacing = 6,
+  }
+  for _,cmd in ipairs(sensor_cmd) do
+    local watch = awful.widget.watch(
+      'bash -c "'..cmd.eval..'"', 1,
+      function(w, stdout)
+        w:set_text(stdout)
+      end,
+      wibox.widget{
+        widget = wibox.widget.textbox,
+        align = "center",
+        valign = "center",
+      }
+    )
+    local sensor = panel_button {
+      content = {
+        {
+          widget  = wibox.widget.textbox,
+          text    = cmd.name,
+        },
+        watch,
+        spacing = 5,
+        layout = wibox.layout.fixed.horizontal,
+      }
+    }
+    table.insert(sensorbar, sensor)
+  end
+
+  local widget = wibox.widget(sensorbar)
+  table.insert(self.workers, widget)
+
+  return widget
+end
+
+
+local function build_panel(args)
   assert(args.screen ~= nil)
   local screen    = args.screen
   local floating  = args.floating or false
@@ -177,7 +238,9 @@ local function __build_panel(args)
   end
 
   function widget:set_rounded(flag)
-    if (flag == self.rounded) then return end
+    if (flag == self.rounded) then
+      return
+    end
 
     self.shape = panel_shape(flag)
     self.rounded = flag
@@ -314,51 +377,6 @@ local function __build_panel(args)
     },
   } 
 
-  -- Sensorbar
-  local function get_temp() 
-    if (host == "compy") then
-      return "sensors | awk 'NR==3{printf $2}' | cut -d'+' -f2"
-    elseif (host == "nobus") then
-      return "sensors | awk 'NR==20{printf $3}' | cut -d'+' -f2"
-    end
-  end
-  local sensor_cmd = {
-    { name = "CPU",  eval = "top -bn2 -d 0.1 | awk '/Cpu/ {print $2}' | awk 'NR==2{print $1\\\"%\\\"}'" },
-    { name = "Temp", eval =  get_temp()},
-    { name = "RAM",  eval = "printf \"%sMiB\" $(free --mebi | awk 'NR==2{printf $3}')" },
-    { name = "SWAP", eval = "printf \"%sMiB\" $(free --mebi | awk 'NR==3{printf $3}')" }
-  }
-  local sensorbar = { 
-    layout  = wibox.layout.fixed.horizontal,
-    spacing = 6,
-  }
-  for _,cmd in ipairs(sensor_cmd) do
-    local watch = awful.widget.watch(
-      'bash -c "'..cmd.eval..'"', 1,
-      function(w, stdout)
-        w:set_text(stdout)
-      end,
-      wibox.widget{
-        widget = wibox.widget.textbox,
-        align = "center",
-        valign = "center",
-      }
-    )
-
-    local sensor = panel_button {
-      content = {
-        {
-          widget  = wibox.widget.textbox,
-          text    = cmd.name,
-        },
-        watch,
-        spacing = 5,
-        layout = wibox.layout.fixed.horizontal,
-      }
-    }
-    table.insert(sensorbar, sensor)
-  end
-
   -- Panel setup
   widget:setup {
     layout = wibox.layout.align.horizontal,
@@ -381,7 +399,8 @@ local function __build_panel(args)
     {
       layout = wibox.layout.fixed.horizontal,
       spacing = 6,
-      sensorbar,
+      sensor_manager:new_worker(),
+      -- sensorbar,
       -- panel_button {
       --   content = mpris.new_worker{},
       --   buttons = gears.table.join(
@@ -408,9 +427,9 @@ local function __build_panel(args)
                   awful.button({ }, 5, function() sound.step_volume(-0.05) end)
                 )
               },
-              tray_manager:new_worker(screen),
             },
           },
+          tray_manager:new_worker(screen),
         }
       },
     },
@@ -418,4 +437,15 @@ local function __build_panel(args)
   return widget
 end
 
-return setmetatable({}, { __call = function(_, ...) return __build_panel(...) end })
+
+local _M = {}
+
+function _M.panel_with(args)
+  return build_panel(args)
+end
+
+function _M.post_init()
+  tray_manager:update_screen()
+end
+
+return _M
