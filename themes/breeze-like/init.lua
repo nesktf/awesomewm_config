@@ -80,7 +80,7 @@ _M.taglist_squares_unsel = theme_assets.taglist_squares_unsel(
 -- notification_[bg|fg]
 -- notification_[width|height|margin]
 -- notification_[border_color|border_width|shape|opacity]
-_M.notification_fon = "Cousine Nerd Font"
+_M.notification_font = "Cousine Nerd Font 8"
 _M.notification_icon_size = 40
 -- theme.notification_max_height = 50
 _M.notification_max_width = 400
@@ -92,41 +92,30 @@ _M.notification_max_width = 400
 _M.menu_height = dpi(15)
 _M.menu_width  = dpi(100)
 
--- You can add as many variables as
--- you wish and access them by using
--- beautiful.variable in your rc.lua
---theme.bg_widget = "#cc0000"
 
--- Define the image to load
+-- Titlebar icons
 _M.titlebar_close_button_normal = icons_path.."/titlebar/close_normal.png"
 _M.titlebar_close_button_focus  = icons_path.."/titlebar/close_focus.png"
-
-_M.titlebar_minimize_button_normal = icons_path.."/titlebar/go-down.png"
-_M.titlebar_minimize_button_focus  = icons_path.."/titlebar/go-down.png"
-
-_M.titlebar_ontop_button_normal_inactive = icons_path.."/titlebar/go-up-skip.png"
-_M.titlebar_ontop_button_focus_inactive  = icons_path.."/titlebar/go-up-skip.png"
-_M.titlebar_ontop_button_normal_active = icons_path.."/titlebar/go-up-skip.png"
-_M.titlebar_ontop_button_focus_active  = icons_path.."/titlebar/go-up-skip.png"
-
-_M.titlebar_sticky_button_normal_inactive = icons_path.."/titlebar/window-pin.png"
-_M.titlebar_sticky_button_focus_inactive  = icons_path.."/titlebar/window-pin.png"
-_M.titlebar_sticky_button_normal_active = icons_path.."/titlebar/window-pin.png"
-_M.titlebar_sticky_button_focus_active  = icons_path.."/titlebar/window-pin.png"
-
+_M.titlebar_ontop_button_normal_inactive = icons_path.."/titlebar/ontop_normal_inactive.png"
+_M.titlebar_ontop_button_focus_inactive  = icons_path.."/titlebar/ontop_focus_inactive.png"
+_M.titlebar_ontop_button_normal_active = icons_path.."/titlebar/ontop_normal_active.png"
+_M.titlebar_ontop_button_focus_active  = icons_path.."/titlebar/ontop_focus_active.png"
+_M.titlebar_sticky_button_normal_inactive = icons_path.."/titlebar/sticky_normal_inactive.png"
+_M.titlebar_sticky_button_focus_inactive  = icons_path.."/titlebar/sticky_focus_incative.png"
+_M.titlebar_sticky_button_normal_active = icons_path.."/titlebar/sticky_normal_active.png"
+_M.titlebar_sticky_button_focus_active  = icons_path.."/titlebar/sticky_focus_active.png"
 _M.titlebar_floating_button_normal_inactive = icons_path.."/titlebar/floating_normal_inactive.png"
 _M.titlebar_floating_button_focus_inactive  = icons_path.."/titlebar/floating_focus_inactive.png"
 _M.titlebar_floating_button_normal_active = icons_path.."/titlebar/floating_normal_active.png"
 _M.titlebar_floating_button_focus_active  = icons_path.."/titlebar/floating_focus_active.png"
+_M.titlebar_minimize_button_normal = icons_path.."/titlebar/minimize_normal.png"
+_M.titlebar_minimize_button_focus  = icons_path.."/titlebar/minimize_focus.png"
+_M.titlebar_maximized_button_normal_inactive = icons_path.."/titlebar/maximize_normal_inactive.png"
+_M.titlebar_maximized_button_focus_inactive  = icons_path.."/titlebar/maximize_focus_inactive.png"
+_M.titlebar_maximized_button_normal_active = icons_path.."/titlebar/maximize_normal_active.png"
+_M.titlebar_maximized_button_focus_active  = icons_path.."/titlebar/maximize_focus_active.png"
 
-_M.titlebar_maximized_button_normal_inactive = icons_path.."/titlebar/go-up.png"
-_M.titlebar_maximized_button_focus_inactive  = icons_path.."/titlebar/go-up.png"
-_M.titlebar_maximized_button_normal_active = icons_path.."/titlebar/window-restore.png"
-_M.titlebar_maximized_button_focus_active  = icons_path.."/titlebar/window-restore.png"
-
-_M.wallpaper = theme_path.."/wallpaper/marisa0.png"
-
--- You can use your own layout icons like this:
+-- Layout icons
 _M.layout_fairh = icons_path.."/layouts/fairhw.png"
 _M.layout_fairv = icons_path.."/layouts/fairvw.png"
 _M.layout_floating  = icons_path.."/layouts/floatingw.png"
@@ -144,20 +133,13 @@ _M.layout_cornerne = icons_path.."/layouts/cornernew.png"
 _M.layout_cornersw = icons_path.."/layouts/cornersww.png"
 _M.layout_cornerse = icons_path.."/layouts/cornersew.png"
 
--- Generate Awesome icon:
-_M.awesome_icon = theme_assets.awesome_icon(
-    _M.menu_height, _M.bg_focus, _M.fg_focus
-)
-
--- Define the icon theme for application icons. If not set then the icons
--- from /usr/share/icons and /usr/share/titlebar/hicolor will be used.
-_M.icon_theme = nil
-
-
+-- Misc icons
 _M.volume_high = icons_path.."/audio-volume-high.png"
 _M.volume_medium = icons_path.."/audio-volume-medium.png"
 _M.volume_low = icons_path.."/audio-volume-low.png"
 _M.volume_mute = icons_path.."/audio-volume-muted.png"
+_M.icon_arrow_left = icons_path.."/arrow_left.png"
+_M.icon_application_menu = icons_path.."/application_menu.png"
 
 -- _M.tasklist_bg_image_normal = widgets_path.."/tasklist/normal.png"
 -- _M.tasklist_bg_image_focus = widgets_path.."/tasklist/focus.png"
@@ -167,7 +149,17 @@ _M.volume_mute = icons_path.."/audio-volume-muted.png"
 -- _M.widget_display_l = widgets_path.."/display/widget_display_l.png"
 -- _M.widget_display_r = widgets_path.."/display/widget_display_r.png"
 -- _M.widget_display = widgets_path.."/display/widget_display.png"
---
+
+
+-- Pape
+_M.wallpaper = theme_path.."/wallpaper/marisa0.png"
+_M.icon_theme = "Tela black dark"
+
+-- Generate Awesome icon:
+_M.awesome_icon = theme_assets.awesome_icon(
+    _M.menu_height, _M.bg_focus, _M.fg_focus
+)
+
 return {theme = _M}
 
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80

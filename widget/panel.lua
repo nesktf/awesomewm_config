@@ -45,7 +45,7 @@ function tray_manager:new_worker(screen)
 
   local button = wibox.widget {
     widget = wibox.widget.imagebox,
-    image = beautiful.volume_high,
+    image = beautiful.icon_arrow_left,
     visible = true,
     buttons = gears.table.join(
       awful.button({ }, 1, function() self:update_screen() end)
@@ -266,48 +266,51 @@ local function __build_panel(args)
         gears.shape.rounded_rect(cr, w, h, 2)
       end,
       bg_normal = "#202426F0",
-      bg_focus = "#292C2EF0",
+      bg_focus = "#343133F0",
       bg_minimize = "#181B1DF0"
     },
     widget_template = {
       widget = wibox.container.margin,
       top = 3, bottom = 3,
-      right = 6,
       {
-        id            = "background_role",
-        widget        = wibox.container.background,
-        forced_width = 180,
+        layout = wibox.layout.align.vertical,
         {
           widget  = wibox.container.margin,
-          left    = 3,
-          right   = 10,
+          left = 3, right = 10, top = 1,
+          forced_height = 15,
+          forced_width = 180,
           {
             layout = wibox.layout.fixed.horizontal,
             {
               widget  = wibox.container.margin,
-              top = 1, bottom = 1,
-              right = 3,
+              right = 4,
               {
                 id     = "icon_role",
                 widget = wibox.widget.imagebox,
               },
             },
             -- {
-              -- widget = wibox.container.constraint,
-              -- width = 180,
-              -- strategy = "max",
-              {
-                id     = "text_role",
-                widget = wibox.widget.textbox,
-              },
+            --   layout = wibox.container.scroll.horizontal,
+            --   max_size = 180,
+            --   step_function = wibox.container.scroll.step_functions.waiting_nonlinear_back_and_forth,
+            --   speed = 20,
+            {
+              id     = "text_role",
+              widget = wibox.widget.textbox,
+            },
             -- }
           },
         },
-      }
+        {
+          id            = "background_role",
+          widget        = wibox.container.background,
+          wibox.widget.base.make_widget(),
+        }
+      },
     },
     layout = {
       layout  = wibox.layout.fixed.horizontal,
-      spacing = 0,
+      spacing = 6,
     },
   } 
 
