@@ -2,9 +2,9 @@ local globals = require('config.globals')
 
 local _M = {}
 
-function _M.cmd()
+function _M.drun_cmd()
   local config = globals.path.config
-  return "alacritty --config-file ".."\""..config.."/alacritty/alacritty.yml\""
+  return "rofi -config \""..config.."/rofi/config.rasi\" -show drun"
 end
 
 return _M

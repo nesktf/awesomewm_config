@@ -5,7 +5,7 @@ local globals = require('config.globals')
 
 local _M = {}
 
-local function get_cmd()
+function _M.cmd()
   local host = globals.env.host
   local config = globals.path.config
 
@@ -17,8 +17,8 @@ local function get_cmd()
   end
 end
 
-_M.toggle_picom = function()
-  local cmd = "((pgrep -x picom || pgrep -x -f picom) && killall picom) || " .. get_cmd()
+function _M.toggle()
+  local cmd = "((pgrep -x picom || pgrep -x -f picom) && killall picom) || " .. _M.cmd()
   awful.spawn.easy_async_with_shell(cmd, function(stdin, _)
     local msg
     if (stdin == "") then
@@ -33,7 +33,5 @@ _M.toggle_picom = function()
     })
   end)
 end
-
-_M.get_cmd = get_cmd
 
 return _M

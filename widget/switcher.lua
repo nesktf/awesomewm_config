@@ -1,13 +1,12 @@
 local awful = require("awful")
 local gears = require("gears")
-local naughty = require("naughty")
 local beautiful = require('beautiful')
 local wibox = require("wibox")
 local client = client
 
-local alt_mod = require('config.globals').keys.alt
+local alt = require('config.globals').keys.alt
 
-local function same_client_table(t1, t2)
+local function __same_client_table(t1, t2)
   local function table_len(t)
     local c = 0
     for _ in pairs(t) do c = c + 1 end
@@ -28,7 +27,7 @@ local function same_client_table(t1, t2)
   return true
 end
 
-local function get_clients(screen, stag) 
+local function __get_clients(screen, stag) 
   local clients = {}
 
   local function in_table(element, t)
@@ -41,17 +40,18 @@ local function get_clients(screen, stag)
   end
 
   --get focused clients
-  local i = 0
-  local last_focused = awful.client.focus.history.get(screen, i)
-  while (last_focused ~= nil) do
-    table.insert(clients, last_focused)
-    i = i + 1
-    last_focused = awful.client.focus.history.get(screen, i)
-  end
+  -- local i = 0
+  -- local last_focused = awful.client.focus.history.get(screen, i)
+  -- while (last_focused ~= nil) do
+  --   table.insert(clients, last_focused)
+  --   i = i + 1
+  --   last_focused = awful.client.focus.history.get(screen, i)
+  -- end
 
   -- get minimized clients
   for _, c in ipairs (client.get(screen)) do
-    if (in_table(stag, c:tags()) and not in_table(c, clients)) then
+    -- if (in_table(stag, c:tags()) and not in_table(c, clients)) then
+    if (in_table(stag, c:tags())) then
       table.insert(clients, c)
     end
   end
@@ -59,7 +59,7 @@ local function get_clients(screen, stag)
   return clients
 end
 
-local preview = {
+local __switcher = {
   wibox = wibox{
     ontop = true,
     visible = false,
@@ -69,15 +69,15 @@ local preview = {
   focused_index = 1,
 }
 
-function preview:focused_client()
+function __switcher:focused_client()
   return self.client_table[self.focused_index]
 end
 
-function preview:hide()
+function __switcher:hide()
   self.wibox.visible = false
 end
 
-function preview:show()
+function __switcher:show()
   local geom = awful.screen.focused().geometry
   self.wibox:geometry {
     x = geom.x,
@@ -86,18 +86,29 @@ function preview:show()
     height = geom.width*0.25,
   }
   self.wibox.visible = true
-  local focused = self:focused_client()
-  local content = wibox.widget {
-    layout = wibox.layout.fixed.horizontal,
-    {
-      widget = wibox.widget.textbox,
-      text = focused.name,
-    }
+  -- local focused = self:focused_client()
+  local thing = {
+    layout = wibox.layout.fixed.vertical,
   }
-  self.wibox:set_widget(content)
+  for _,i in ipairs(self.client_table) do
+    table.insert(thing, {
+      widget = wibox.widget.textbox,
+      text = i.name
+    })
+  end
+
+  -- local content = wibox.widget {
+  --   layout = wibox.layout.fixed.horizontal,
+  --   {
+  --     widget = wibox.widget.textbox,
+  --     text = focused.name,
+  --   }
+  -- }
+  -- self.wibox:set_widget(content)
+  self.wibox:set_widget(wibox.widget(thing))
 end
 
-function preview:cycle(dir)
+function __switcher:cycle(dir)
   local ccount = #self.client_table
   local new_index = self.focused_index + dir
   self.focused_index = 
@@ -108,31 +119,31 @@ function preview:cycle(dir)
   self:show()
 end
 
-function preview:populate(screen)
+function __switcher:populate(screen)
   local stag = screen.selected_tag
-  self.client_table = get_clients(screen, stag)
+  self.client_table = __get_clients(screen, stag)
 end
 
 local _M = {}
 
 function _M.switch(dir)
   local screen = awful.screen.focused()
-  preview:populate(screen)
+  __switcher:populate(screen)
 
-  if (#preview.client_table == 0) then
+  if (#__switcher.client_table == 0) then
     return
   end
 
   awful.keygrabber.run(function(modifiers, key, event)
-    if (not gears.table.hasitem(modifiers, alt_mod)) then
+    if (not gears.table.hasitem(modifiers, alt)) then
       return
     end
 
     local alt_key = "Alt_L" -- key instead of modifier
     if (key == alt_key and event == "release") then
-      preview:hide()
+      __switcher:hide()
 
-      local focused = preview:focused_client()
+      local focused = __switcher:focused_client()
       focused.minimized = false
       focused:raise()
       focused:jump_to()
@@ -141,14 +152,14 @@ function _M.switch(dir)
       awful.keygrabber.stop()
     elseif (key == "Tab" and event == "press") then
       if (gears.table.hasitem(modifiers, "Shift")) then
-        preview:cycle(-1)
+        __switcher:cycle(-1)
       else
-        preview:cycle(1)
+        __switcher:cycle(1)
       end
     end
   end)
 
-  preview:cycle(dir)
+  __switcher:cycle(dir)
 end
 
 return _M

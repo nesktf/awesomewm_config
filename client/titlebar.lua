@@ -3,9 +3,14 @@ local wibox     = require('wibox')
 local gears     = require('gears')
 local beautiful = require('beautiful')
 
-local _M = {}
+local _M = { mt = {} }
 
-function _M.update_titlebars(c)
+function _M.update(c)
+  if (c.requests_no_titlebar) then
+    c.border_width = beautiful.border_width
+    return
+  end
+
   local function is_floating()
     return (c.floating or (c.first_tag ~= nil and c.first_tag.layout.name == "floating"))
   end
@@ -21,7 +26,7 @@ function _M.update_titlebars(c)
   end
 end
 
-function _M.create(client)
+function _M.new(client)
   assert(client ~= nil)
 
   local titlebar = {
@@ -82,4 +87,8 @@ function _M.create(client)
   return titlebar
 end
 
-return _M
+function _M.mt:__call(...)
+  return _M.new(...)
+end
+
+return setmetatable(_M, _M.mt)

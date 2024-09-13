@@ -2,13 +2,19 @@
 local naughty   = require("naughty")
 local beautiful = require("beautiful")
 local awful     = require('awful')
-local gears     = require("gears")
+local gears     = require('gears')
 local menubar   = require("menubar")
+local gclient   = client
 
-local globals   = require('config.globals')
+local themes  = require('themes')
+local widget  = require('widget')
+local client  = require('client')
+local signals = require('signals')
+local config  = require('config')
+local binds   = require('binds')
 
 do -- Error handling
-  if awesome.startup_errors then
+  if (awesome.startup_errors) then
     naughty.notify({ 
       preset  = naughty.config.presets.critical,
       title   = "Oops, there were errors during startup!",
@@ -17,9 +23,11 @@ do -- Error handling
   end
 
   local in_error = false
-  awesome.connect_signal("debug::error", function (err)
+  awesome.connect_signal("debug::error", function(err)
     -- Make sure we don't go into an endless error loop
-    if in_error then return end
+    if (in_error) then
+      return
+    end
     in_error = true
 
     naughty.notify({ 
@@ -31,70 +39,54 @@ do -- Error handling
   end)
 end
 
--- Theme things
-local theme = require('themes.breeze-like')
-beautiful.init(theme.settings_with{
+require("awful.autofocus") -- Autofocus
+require("awful.hotkeys_popup.keys") -- Enable hotkeys help widget for vim-likes
+
+beautiful.init(themes.breeze_like.settings_with{
   font       = "Cousine Nerd Font 8",
   icon_theme = "Tela black dark",
   wallpaper  = "marisa0",
 })
 awesome.set_preferred_icon_size(128) -- ?
 
--- Bind panel, wallpaper & layout
-local tags = require('tags')
-tags:init({ "1", "2", "3", "4" })
+local tags = {"1", "2", "3", "4"}
+local layouts = {
+  awful.layout.suit.floating,
+  awful.layout.suit.tile,
+  awful.layout.suit.tile.bottom,
+  awful.layout.suit.fair,
+  awful.layout.suit.spiral,
+  awful.layout.suit.corner.nw,
+}
+awful.layout.layouts = layouts
 
-local panel = require('widget.panel')
-awful.screen.connect_for_each_screen(function(screen)
-  if beautiful.wallpaper then
-    local wallpaper = beautiful.wallpaper
-    -- If wallpaper is a function, call it with the screen
-    if type(wallpaper) == "function" then
-      wallpaper = wallpaper(screen)
-    end
-    gears.wallpaper.maximized(wallpaper, screen, false)
+awful.screen.connect_for_each_screen(function(s)
+  themes.util.apply_pape(s)
+
+  local selected = 1
+  local floating = true
+  for i, tag_name in ipairs(tags) do
+    awful.tag.add(tag_name, {
+      screen   = s,
+      layout   = floating and layouts[1] or layouts[2],
+      selected = (i == selected),
+    })
   end
 
-  tags:setup_for_screen({
-    screen   = screen,
-    floating = true,
-  })
-  screen.panel = panel.panel_with{ 
-    screen   = screen,
-    floating = true,
-    rounded  = true,
+  s.panel = widget.panel {
+    screen = s,
   }
 end)
-panel.post_init()
 
--- Key bindings
-require("awful.hotkeys_popup.keys") -- Enable hotkeys help widget for vim-likes
-local global_bindings = require('binding.global')
--- root.buttons(global_bindings.buttons)
-local keys = gears.table.join(global_bindings.keys, tags:create_bindings())
-root.keys(keys)
+awful.rules.rules = client.rules.get()
 
--- Autofocus
-require("awful.autofocus")
+awful.util.shell = config.globals.env.shell -- For autostart
+menubar.utils.terminal = config.globals.env.term
 
--- Client rules
-local rules = require('rules')
-awful.rules.rules = rules.rules
+signals.connect(gclient, signals.client())
+signals.connect(tag, signals.tag())
 
--- Signals
-local signals = require('signals')
-for _,signal in ipairs(signals.client) do
-  client.connect_signal(signal.id, signal.callback)
-end
-for _, signal in ipairs(signals.tag) do
-  tag.connect_signal(signal.id, signal.callback)
-end
+root.keys(gears.table.join(binds.get(), binds.gen_for_tags(tags)))
 
--- Misc
-awful.util.shell = globals.env.shell -- For autostart & other things
-menubar.utils.terminal = globals.env.term -- Set the terminal for applications that require it
-
--- Autostart
-local autostart = require('config.autostart')
-autostart.on_startup()
-autostart.on_reload()
+widget.panel.update_workers()
+config.autostart.trigger()

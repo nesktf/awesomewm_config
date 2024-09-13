@@ -1,10 +1,8 @@
 local awful = require('awful')
 
-local client_bindings = require('binding.client')
+local cbinds = require('client.binds')
 
-local _M = {}
-
-_M.rules =  {
+local __client_rules =  {
   { -- Global rules
     rule = {},
     properties = {
@@ -12,8 +10,8 @@ _M.rules =  {
       raise = true,
       screen = awful.screen.preferred,
       placement = awful.placement.no_overlap+awful.placement.no_offscreen,
-      buttons = client_bindings.buttons,
-      keys = client_bindings.keys,
+      buttons = cbinds.buttons,
+      keys = cbinds.keys,
     },
   },
   { -- Titlebar rule
@@ -84,9 +82,9 @@ _M.rules =  {
   },
   { -- No titlebar
     rule_any = {
-      name = {
-        "Lutris"
-      }
+      instance = {
+        "lutris",
+      };
     },
     properties = { titlebars_enabled = false }
   },
@@ -101,5 +99,11 @@ _M.rules =  {
     }
   },
 }
+
+local _M = {}
+
+function _M.get()
+  return __client_rules
+end
 
 return _M

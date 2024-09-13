@@ -8,8 +8,10 @@ local mod   = require('config.globals').keys.mod
 local sound = require('widget.sound')
 -- local mpris = require('widget.mpris')
 
+local debian = require("debian.menu")
+local has_fdo, freedesktop = pcall(require, "freedesktop")
 
-local function panel_button(panel_args)
+local function __panel_button(panel_args)
   local left = panel_args.left or 0
   local right = panel_args.right or 0
   local left_cont = panel_args.left_cont or 5
@@ -53,14 +55,13 @@ local function panel_button(panel_args)
   return base
 end
 
-
-local tray_manager = {
+local __tray_manager = {
   timeout = 5,
   workers = {},
   tray = wibox.widget.systray(),
 }
 
-function tray_manager:reset_timer()
+function __tray_manager:reset_timer()
   if (self.timer ~= nil) then
     self.timer:stop()
   end
@@ -72,7 +73,7 @@ function tray_manager:reset_timer()
   self.timer:start()
 end
 
-function tray_manager:update_screen()
+function __tray_manager:update_screen()
   local screen = awful.screen.focused()
   for _, worker in pairs(self.workers) do
     worker:set_tray_visibility(false)
@@ -82,7 +83,7 @@ function tray_manager:update_screen()
   -- self:reset_timer()
 end
 
-function tray_manager:new_worker(screen)
+function __tray_manager:new_worker(screen)
   assert(screen ~= nil)
 
   local tray_holder = wibox.widget {
@@ -117,12 +118,11 @@ function tray_manager:new_worker(screen)
   return worker
 end
 
-
-local sensor_manager = {
+local __sensor_manager = {
   workers = {}
 }
 
-function sensor_manager:new_worker()
+function __sensor_manager:new_worker()
   local function get_temp() 
     if (host == "compy") then
       return "sensors | awk 'NR==3{printf $2}' | cut -d'+' -f2"
@@ -154,7 +154,7 @@ function sensor_manager:new_worker()
         valign = "center",
       }
     )
-    local sensor = panel_button {
+    local sensor = __panel_button {
       content = {
         {
           widget  = wibox.widget.textbox,
@@ -174,8 +174,27 @@ function sensor_manager:new_worker()
   return widget
 end
 
+local _M = { mt = {} }
 
-local function build_panel(args)
+function _M.update_workers()
+  __tray_manager:update_screen()
+end
+
+function _M.toggle_floating(tag)
+  if (not tag.screen.panel) then
+    return
+  end
+
+  if (tag.layout.name == "floating") then
+    tag.screen.panel:set_floating(false)
+    tag.screen.panel:set_rounded(false)
+  else
+    tag.screen.panel:set_floating(true)
+    tag.screen.panel:set_rounded(true)
+  end
+end
+
+function _M.new(args)
   assert(args.screen ~= nil)
   local screen    = args.screen
   local floating  = args.floating or false
@@ -245,6 +264,39 @@ local function build_panel(args)
     self.shape = panel_shape(flag)
     self.rounded = flag
   end
+
+  local menu = {
+    "awesome", {
+      { "restart", awesome.restart },
+      { "quit", function() awesome.quit() end },
+    },
+    beautiful.awesome_icon,
+  }
+
+  local main_menu
+  if (has_fdo) then
+    main_menu = freedesktop.menu.build {
+      before = { menu, 
+        {"debian", debian.menu.Debian_menu.Debian}, },
+      after = {
+        { "open terminal", "alacritty" }
+      }
+    }
+  else
+    main_menu = awful.menu {
+      items = {
+        menu,
+        {"debian", debian.menu.Debian_menu.Debian},
+        {"open terminal", "alacritty"},
+      }
+    }
+  end
+
+  local mylauncher = awful.widget.launcher {
+    image = beautiful.awesome_icon,
+    menu = main_menu,
+  }
+
 
   -- Taglist
   local taglist = awful.widget.taglist {
@@ -340,7 +392,7 @@ local function build_panel(args)
         {
           widget  = wibox.container.margin,
           left = 3, right = 10, top = 1,
-          forced_height = 15,
+          forced_height = 16,
           forced_width = 180,
           {
             layout = wibox.layout.fixed.horizontal,
@@ -383,11 +435,12 @@ local function build_panel(args)
     {
       layout = wibox.layout.fixed.horizontal,
       spacing = 6,
-      panel_button {
+      mylauncher,
+      __panel_button {
         left = 5,
         content = wibox.widget.textclock()
       },
-      panel_button {
+      __panel_button {
         content = taglist,
       },
       {
@@ -399,17 +452,17 @@ local function build_panel(args)
     {
       layout = wibox.layout.fixed.horizontal,
       spacing = 6,
-      sensor_manager:new_worker(),
+      __sensor_manager:new_worker(),
       -- sensorbar,
       -- panel_button {
-      --   content = mpris.new_worker{},
+      --   content = mpris{},
       --   buttons = gears.table.join(
       --     awful.button({ }, 2, function() mpris.toggle_pause() end),
       --     awful.button({ }, 4, function() mpris.step_volume(0.05) end),
       --     awful.button({ }, 5, function() mpris.step_volume(-0.05) end)
       --   )
       -- },
-      panel_button {
+      __panel_button {
         right = 5,
         content = {
           layout = wibox.layout.fixed.horizontal,
@@ -421,7 +474,7 @@ local function build_panel(args)
               spacing = 5,
               layoutbox,
               {
-                widget = sound.new_worker(),
+                widget = sound{},
                 buttons = gears.table.join(
                   awful.button({ }, 4, function() sound.step_volume(0.05) end),
                   awful.button({ }, 5, function() sound.step_volume(-0.05) end)
@@ -429,7 +482,7 @@ local function build_panel(args)
               },
             },
           },
-          tray_manager:new_worker(screen),
+          __tray_manager:new_worker(screen),
         }
       },
     },
@@ -437,15 +490,8 @@ local function build_panel(args)
   return widget
 end
 
-
-local _M = {}
-
-function _M.panel_with(args)
-  return build_panel(args)
+function _M.mt:__call(...)
+  return _M.new(...)
 end
 
-function _M.post_init()
-  tray_manager:update_screen()
-end
-
-return _M
+return setmetatable(_M, _M.mt)

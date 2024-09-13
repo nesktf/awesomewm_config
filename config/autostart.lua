@@ -1,23 +1,23 @@
 local awful = require('awful')
 local picom = require('config.picom')
 
-local _M = {}
-
-local _on_init = {
-  picom.get_cmd(),
+local __on_init = {
+  picom.cmd(),
   "kdeconnect-indicator",
   "nm-applet",
   "copyq",
   "polkit-dumb-agent"
 }
 
-local _on_reload = {
+local __on_reload = {
   'setxkbmap es',
   'xinput set-prop "USB OPTICAL MOUSE " "libinput Accel Profile Enabled" 0 1'
 }
 
-_M.on_startup = function()
-  for _, cmd in ipairs(_on_init) do
+local _M = {}
+
+function _M.trigger()
+  for _, cmd in ipairs(__on_init) do
     local findme = cmd
     local firstspace = cmd:find(' ')
     if firstspace then
@@ -43,10 +43,8 @@ _M.on_startup = function()
       end
     )
   end
-end
 
-_M.on_reload = function()
-  for _, cmd in ipairs(_on_reload) do
+  for _, cmd in ipairs(__on_reload) do
     awful.spawn.easy_async_with_shell(cmd)
   end
 end

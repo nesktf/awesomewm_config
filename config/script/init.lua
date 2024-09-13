@@ -4,20 +4,20 @@ local beautiful = require('beautiful')
 local osd     = require('widget.osd')
 local globals = require('config.globals')
 
-local _M = {}
-
-local function run_script(cmd, callback)
+local function __run(cmd, callback)
   local path = globals.path.script.."/"..cmd
   awful.spawn.easy_async_with_shell(path, function(stdout, stderr)
     callback(stdout, stderr)
   end)
 end
 
-_M.toggle_crt = function()
+local _M = {}
+
+function _M.toggle_crt()
   local host = globals.env.host
   if (host ~= "compy") then return end
   
-  run_script("toggle_screen.sh", function(stdout,_)
+  __run("toggle_screen.sh", function(stdout,_)
     osd.text{
       screen = awful.screen.focused(),
       text   = stdout,

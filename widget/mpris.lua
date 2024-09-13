@@ -1,27 +1,25 @@
 local awful     = require("awful")
 local wibox     = require("wibox")
 local gears     = require("gears")
--- local beautiful = require("beautiful")
--- local naughty   = require("naughty")
 
 local osd = require('widget.osd')
 
-local mpris = {
+local __mpris = {
   worker_list = {},
   state = {},
   players = { "mpd", "kdeconnect" },
   timer = nil,
 }
 
-function mpris:init() 
+function __mpris:init() 
   self.timer = gears.timer {
     timeout = 2,
     autostart = true,
-    callback = function() mpris:update_workers{} end
+    callback = function() __mpris:update_workers{} end
   }
 end
 
-function mpris:update_workers(args)
+function __mpris:update_workers(args)
   local player = args.player or 1 -- Start with players[1]
   local base = "playerctl -p %s metadata && printf 'm mpris:state %%s\nm mpris:volume %%s' $(playerctl status) $(playerctl volume)"
   local cmd = string.format(base, self.players[player])
@@ -66,24 +64,7 @@ function mpris:update_workers(args)
   end)
 end
 
-local _M = {}
-
-function _M.new_worker(_)
-  if (mpris.timer == nil and #mpris.worker_list == 0) then
-    mpris:init()
-  end
-
-  local widget = wibox.widget {
-    widget = wibox.widget.textbox,
-    align = "center",
-    valign = "center",
-  }
-
-  table.insert(mpris.worker_list, widget)
-  mpris:update_workers{}
-
-  return widget
-end
+local _M = { mt = {} }
 
 function _M.toggle_pause() 
   local cmd = string.format("playerctl play-pause && playerctl status")
@@ -99,12 +80,12 @@ function _M.toggle_pause()
         text = "mpris paused"
       }
     end
-    mpris:update_workers{}
+    __mpris:update_workers{}
   end)
 end
 
 function _M.step_volume(step)
-  local vol = tonumber(mpris.state["mpris:volume"])+step
+  local vol = tonumber(__mpris.state["mpris:volume"])+step
   if (vol >= 1) then
     vol = 1
   elseif (vol <= 0) then
@@ -118,9 +99,30 @@ function _M.step_volume(step)
         screen = awful.screen.focused(),
         text = string.format("mpris vol: %.0f%%", vol*100),
       }
-      mpris:update_workers{}
+      __mpris:update_workers{}
     end
   end)
 end
 
-return _M
+function _M.new(_)
+  if (__mpris.timer == nil and #__mpris.worker_list == 0) then
+    __mpris:init()
+  end
+
+  local widget = wibox.widget {
+    widget = wibox.widget.textbox,
+    align = "center",
+    valign = "center",
+  }
+
+  table.insert(__mpris.worker_list, widget)
+  __mpris:update_workers{}
+
+  return widget
+end
+
+function _M.mt:__call(...)
+  return _M.new(...)
+end
+
+return setmetatable(_M, _M.mt)

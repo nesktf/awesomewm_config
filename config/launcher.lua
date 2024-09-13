@@ -1,37 +1,35 @@
 local awful   = require('awful')
 local globals = require('config.globals')
 local alacritty = require('config.alacritty')
+local rofi = require('config.rofi')
 
 local _M = {}
 
-_M.terminal = function() 
-  awful.spawn(alacritty.get_cmd())
+function _M.terminal()
+  awful.spawn(alacritty.cmd())
 end
 
-_M.files = function()
+function _M.files()
   awful.spawn("dolphin")
 end
 
-_M.browser_main = function() 
+function _M.browser_main() 
   awful.spawn("librewolf")
 end
 
-_M.browser_work = function()
-  local home = globals.path.home
-  awful.spawn("librewolf --profile \""..home.."/.librewolf/80zhfr50.work/\"")
+function _M.browser_work()
+  awful.spawn("librewolf --profile \""..globals.path.home.."/.librewolf/80zhfr50.work/\"")
 end
 
-_M.freetube = function()
+function _M.freetube()
   awful.spawn("freetube")
 end
 
-_M.rofi_drun = function()
-  local config = globals.path.config
-  local cmd = "rofi -config \""..config.."/rofi/config.rasi\" -show drun"
-  awful.spawn(cmd)
+function _M.rofi_drun()
+  awful.spawn(rofi.drun_cmd())
 end
 
-_M.lutris = function()
+function _M.lutris()
   awful.spawn("flatpak run net.lutris.Lutris")
 end
 

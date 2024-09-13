@@ -2,7 +2,8 @@ local wibox     = require('wibox')
 local gears     = require('gears')
 local beautiful = require('beautiful')
 
-local _M = {
+local __osd = {
+  -- timer = nil,
   wibox = wibox {
     width   = 230,
     height  = 40,
@@ -10,30 +11,32 @@ local _M = {
     visible = false,
     bg      = beautiful.titlebar_bg_focus,
   },
-  timer = nil,
-  show_wibox = function(self, timeout)
-    self.wibox.visible = true
-
-    if (self.timer ~= nil) then 
-      self.timer:stop() 
-    end
-
-    self.timer = gears.timer { timeout = timeout }
-    self.timer:connect_signal("timeout", function()
-      self.timer:stop()
-      self.wibox.visible = false
-    end)
-    self.timer:start()
-  end
 }
 
-local function _defoffset(screen) return math.floor(screen.geometry.height*0.25) end
+local function __default_offset(screen)
+  return math.floor(screen.geometry.height*0.25)
+end
 
-local function __osd_show_progress(args)
+function __osd:show_wibox(timeout)
+  self.wibox.visible = true
+
+  if (self.timer ~= nil) then 
+    self.timer:stop() 
+  end
+
+  self.timer = gears.timer { timeout = timeout }
+  self.timer:connect_signal("timeout", function()
+    self.timer:stop()
+    self.wibox.visible = false
+  end)
+  self.timer:start()
+end
+
+function __osd:show_progress(args)
   assert(args.screen ~= nil)
   local screen  = args.screen
   local value   = args.value or 0
-  local offset  = args.offset or _defoffset(screen)
+  local offset  = args.offset or __default_offset(screen)
   local timeout = args.timeout or 2
   local icon    = args.icon or ""
 
@@ -73,20 +76,20 @@ local function __osd_show_progress(args)
   end
 
   local geom = screen.geometry
-  _M.wibox:geometry {
-    x = geom.x + (geom.width - _M.wibox.width) * 0.5,
-    y = geom.y + (geom.height - _M.wibox.height + offset) * 0.5,
+  self.wibox:geometry {
+    x = geom.x + (geom.width - __osd.wibox.width) * 0.5,
+    y = geom.y + (geom.height - __osd.wibox.height + offset) * 0.5,
   }
-  _M.wibox:set_widget(widget)
+  self.wibox:set_widget(widget)
 
-  _M:show_wibox(timeout)
+  self:show_wibox(timeout)
 end
 
-local function __osd_show_text(args)
+function __osd:show_text(args)
   assert(args.screen ~= nil)
   local screen  = args.screen
   local text    = args.text or ""
-  local offset  = args.offset or _defoffset(screen)
+  local offset  = args.offset or __default_offset(screen)
   local timeout = args.timeot or 1
   local icon    = args.icon or ""
 
@@ -115,16 +118,23 @@ local function __osd_show_text(args)
   end
 
   local geom = screen.geometry
-  _M.wibox:geometry {
-    x = geom.x + (geom.width - _M.wibox.width) * 0.5,
-    y = geom.y + (geom.height - _M.wibox.height + offset) * 0.5,
+  self.wibox:geometry {
+    x = geom.x + (geom.width - __osd.wibox.width) * 0.5,
+    y = geom.y + (geom.height - __osd.wibox.height + offset) * 0.5,
   }
-  _M.wibox:set_widget(widget)
+  self.wibox:set_widget(widget)
 
-  _M:show_wibox(timeout)
+  self:show_wibox(timeout)
 end
 
-return {
-  progress = setmetatable({}, { __call = function(_, ...) __osd_show_progress(...) end }),
-  text     = setmetatable({}, { __call = function(_, ...) __osd_show_text(...) end }),
-}
+local _M = {}
+
+function _M.progress(args)
+  __osd:show_progress(args)
+end
+
+function _M.text(args)
+  __osd:show_text(args)
+end
+
+return _M
