@@ -4,7 +4,9 @@ local beautiful = require("beautiful")
 local awful     = require('awful')
 local gears     = require('gears')
 local menubar   = require("menubar")
+local gawesome  = awesome
 local gclient   = client
+local gtag      = tag
 
 local themes  = require('themes')
 local widget  = require('widget')
@@ -13,17 +15,17 @@ local signals = require('signals')
 local config  = require('config')
 local binds   = require('binds')
 
-do -- Error handling
-  if (awesome.startup_errors) then
+local function init_error_handler()
+  if (gawesome.startup_errors) then
     naughty.notify({ 
       preset  = naughty.config.presets.critical,
       title   = "Oops, there were errors during startup!",
-      text    = awesome.startup_errors
+      text    = gawesome.startup_errors
     })
   end
 
   local in_error = false
-  awesome.connect_signal("debug::error", function(err)
+  gawesome.connect_signal("debug::error", function(err)
     -- Make sure we don't go into an endless error loop
     if (in_error) then
       return
@@ -39,54 +41,57 @@ do -- Error handling
   end)
 end
 
-require("awful.autofocus") -- Autofocus
-require("awful.hotkeys_popup.keys") -- Enable hotkeys help widget for vim-likes
+local function main()
+  init_error_handler()
 
-beautiful.init(themes.breeze_like.settings_with{
-  font       = "Cousine Nerd Font 8",
-  icon_theme = "Tela black dark",
-  wallpaper  = "marisa0",
-})
-awesome.set_preferred_icon_size(128) -- ?
+  require("awful.autofocus")
+  require("awful.hotkeys_popup.keys") -- Enable hotkeys help widget for vim-likes
 
-local tags = {"1", "2", "3", "4"}
-local layouts = {
-  awful.layout.suit.floating,
-  awful.layout.suit.tile,
-  awful.layout.suit.tile.bottom,
-  awful.layout.suit.fair,
-  awful.layout.suit.spiral,
-  awful.layout.suit.corner.nw,
-}
-awful.layout.layouts = layouts
+  gawesome.set_preferred_icon_size(128) -- ?
+  beautiful.init(themes.breeze_like.settings_with {
+    font       = "Cousine Nerd Font 8",
+    icon_theme = "Tela black dark",
+    wallpaper  = "marisa0",
+  })
 
-awful.screen.connect_for_each_screen(function(s)
-  themes.util.apply_pape(s)
-
-  local selected = 1
-  local floating = true
-  for i, tag_name in ipairs(tags) do
-    awful.tag.add(tag_name, {
-      screen   = s,
-      layout   = floating and layouts[1] or layouts[2],
-      selected = (i == selected),
-    })
-  end
-
-  s.panel = widget.panel {
-    screen = s,
+  local tags = {"1", "2", "3", "4"}
+  local layouts = {
+    awful.layout.suit.floating,
+    awful.layout.suit.tile,
+    awful.layout.suit.tile.bottom,
+    awful.layout.suit.fair,
+    awful.layout.suit.spiral,
+    awful.layout.suit.corner.nw,
   }
-end)
 
-awful.rules.rules = client.rules.get()
+  awful.layout.layouts = layouts
+  awful.rules.rules = client.rules.get()
+  awful.util.shell = config.globals.env.shell -- For autostart
+  menubar.utils.terminal = config.globals.env.term
 
-awful.util.shell = config.globals.env.shell -- For autostart
-menubar.utils.terminal = config.globals.env.term
+  awful.screen.connect_for_each_screen(function(s)
+    themes.util.apply_pape(s)
 
-signals.connect(gclient, signals.client())
-signals.connect(tag, signals.tag())
+    for i, tag_name in ipairs(tags) do
+      awful.tag.add(tag_name, {
+        screen   = s,
+        layout   = layouts[1], -- Floating
+        selected = (i == 1), -- Select first tag
+      })
+    end
 
-root.keys(gears.table.join(binds.get(), binds.gen_for_tags(tags)))
+    s.panel = widget.panel {
+      screen = s,
+    }
+  end)
 
-widget.panel.update_workers()
-config.autostart.trigger()
+  root.keys(gears.table.join(binds.get(), binds.gen_for_tags(tags)))
+
+  signals.connect(gclient, signals.client())
+  signals.connect(gtag, signals.tag()) 
+
+  widget.panel.update_workers()
+  config.autostart.trigger()
+end
+
+main()
