@@ -5,6 +5,16 @@ local titlebar = require("client.titlebar")
 
 local _M = {}
 
+local function __titlebar_action(c, hidden)
+  if (hidden) then
+    awful.titlebar.hide(c, "top")
+    awful.titlebar.hide(c, "bottom")
+    c.border_width = 0
+  else
+    titlebar.update(c)
+  end
+end
+
 function _M.toggle_titlebars(c)
   awful.titlebar.toggle(c, "top")
   awful.titlebar.toggle(c, "bottom")
@@ -21,25 +31,16 @@ function _M.toggle_maximized(c)
     return
   end
 
-  local action = function(maximized)
-    if (maximized) then
-      awful.titlebar.hide(c, "top")
-      awful.titlebar.hide(c, "bottom")
-      c.border_width = 0
-    else
-      titlebar.update(c)
-    end
-  end
-
-  action(not c.maximized)
+  __titlebar_action(c, not c.maximized)
   c.maximized = not c.maximized
-  action(c.maximized)
-
+  __titlebar_action(c, c.maximized)
   c:raise()
 end
 
 function _M.toggle_fullscreen(c)
+  __titlebar_action(c, not c.fullscreen)
   c.fullscreen = not c.fullscreen
+  __titlebar_action(c, c.fullscreen)
   c:raise()
 end
 

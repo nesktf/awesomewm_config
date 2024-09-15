@@ -33,7 +33,7 @@ font:
     family: 'Cousine Nerd Font Mono'
     style: 'Bold Italic'
 
-  size: 10
+  size: 11
 
 # Stolen from MateriaDark :DDD
 colors:
