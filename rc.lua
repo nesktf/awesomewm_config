@@ -47,7 +47,7 @@ local function main()
   require("awful.autofocus")
   require("awful.hotkeys_popup.keys") -- Enable hotkeys help widget for vim-likes
 
-  gawesome.set_preferred_icon_size(128) -- ?
+  awesome.set_preferred_icon_size(128) -- ?
   beautiful.init(themes.breeze_like.settings_with {
     font       = "Cousine Nerd Font 8",
     icon_theme = "Tela black dark",

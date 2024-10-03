@@ -84,6 +84,8 @@ local __client_rules =  {
     rule_any = {
       instance = {
         "lutris",
+        "steam",
+        "steamwebhelper",
       };
     },
     properties = { titlebars_enabled = false }
