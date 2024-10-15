@@ -86,7 +86,11 @@ local __client_rules =  {
         "lutris",
         "steam",
         "steamwebhelper",
+        ""
       };
+      name = {
+        "Picture-in-picture",
+      }
     },
     properties = { titlebars_enabled = false }
   },

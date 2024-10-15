@@ -5,7 +5,7 @@ local beautiful = require('beautiful')
 
 local host  = require('config.globals').env.host
 local mod   = require('config.globals').keys.mod
-local sound = require('widget.sound')
+-- local sound = require('widget.sound')
 -- local mpris = require('widget.mpris')
 
 local debian = require("debian.menu")
@@ -473,13 +473,13 @@ function _M.new(args)
               layout = wibox.layout.fixed.horizontal,
               spacing = 5,
               layoutbox,
-              {
-                widget = sound{},
-                buttons = gears.table.join(
-                  awful.button({ }, 4, function() sound.step_volume(0.05) end),
-                  awful.button({ }, 5, function() sound.step_volume(-0.05) end)
-                )
-              },
+              -- {
+              --   widget = sound{},
+              --   buttons = gears.table.join(
+              --     awful.button({ }, 4, function() sound.step_volume(0.05) end),
+              --     awful.button({ }, 5, function() sound.step_volume(-0.05) end)
+              --   )
+              -- },
             },
           },
           __tray_manager:new_worker(screen),

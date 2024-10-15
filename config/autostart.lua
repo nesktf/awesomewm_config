@@ -6,7 +6,8 @@ local __on_init = {
   "kdeconnect-indicator",
   "nm-applet",
   "copyq",
-  "polkit-dumb-agent"
+  "polkit-dumb-agent",
+  "pasystray"
 }
 
 local __on_reload = {
