@@ -4,28 +4,28 @@ local beautiful = require("beautiful")
 local awful     = require('awful')
 local gears     = require('gears')
 local menubar   = require("menubar")
-local gawesome  = awesome
-local gclient   = client
-local gtag      = tag
+local awesome   = awesome
+local client    = client
+local tag       = tag
 
-local themes  = require('themes')
-local widget  = require('widget')
-local client  = require('client')
-local signals = require('signals')
-local config  = require('config')
-local binds   = require('binds')
+local themes   = require('themes')
+local widget   = require('widget')
+local lclient  = require('client')
+local signals  = require('signals')
+local config   = require('config')
+local binds    = require('binds')
 
 local function init_error_handler()
-  if (gawesome.startup_errors) then
+  if (awesome.startup_errors) then
     naughty.notify({ 
       preset  = naughty.config.presets.critical,
       title   = "Oops, there were errors during startup!",
-      text    = gawesome.startup_errors
+      text    = awesome.startup_errors
     })
   end
 
   local in_error = false
-  gawesome.connect_signal("debug::error", function(err)
+  awesome.connect_signal("debug::error", function(err)
     -- Make sure we don't go into an endless error loop
     if (in_error) then
       return
@@ -54,7 +54,7 @@ local function main()
     wallpaper  = "marisa0",
   })
 
-  local tags = {"1", "2", "3", "4"}
+  local tags = {"1", "2", "3", "4", "5"}
   local layouts = {
     awful.layout.suit.floating,
     awful.layout.suit.tile,
@@ -62,10 +62,13 @@ local function main()
     awful.layout.suit.fair,
     awful.layout.suit.spiral,
     awful.layout.suit.corner.nw,
+    awful.layout.suit.max,
+    awful.layout.suit.max.fullscreen,
+    awful.layout.suit.magnifier,
   }
 
   awful.layout.layouts = layouts
-  awful.rules.rules = client.rules.get()
+  awful.rules.rules = lclient.rules.get()
   awful.util.shell = config.globals.env.shell -- For autostart
   menubar.utils.terminal = config.globals.env.term
 
@@ -86,9 +89,13 @@ local function main()
   end)
 
   root.keys(gears.table.join(binds.get(), binds.gen_for_tags(tags)))
+  root.buttons(gears.table.join(
+    awful.button({ }, 4, awful.tag.viewnext),
+    awful.button({ }, 5, awful.tag.viewprev)
+  ))
 
-  signals.connect(gclient, signals.client())
-  signals.connect(gtag, signals.tag()) 
+  signals.connect(client, signals.client())
+  signals.connect(tag, signals.tag()) 
 
   widget.panel.update_workers()
   config.autostart.trigger()
