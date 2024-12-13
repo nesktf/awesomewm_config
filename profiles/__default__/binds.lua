@@ -31,7 +31,6 @@ local __media_keys = gears.table.join(
 
   awful.key({ mod }, "F3",
     function()
-      sound.toggle_sink_mute()
     end,
     {description = "toggle mute volume", group = "media"}
   ),
@@ -47,12 +46,6 @@ local __media_keys = gears.table.join(
       sound.set_balance(1)
     end,
     {description = "balance", group = "media"}
-  ),
-  awful.key({ mod }, "c",
-    function()
-      sound.toggle_source_mute()
-    end,
-    {description = "toggle mute microphone", group = "media"}
   )
 )
 

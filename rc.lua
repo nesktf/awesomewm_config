@@ -1,4 +1,5 @@
 -- ~/.config/awesome/rc.lua
+pcall(require, "luarocks.loader")
 local naughty   = require("naughty")
 local beautiful = require("beautiful")
 local awful     = require('awful')
@@ -15,7 +16,14 @@ local signals  = require('signals')
 local config   = require('config')
 local binds    = require('binds')
 
-local function init_error_handler()
+local util = require("util")
+
+-- local profiles = require("profiles")
+
+local function main()
+  require("awful.autofocus")
+  require("awful.hotkeys_popup.keys") -- Enable hotkeys help widget for vim-likes
+
   if (awesome.startup_errors) then
     naughty.notify({ 
       preset  = naughty.config.presets.critical,
@@ -39,13 +47,6 @@ local function init_error_handler()
     })
     in_error = false
   end)
-end
-
-local function main()
-  init_error_handler()
-
-  require("awful.autofocus")
-  require("awful.hotkeys_popup.keys") -- Enable hotkeys help widget for vim-likes
 
   awesome.set_preferred_icon_size(128) -- ?
   beautiful.init(themes.breeze_like.settings_with {
@@ -73,7 +74,7 @@ local function main()
   menubar.utils.terminal = config.globals.env.term
 
   awful.screen.connect_for_each_screen(function(s)
-    themes.util.apply_pape(s)
+    util.apply_pape(s)
 
     for i, tag_name in ipairs(tags) do
       awful.tag.add(tag_name, {
@@ -94,8 +95,8 @@ local function main()
     awful.button({ }, 5, awful.tag.viewprev)
   ))
 
-  signals.connect(client, signals.client())
-  signals.connect(tag, signals.tag()) 
+  util.connect_signal(client, signals.client())
+  util.connect_signal(tag, signals.tag())
 
   widget.panel.update_workers()
   config.autostart.trigger()
