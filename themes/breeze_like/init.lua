@@ -12,8 +12,8 @@ _conf.bg_normal     = "#222222"
 _conf.bg_focus      = "#535d6c"
 _conf.bg_urgent     = "#ff0000"
 _conf.bg_minimize   = "#444444"
-_conf.fg_normal     = "#CCCCCC"
-_conf.fg_focus      = _conf.fg_normal
+_conf.fg_normal     = "#888888"
+_conf.fg_focus      = "#D4D4D4"
 _conf.fg_urgent     = "#FFFFFF"
 _conf.fg_minimize   = "#999999"
 
@@ -31,7 +31,7 @@ _conf.panel_color_alt = "#25282AF0"
 _conf.panel_border    = "#141516F0"
 
 -- Systray
-_conf.bg_systray           = _conf.panel_color_alt
+-- _conf.bg_systray           = _conf.panel_color_alt
 _conf.systray_icon_spacing = 6
 -- __sett.bg_systray    = "#272727"
 -- __sett.bg_systray    = "#343434"
@@ -91,22 +91,16 @@ _conf.titlebar_maximized_button_normal_active = icons_path.."/titlebar/maximize_
 _conf.titlebar_maximized_button_focus_active  = icons_path.."/titlebar/maximize_focus_active.png"
 
 -- Layout icons
-_conf.layout_fairh = icons_path.."/layouts/fairhw.png"
-_conf.layout_fairv = icons_path.."/layouts/fairvw.png"
-_conf.layout_floating  = icons_path.."/layouts/floatingw.png"
-_conf.layout_magnifier = icons_path.."/layouts/magnifierw.png"
-_conf.layout_max = icons_path.."/layouts/maxw.png"
-_conf.layout_fullscreen = icons_path.."/layouts/fullscreenw.png"
-_conf.layout_tilebottom = icons_path.."/layouts/tilebottomw.png"
-_conf.layout_tileleft   = icons_path.."/layouts/tileleftw.png"
-_conf.layout_tile = icons_path.."/layouts/tilew.png"
-_conf.layout_tiletop = icons_path.."/layouts/tiletopw.png"
-_conf.layout_spiral  = icons_path.."/layouts/spiralw.png"
-_conf.layout_dwindle = icons_path.."/layouts/dwindlew.png"
-_conf.layout_cornernw = icons_path.."/layouts/cornernww.png"
-_conf.layout_cornerne = icons_path.."/layouts/cornernew.png"
-_conf.layout_cornersw = icons_path.."/layouts/cornersww.png"
-_conf.layout_cornerse = icons_path.."/layouts/cornersew.png"
+_conf.layout_fairh = icons_path.."/layout-fairh.png"
+_conf.layout_fairv = icons_path.."/layout-fairv.png"
+_conf.layout_floating  = icons_path.."/layout-floating.png"
+_conf.layout_magnifier = icons_path.."/layout-magnifier.png"
+_conf.layout_max = icons_path.."/layout-max.png"
+_conf.layout_tile = icons_path.."/layout-tile.png"
+_conf.layout_tilebottom = icons_path.."/layout-tilebottom.png"
+_conf.layout_tileleft   = icons_path.."/layout-tileleft.png"
+_conf.layout_tiletop = icons_path.."/layout-tiletop.png"
+_conf.layout_spiral  = icons_path.."/layout-spiral.png"
 
 -- Misc icons
 _conf.volume_high = icons_path.."/audio-volume-high.png"
@@ -122,6 +116,13 @@ _conf.icon_application_menu = icons_path.."/application_menu.png"
 -- __sett.widget_display_l = widgets_path.."/display/widget_display_l.png"
 -- __sett.widget_display_r = widgets_path.."/display/widget_display_r.png"
 -- __sett.widget_display = widgets_path.."/display/widget_display.png"
+_conf.icon_panel_cpu = icons_path.."/panel-cpu.png"
+_conf.icon_panel_ram = icons_path.."/panel-ram.png"
+_conf.icon_panel_swap = _conf.icon_panel_ram
+_conf.icon_panel_temp = icons_path.."/panel-temp.png"
+_conf.icon_panel_clock = icons_path.."/panel-clock.png"
+_conf.icon_panel_battery = icons_path.."/panel-battery.png"
+_conf.icon_panel_tray = icons_path.."/panel-tray.png"
 
 
 local _M = {}

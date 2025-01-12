@@ -50,21 +50,19 @@ local function main()
 
   awesome.set_preferred_icon_size(128) -- ?
   beautiful.init(themes.breeze_like.settings_with {
-    font       = "Cousine Nerd Font 8",
+    font       = "Cousine Nerd Font 9",
     icon_theme = "Tela black dark",
-    wallpaper  = "marisa0",
+    wallpaper  = "marisa1",
   })
 
-  local tags = {"1", "2", "3", "4", "5"}
+  local tags = {"main", "dev", "web", "gaems", "media"}
   local layouts = {
     awful.layout.suit.floating,
     awful.layout.suit.tile,
     awful.layout.suit.tile.bottom,
     awful.layout.suit.fair,
     awful.layout.suit.spiral,
-    awful.layout.suit.corner.nw,
     awful.layout.suit.max,
-    awful.layout.suit.max.fullscreen,
     awful.layout.suit.magnifier,
   }
 
@@ -98,7 +96,6 @@ local function main()
   util.connect_signal(client, signals.client())
   util.connect_signal(tag, signals.tag())
 
-  widget.panel.update_workers()
   config.autostart.trigger()
 end
 
