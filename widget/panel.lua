@@ -1,215 +1,166 @@
 local awful     = require('awful')
 local wibox     = require('wibox')
 local gears     = require('gears')
-local beautiful = require('beautiful')
+local theme     = require('theme')
 
 local host  = require('config.globals').env.host
 local mod   = require('config.globals').keys.mod
 -- local sound = require('widget.sound')
 -- local mpris = require('widget.mpris')
 
-local debian = require("debian.menu")
-local has_fdo, freedesktop = pcall(require, "freedesktop")
+local text_focus = theme.util.markdown_fg_focus
 
--- local function _panel_button(panel_args)
---   local left = panel_args.left or 0
---   local right = panel_args.right or 0
---   local left_cont = panel_args.left_cont or 5
---   local right_cont = panel_args.right_cont or 5
---   local content = panel_args.content
---   local buttons = panel_args.buttons
---
---   local base = {
---     widget = wibox.container.margin,
---     left = left, right = right,
---     top = 3, bottom = 3,
---   }
---
---   local unfocus_bg = "#292C2EF0"
---   local focus_bg = "#35383AF0"
---   local back = wibox.widget {
---     widget = wibox.container.background,
---     bg = unfocus_bg,
---     shape = function(cr, w, h)
---       gears.shape.rounded_rect(cr, w, h, 2)
---     end,
---     {
---       widget = wibox.container.margin,
---       left = left_cont,
---       right = right_cont,
---       content
---     }
---   }
---
---   if (buttons) then
---     back:buttons(buttons)
---     back:connect_signal("mouse::enter", function()
---       back.bg = focus_bg
---     end)
---     back:connect_signal("mouse::leave", function()
---       back.bg = unfocus_bg
---     end)
---   end
---   table.insert(base, back)
---
---   return base
--- end
-
-local function text_focus(str)
-  return string.format([[<span foreground='%s'>%s</span>]], beautiful.fg_focus, str)
-end
-
-local _tray_manager = {
-  timeout = 5,
+local systray = {
+  timeout = 10,
   workers = {},
   tray = wibox.widget.systray(),
-}
 
-function _tray_manager:reset_timer(index)
-  if (self.timer ~= nil) then
-    self.timer:stop()
-  end
+  reset_timer = function(self, index)
+    if (self.timer ~= nil) then
+      self.timer:stop()
+    end
 
-  self.timer = gears.timer { timeout = self.timeout }
-  self.timer:connect_signal("timeout", function()
-    self.workers[index]:set_tray_visibility(false)
-  end)
-  self.timer:start()
-end
+    self.timer = gears.timer { timeout = self.timeout }
+    self.timer:connect_signal("timeout", function()
+      self.workers[index]:set_tray_visibility(false)
+    end)
+    self.timer:start()
+  end,
 
-function _tray_manager:update_screen()
-  local screen = awful.screen.focused()
-  for _, worker in pairs(self.workers) do
-    worker:set_tray_visibility(false)
-  end
-  self.workers[screen.index]:set_tray_visibility(true)
-  self.tray:set_screen(screen)
-  self:reset_timer(screen.index)
-end
+  update_screen = function(self, screen)
+    for _, worker in pairs(self.workers) do
+      worker:set_tray_visibility(false)
+    end
+    self.workers[screen.index]:set_tray_visibility(true)
+    self.tray:set_screen(screen)
+    -- self:reset_timer(screen.index)
+  end,
 
-function _tray_manager:new_worker(screen)
-  assert(screen ~= nil)
+  new_worker = function(self, screen)
+    assert(screen ~= nil)
 
-  local tray_holder = wibox.widget {
-    widget = wibox.container.margin,
-    left = 4,
-    top = 1, bottom = 1,
-    visible = false,
-    self.tray
-  }
-
-  local button = wibox.widget {
-    widget = wibox.widget.imagebox,
-    image = beautiful.icon_panel_tray,
-    -- image = beautiful.icon_arrow_left,
-    visible = true,
-    buttons = gears.table.join(
-      awful.button({ }, 1, function() self:update_screen() end)
-    )
-  }
-
-  local worker = wibox.widget {
-    layout = wibox.layout.fixed.horizontal,
-    tray_holder,
-    button,
-  }
-
-  function worker:set_tray_visibility(flag)
-    tray_holder.visible = flag
-    button.visible = not flag
-  end
-
-  self.workers[screen.index] = worker
-
-  return worker
-end
-
-local _sensor_manager = {
-  workers = {}
-}
-
-function _sensor_manager:new_worker(arg)
-  local sensor_cmd = {
-    {
-      icon = beautiful.icon_panel_cpu,
-      eval = "top -bn2 -d 0.1 | awk '/Cpu/ {print $2}' | awk 'NR==2{print $1\\\"%\\\"}'",
-    },
-    {
-      icon = beautiful.icon_panel_temp,
-      eval = (function()
-        if (host == "compy") then
-          return "sensors | awk 'NR==3{printf $2}' | cut -d'+' -f2"
-        elseif (host == "nobus") then
-          return "sensors | awk 'NR==20{printf $3}' | cut -d'+' -f2"
-        end
-      end)(),
-    },
-    {
-      icon = beautiful.icon_panel_ram,
-      eval = "printf \"%sMiB\" $(free --mebi | awk 'NR==2{printf $3}')"
-    },
-    {
-      icon = beautiful.icon_panel_swap,
-      eval = "printf \"%sMiB\" $(free --mebi | awk 'NR==3{printf $3}')" 
+    local tray_holder = wibox.widget {
+      widget = wibox.container.margin,
+      left = 6,
+      top = 2, bottom = 2,
+      visible = false,
+      self.tray
     }
-  }
 
-  local sensorbar = { 
-    layout  = wibox.layout.fixed.horizontal,
-    spacing = arg.spacing,
-  }
-  for _,cmd in ipairs(sensor_cmd) do
-    local watch = awful.widget.watch(
-      'bash -c "'..cmd.eval..'"', 1,
-      function(w, stdout)
-        w:set_markup_silently(text_focus(stdout))
-      end,
-      wibox.widget{
-        widget = wibox.widget.textbox,
-        align = "center",
-        valign = "center",
-      }
-    )
-    local sensor = {
+    local show_button = wibox.widget {
+      widget = wibox.widget.imagebox,
+      image = theme.icon_panel_tray_open,
+      visible = true,
+      buttons = gears.table.join(
+        awful.button({ }, 1, function() self:update_screen(awful.screen.focused()) end)
+      )
+    }
+
+    local hide_button
+    hide_button = wibox.widget {
+      widget = wibox.widget.imagebox,
+      image = theme.icon_panel_tray_close,
+      visible = false,
+      buttons = gears.table.join(
+        awful.button({ }, 1, function()
+          hide_button.visible = false
+          tray_holder.visible = false
+          show_button.visible = true
+        end)
+      )
+    }
+
+    local worker = wibox.widget {
       layout = wibox.layout.fixed.horizontal,
-      spacing = 2,
+      tray_holder,
+      show_button,
       {
-        widget = wibox.widget.imagebox,
-        image = cmd.icon,
-        -- widget  = wibox.widget.textbox,
-        -- markup = string.format([[<b>%s</b>]], cmd.name)
-        -- text    = cmd.name,
+        widget = wibox.container.margin,
+        left = 5,
+        hide_button
       },
-      watch,
     }
-    table.insert(sensorbar, sensor)
+
+    function worker:set_tray_visibility(flag)
+      tray_holder.visible = flag
+      hide_button.visible = flag
+      show_button.visible = not flag
+    end
+
+    self.workers[screen.index] = worker
+
+    return worker
   end
+}
 
-  local widget = wibox.widget(sensorbar)
-  table.insert(self.workers, widget)
+local sensors = {
+  workers = {},
 
-  return widget
-end
+  new_worker = function(self, arg)
+    local sensor_cmd = {
+      {
+        icon = theme.icon_panel_cpu,
+        eval = "top -bn2 -d 0.1 | awk '/Cpu/ {print $2}' | awk 'NR==2{print $1\\\"%\\\"}'",
+      },
+      {
+        icon = theme.icon_panel_temp,
+        eval = (function()
+          if (host == "compy") then
+            return "sensors | awk 'NR==3{printf $2}' | cut -d'+' -f2"
+          elseif (host == "nobus") then
+            return "sensors | awk 'NR==20{printf $3}' | cut -d'+' -f2"
+          end
+        end)(),
+      },
+      {
+        icon = theme.icon_panel_ram,
+        eval = "printf \"%sMiB\" $(free --mebi | awk 'NR==2{printf $3}')"
+      },
+      {
+        icon = theme.icon_panel_swap,
+        eval = "printf \"%sMiB\" $(free --mebi | awk 'NR==3{printf $3}')" 
+      }
+    }
 
-local _M = { mt = {} }
+    local sensorbar = { 
+      layout  = wibox.layout.fixed.horizontal,
+      spacing = arg.spacing,
+    }
+    for _,cmd in ipairs(sensor_cmd) do
+      local watch = awful.widget.watch(
+        'bash -c "'..cmd.eval..'"', 1,
+        function(w, stdout)
+          w:set_markup_silently(text_focus(stdout))
+        end,
+        wibox.widget{
+          widget = wibox.widget.textbox,
+          align = "center",
+          valign = "center",
+        }
+      )
+      local sensor = {
+        layout = wibox.layout.fixed.horizontal,
+        spacing = 2,
+        {
+          widget = wibox.widget.imagebox,
+          image = cmd.icon,
+          -- widget  = wibox.widget.textbox,
+          -- markup = string.format([[<b>%s</b>]], cmd.name)
+          -- text    = cmd.name,
+        },
+        watch,
+      }
+      table.insert(sensorbar, sensor)
+    end
 
-function _M.update_workers()
-  _tray_manager:update_screen()
-end
+    local widget = wibox.widget(sensorbar)
+    table.insert(self.workers, widget)
 
-function _M.toggle_floating(tag)
-  if (not tag.screen.panel) then
-    return
+    return widget
   end
+}
 
-  if (tag.layout.name == "floating") then
-    tag.screen.panel:set_floating(false)
-    tag.screen.panel:set_rounded(false)
-  else
-    tag.screen.panel:set_floating(true)
-    tag.screen.panel:set_rounded(true)
-  end
-end
+local _M = {}
 
 function _M.new(args)
   assert(args.screen ~= nil)
@@ -218,12 +169,12 @@ function _M.new(args)
   local rounded   = args.rounded or false
 
   local function panel_gap(is_floating) 
-    return is_floating and beautiful.panel_gap*2 or 0 
+    return is_floating and theme.panel_gap*2 or 0 
   end
 
   local function panel_shape(is_rounded)
     return is_rounded and function(cr, w, h)
-      gears.shape.rounded_rect(cr, w, h, beautiful.panel_radius)
+      gears.shape.rounded_rect(cr, w, h, theme.panel_radius)
     end or gears.shape.rectangle
   end
 
@@ -236,25 +187,39 @@ function _M.new(args)
     screen       = screen,
     visible      = true,
     width        = geom.width - 2*gap,
-    height       = beautiful.panel_size,
+    height       = theme.panel_size,
     x            = geom.x + gap,
     y            = geom.y + gap,
-    bg           = beautiful.panel_color,
-    border_width = beautiful.panel_border_w,
-    border_color = beautiful.panel_border,
+    bg           = theme.panel_color,
+    border_width = theme.panel_border_w,
+    border_color = theme.panel_border,
     shape        = panel_shape(rounded),
   }
   widget:struts {
-    top     = beautiful.panel_size+2*beautiful.panel_border_w+gap,
+    top     = theme.panel_size+2*theme.panel_border_w+gap,
     bottom  = 0,
     left    = 0,
     right   = 0
   }
+  widget.enable_floating = floating
+  widget.enable_rounding = rounded
   widget.floating = floating
-  widget.rounded = rounded
+  widget.screen = screen
+
+  function widget:toggle_floating()
+    self:set_floating(not self.enable_floating)
+    self.enable_floating = not self.enable_floating
+    self:set_floating(self.enable_floating)
+  end
 
   function widget:set_floating(flag)
-    if (flag == self.floating) then return end
+    if (not self.enable_floating) then
+      return
+    end
+
+    if (flag == self.floating) then
+      return
+    end
 
     local _geom = self.screen.geometry
     local _gap = panel_gap(flag)
@@ -264,56 +229,19 @@ function _M.new(args)
     self.width = _geom.width - 2*_gap
 
     self:struts {
-      top     = beautiful.panel_size+2*beautiful.panel_border_w+_gap,
+      top     = theme.panel_size+2*theme.panel_border_w+_gap,
       bottom  = 0,
       left    = 0,
       right   = 0
     }
 
     self.floating = flag
+    self.shape = panel_shape(self.enable_rounding and self.floating)
   end
 
-  function widget:set_rounded(flag)
-    if (flag == self.rounded) then
-      return
-    end
-
-    self.shape = panel_shape(flag)
-    self.rounded = flag
+  function widget:make_tray_current()
+    systray:update_screen(self.screen)
   end
-
-  local menu = {
-    "awesome", {
-      { "restart", awesome.restart },
-      { "quit", function() awesome.quit() end },
-    },
-    beautiful.awesome_icon,
-  }
-
-  local main_menu
-  if (has_fdo) then
-    main_menu = freedesktop.menu.build {
-      before = { menu, 
-        {"debian", debian.menu.Debian_menu.Debian}, },
-      after = {
-        { "open terminal", "alacritty" }
-      }
-    }
-  else
-    main_menu = awful.menu {
-      items = {
-        menu,
-        {"debian", debian.menu.Debian_menu.Debian},
-        {"open terminal", "alacritty"},
-      }
-    }
-  end
-
-  local mylauncher = awful.widget.launcher {
-    image = beautiful.awesome_icon,
-    menu = main_menu,
-  }
-
 
   -- Taglist
   local taglist = awful.widget.taglist {
@@ -326,12 +254,12 @@ function _M.new(args)
             client.focus:move_to_tag(t)
         end
       end),
-      awful.button({ }, 3, awful.tag.viewtoggle),
-      awful.button({ mod }, 3, function(t)
-        if client.focus then
-            client.focus:toggle_tag(t)
-        end
-      end),
+      -- awful.button({ }, 3, awful.tag.viewtoggle),
+      -- awful.button({ mod }, 3, function(t)
+      --   if client.focus then
+      --       client.focus:toggle_tag(t)
+      --   end
+      -- end),
       awful.button({ }, 4, function(t) awful.tag.viewnext(t.screen) end),
       awful.button({ }, 5, function(t) awful.tag.viewprev(t.screen) end)
     ),
@@ -403,8 +331,8 @@ function _M.new(args)
     },
     widget_template = {
       widget = wibox.container.margin,
-      top = 3,
-      bottom = 3,
+      top = 5,
+      bottom = 5,
       {
         layout = wibox.layout.align.vertical,
         {
@@ -453,26 +381,32 @@ function _M.new(args)
     layout = wibox.layout.align.horizontal,
     {
       widget = wibox.container.margin,
-      top = 3,
-      bottom = 3,
       left = 5,
       right = 1,
       {
         layout = wibox.layout.fixed.horizontal,
         spacing = 2,
-        layoutbox,
         {
           widget = wibox.container.margin,
-          left = 1,
-          right = 3,
+          top = 3,
+          bottom = 3,
           {
-            widget = wibox.widget.separator,
-            orientation = "vertical",
-            forced_width = 1,
-            thickness = 1,
-            color = "#707070",
-            span_ratio = 0.8,
-          }
+            layout = wibox.layout.fixed.horizontal,
+            layoutbox,
+            {
+              widget = wibox.container.margin,
+              left = 3,
+              right = 3,
+              {
+                widget = wibox.widget.separator,
+                orientation = "vertical",
+                forced_width = 1,
+                thickness = 1,
+                color = "#707070",
+                span_ratio = 0.9,
+              }
+            },
+          },
         },
         taglist,
         {
@@ -503,7 +437,7 @@ function _M.new(args)
           {
             layout = wibox.layout.fixed.horizontal,
             spacing = 6,
-            _sensor_manager:new_worker {
+            sensors:new_worker {
               spacing = 6,
             },
             {
@@ -511,7 +445,7 @@ function _M.new(args)
               spacing = 2,
               {
                 widget = wibox.widget.imagebox,
-                image = beautiful.icon_panel_clock,
+                image = theme.icon_panel_clock,
               },
               {
                 widget = wibox.widget.textclock,
@@ -538,7 +472,7 @@ function _M.new(args)
               span_ratio = 0.9,
             }
           },
-          _tray_manager:new_worker(screen),
+          systray:new_worker(screen),
         }
       }
     }
@@ -546,8 +480,4 @@ function _M.new(args)
   return widget
 end
 
-function _M.mt:__call(...)
-  return _M.new(...)
-end
-
-return setmetatable(_M, _M.mt)
+return setmetatable({}, { __call = function(_, ...) return _M.new(...) end })

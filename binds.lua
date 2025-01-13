@@ -14,7 +14,7 @@ local launcher  = require('config.launcher')
 local script    = require('config.script')
 local picom     = require('config.picom')
 
-local __media_keys = gears.table.join(
+local _media_keys = gears.table.join(
   awful.key({ mod }, "F1",
     function()
       sound.step_volume(-0.05)
@@ -56,25 +56,25 @@ local __media_keys = gears.table.join(
   )
 )
 
-local __wwmfact = 0.025
-local __hwmfact = 0.05
-local __layout_keys = gears.table.join(
+local _wwmfact = 0.025
+local _hwmfact = 0.05
+local _layout_keys = gears.table.join(
   awful.key({ mod, }, "r", function() awful.layout.inc(1) end,
     {description = "select next layout", group = "layout"}
   ),
   awful.key({ mod, "Shift"}, "r", function() awful.layout.inc(-1) end,
     {description = "select previous layout", group = "layout"}
   ),
-  awful.key({ mod, "Control" }, "l", function() awful.tag.incmwfact(-__wwmfact) end,
+  awful.key({ mod, "Control" }, "l", function() awful.tag.incmwfact(-_wwmfact) end,
     {description = "decrease mater window width factor", group = "layout"}
   ),
-  awful.key({ mod, "Control" }, "h", function() awful.tag.incmwfact(__wwmfact) end,
+  awful.key({ mod, "Control" }, "h", function() awful.tag.incmwfact(_wwmfact) end,
     {description = "increase master window width factor", group = "layout"}
   ),
-  awful.key({ mod, "Control" }, "k", function() awful.client.incwfact(-__hwmfact) end,
+  awful.key({ mod, "Control" }, "k", function() awful.client.incwfact(-_hwmfact) end,
     {description = "decrease master window height factor", group = "layout"}
   ),
-  awful.key({ mod, "Control" }, "j", function() awful.client.incwfact(__hwmfact) end,
+  awful.key({ mod, "Control" }, "j", function() awful.client.incwfact(_hwmfact) end,
     {description = "increase master window height factor", group = "layout"}
   ),
 
@@ -134,7 +134,7 @@ local __layout_keys = gears.table.join(
   )
 )
 
-local __launcher_keys = gears.table.join(
+local _launcher_keys = gears.table.join(
    awful.key({ mod }, "p", function() menubar.show() end,
     {description = "show the menubar", group = "launcher"}
   ),
@@ -167,7 +167,7 @@ local __launcher_keys = gears.table.join(
   )
 )
 
-local __global_keys = gears.table.join(
+local _global_keys = gears.table.join(
   awful.key({ mod }, "s", function() popup.show_help(nil, awful.screen.focused()) end,
     {description="show help", group="awesome"}
   ),
@@ -192,16 +192,14 @@ local __global_keys = gears.table.join(
   ),
   awful.key({ mod, "Shift"}, "o",
     function()
-      local panel = awful.screen.focused().panel
-      panel:set_floating(not panel.floating)
-      panel:set_rounded(not panel.rounded)
+      awful.screen.focused().panel:toggle_floating()
     end,
     {description = "togle floating panel", group = "awesome"}
   ),
 
-  __media_keys,
-  __layout_keys,
-  __launcher_keys
+  _media_keys,
+  _layout_keys,
+  _launcher_keys
 )
 
 local _M = {}
@@ -224,16 +222,16 @@ function _M.gen_for_tags(tags)
         {description = 'view tag "'..tag_name..'"', group = "tag"}
       ),
       -- Toggle tag display.
-      awful.key({ mod, "Control" }, key_id,
-        function()
-          local screen = awful.screen.focused()
-          local tag = screen.tags[i]
-          if (tag) then
-            awful.tag.viewtoggle(tag)
-          end
-        end,
-        {description = 'toggle tag "'..tag_name..'"', group = "tag"}
-      ),
+      -- awful.key({ mod, "Control" }, key_id,
+      --   function()
+      --     local screen = awful.screen.focused()
+      --     local tag = screen.tags[i]
+      --     if (tag) then
+      --       awful.tag.viewtoggle(tag)
+      --     end
+      --   end,
+      --   {description = 'toggle tag "'..tag_name..'"', group = "tag"}
+      -- ),
       -- Move client to tag.
       awful.key({ mod, "Shift" }, key_id,
         function()
@@ -264,7 +262,7 @@ function _M.gen_for_tags(tags)
 end
 
 function _M.get()
-  return __global_keys
+  return _global_keys
 end
 
 return _M

@@ -9,7 +9,7 @@ local awesome   = awesome
 local client    = client
 local tag       = tag
 
-local themes   = require('themes')
+local theme    = require('theme')
 local widget   = require('widget')
 local lclient  = require('client')
 local signals  = require('signals')
@@ -49,21 +49,17 @@ local function main()
   end)
 
   awesome.set_preferred_icon_size(128) -- ?
-  beautiful.init(themes.breeze_like.settings_with {
-    font       = "Cousine Nerd Font 9",
-    icon_theme = "Tela black dark",
-    wallpaper  = "marisa1",
-  })
+  beautiful.init(theme.get())
 
-  local tags = {"main", "dev", "web", "gaems", "media"}
+  local tags = {"dev", "web", "docs", "gaems", "media"}
   local layouts = {
-    awful.layout.suit.floating,
     awful.layout.suit.tile,
     awful.layout.suit.tile.bottom,
     awful.layout.suit.fair,
     awful.layout.suit.spiral,
     awful.layout.suit.max,
     awful.layout.suit.magnifier,
+    awful.layout.suit.floating,
   }
 
   awful.layout.layouts = layouts
@@ -75,17 +71,21 @@ local function main()
     util.apply_pape(s)
 
     for i, tag_name in ipairs(tags) do
-      awful.tag.add(tag_name, {
+      local t = awful.tag.add(tag_name, {
         screen   = s,
         layout   = layouts[1], -- Floating
         selected = (i == 1), -- Select first tag
       })
+      t.maximized_count = 0
     end
 
     s.panel = widget.panel {
       screen = s,
+      floating = theme.panel_floating,
+      rounded = theme.panel_rounded,
     }
   end)
+  awful.screen.focused().panel:make_tray_current()
 
   root.keys(gears.table.join(binds.get(), binds.gen_for_tags(tags)))
   root.buttons(gears.table.join(

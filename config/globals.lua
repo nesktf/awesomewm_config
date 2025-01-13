@@ -6,7 +6,7 @@ local _M = {}
 
 _M.path = {
   awesome = awesome_dir,
-  themes  = awesome_dir .. "/themes",
+  theme   = awesome_dir .. "/theme",
   config  = awesome_dir .. "/config",
   script  = awesome_dir .. "/config/script",
   home    = home_dir,

@@ -3,12 +3,12 @@ local beautiful = require('beautiful')
 
 local titlebar = require("client.titlebar")
 
-local function __signal(id, callback)
+local function signal(id, callback)
   return {id=id, callback=callback}
 end
 
-local __client_signals = {
-  __signal("manage", function(c)
+local _client_signals = {
+  signal("manage", function(c)
     -- Set the windows at the slave, i.e. put it at the end of others instead of setting it master.
     -- if (not awesome.startup) then
     --   awful.client.setslave(c)
@@ -26,25 +26,29 @@ local __client_signals = {
     end
   end),
 
-  __signal("focus", function(c)
+  signal("focus", function(c)
     c.border_color = beautiful.border_focus
   end),
 
-  __signal("unfocus", function(c)
+  signal("unfocus", function(c)
     c.border_color = beautiful.border_normal
   end),
 
-  __signal("request::titlebars", function(c)
+  signal("request::titlebars", function(c)
     c.titlebars = titlebar(c)
   end),
 
-  __signal("property::floating", function(c)
+  signal("property::floating", function(c)
     titlebar.update(c)
   end),
+
+  signal("property::tagged", function(c)
+    require("naughty").notify{text = c.name}
+  end)
 }
 
-local __tag_signals = {
-  __signal("property::layout", function(t)
+local _tag_signals = {
+  signal("property::layout", function(t)
     local clients = t:clients()
     for _,c in pairs(clients) do
       titlebar.update(c)
@@ -58,14 +62,11 @@ local __tag_signals = {
   -- end)
 }
 
-local _M = {}
-
-function _M.client()
-  return __client_signals
-end
-
-function _M.tag()
-  return __tag_signals
-end
-
-return _M
+return {
+  client = function()
+    return _client_signals
+  end,
+  tag = function()
+    return _tag_signals
+  end
+}

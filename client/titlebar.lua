@@ -1,43 +1,36 @@
 local awful     = require('awful')
 local wibox     = require('wibox')
 local gears     = require('gears')
-local beautiful = require('beautiful')
+local theme     = require('theme')
 
-local _M = { mt = {} }
+local _M = {}
 
-function _M.update(c)
+function _M.toggle(c, toggle, floating)
   if (c.requests_no_titlebar) then
-    c.border_width = beautiful.border_width
     return
   end
 
-  local function is_floating()
-    return (c.floating or (c.first_tag ~= nil and c.first_tag.layout.name == "floating"))
-  end
-
-  if (is_floating()) then
-    awful.titlebar.show(c, "top")
-    awful.titlebar.show(c, "bottom")
-    c.border_width = beautiful.border_width
-  else
+  if (not toggle) then
     awful.titlebar.hide(c, "top")
     awful.titlebar.hide(c, "bottom")
-    c.border_width = beautiful.border_width_tiling
+  elseif (floating) then
+    awful.titlebar.show(c, "top")
+    awful.titlebar.show(c, "bottom")
   end
 end
 
-function _M.new(client)
+function _M.setup(client)
   assert(client ~= nil)
 
   local titlebar = {
     top = awful.titlebar(client, {
       position = "top",
-      size     = beautiful.titlebar_top_size,
+      size     = theme.titlebar_top_size,
     }),
     bottom = awful.titlebar(client, {
       position = "bottom",
-      size     = beautiful.titlebar_bot_size,
-    })
+      size     = theme.titlebar_bot_size,
+    }),
   }
 
   titlebar.top:setup {
@@ -62,7 +55,7 @@ function _M.new(client)
         end),
         awful.button({ }, 3, function()
           client:emit_signal("request::activate", "titlebar", {raise = true})
-          awful.mouse.client.resize(client)
+          awful.mouse.c.resize(client)
         end)
       ),
       awful.titlebar.widget.titlewidget(client),
@@ -83,12 +76,6 @@ function _M.new(client)
   titlebar.bottom:setup {
     widget = wibox.container.background,
   }
-
-  return titlebar
 end
 
-function _M.mt:__call(...)
-  return _M.new(...)
-end
-
-return setmetatable(_M, _M.mt)
+return _M

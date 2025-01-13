@@ -1,11 +1,10 @@
 local awful = require('awful')
 local gears = require('gears')
+local theme = require("theme")
 
 local keys = require('config.globals').keys
 local mod  = keys.mod
 local alt  = keys.alt
-
-local cutil = require('client.util')
 
 local __client_buttons = gears.table.join( -- Mouse bindings
   awful.button({ }, 1, function (c)
@@ -23,7 +22,10 @@ local __client_buttons = gears.table.join( -- Mouse bindings
 
 local __client_keys = gears.table.join(
   awful.key({ mod, "Shift" }, "f",
-    cutil.toggle_fullscreen,
+    function(c)
+      c.fullscreen = not c.fullscreen
+      c:raise()
+    end,
     {description = "toggle fullscreen", group = "client"}
   ),
   awful.key({ "Control", alt }, "q",
@@ -38,7 +40,13 @@ local __client_keys = gears.table.join(
     {description = "minimize", group = "client"}
   ),
   awful.key({ mod }, "a",
-    cutil.toggle_maximized,
+    function(c)
+      if (c.fullscreen) then
+        return
+      end
+      c.maximized = not c.maximized
+      c:raise()
+    end,
     {description = "(un)maximize", group = "client"}
   ),
   awful.key({ mod }, "t",
@@ -46,11 +54,18 @@ local __client_keys = gears.table.join(
     {description = "toggle keep on top", group = "client"}
   ),
   awful.key({ mod }, "x",
-    cutil.toggle_titlebars,
+    function(c)
+      awful.titlebar.toggle(c, "top")
+      awful.titlebar.toggle(c, "bottom")
+    end,
     {description = "toggle window borders", group = "client"}
   ),
   awful.key({ mod }, "z",
-    cutil.toggle_tiling_borders,
+    function(c)
+      c.border_width = (c.border_width == theme.border_width)
+        and theme.border_width_tiling
+        or theme.border_width
+    end,
     {description = "toggle tiling borders", group = "client"}
   ),
   awful.key({ mod, alt }, "l",
