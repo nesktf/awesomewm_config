@@ -64,6 +64,9 @@ local _client_signals = {
     c.border_width =
       toggle_titlebar and (floating and theme.border_width or theme.border_width_tiling) or 0
 
+    if (not t) then
+      return
+    end
     t.maximized_count = t.maximized_count + (toggle_titlebar and -1 or 1)
     panel:set_floating(t.maximized_count == 0)
   end),
@@ -102,7 +105,12 @@ local _tag_signals = {
   end),
   
   signal("property::selected", function(t)
-    t.screen.panel:set_floating(t.maximized_count == 0)
+    if (not t.screen) then
+      return
+    end
+    if (t.screen.panel) then
+      t.screen.panel:set_floating(t.maximized_count == 0)
+    end
   end)
 }
 
