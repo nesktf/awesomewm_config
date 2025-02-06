@@ -25,12 +25,6 @@ function _M.apply_pape(screen)
   end
 end
 
-function _M.connect_signal(thing, signals)
-  for _, signal in ipairs(signals) do
-    thing.connect_signal(signal.id, signal.callback)
-  end
-end
-
 function _M.make_launcher(params)
   local mod = assert(params.mod)
   local key = assert(params.key)

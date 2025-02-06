@@ -12,7 +12,7 @@ local tag       = tag
 local theme    = require('theme')
 local widget   = require('widget')
 local lclient  = require('client')
-local signals  = require('signals')
+local ltag     = require('tag')
 local config   = require('config')
 local binds    = require('binds')
 
@@ -51,29 +51,18 @@ local function main()
   awesome.set_preferred_icon_size(128) -- ?
   beautiful.init(theme.get())
 
-  local tags = {"dev", "web", "docs", "gaems", "media"}
-  local layouts = {
-    awful.layout.suit.tile,
-    awful.layout.suit.tile.bottom,
-    awful.layout.suit.fair,
-    awful.layout.suit.spiral,
-    awful.layout.suit.max,
-    awful.layout.suit.magnifier,
-    awful.layout.suit.floating,
-  }
-
-  awful.layout.layouts = layouts
-  awful.rules.rules = lclient.rules.get()
+  awful.layout.layouts = ltag.layouts
+  awful.rules.rules = lclient.rules
   awful.util.shell = config.globals.env.shell -- For autostart
   menubar.utils.terminal = config.globals.env.term
 
   awful.screen.connect_for_each_screen(function(s)
     util.apply_pape(s)
 
-    for i, tag_name in ipairs(tags) do
-      local t = awful.tag.add(tag_name, {
+    for i, curr_tag in ipairs(ltag.tags) do
+      local t = awful.tag.add(curr_tag.name, {
         screen   = s,
-        layout   = layouts[1], -- Floating
+        layout   = ltag.layouts[curr_tag.layout],
         selected = (i == 1), -- Select first tag
       })
       t.maximized_count = 0
@@ -87,14 +76,16 @@ local function main()
   end)
   awful.screen.focused().panel:make_tray_current()
 
-  root.keys(gears.table.join(binds.get(), binds.gen_for_tags(tags)))
-  root.buttons(gears.table.join(
-    awful.button({ }, 4, awful.tag.viewnext),
-    awful.button({ }, 5, awful.tag.viewprev)
-  ))
+  root.keys(gears.table.join(binds.keys, ltag.keys))
+  root.buttons(binds.buttons)
 
-  util.connect_signal(client, signals.client())
-  util.connect_signal(tag, signals.tag())
+  for _, signal in ipairs(lclient.signals) do
+    client.connect_signal(signal.id, signal.callback)
+  end
+
+  for _, signal in ipairs(ltag.signals) do
+    tag.connect_signal(signal.id, signal.callback)
+  end
 
   config.autostart.trigger()
 end

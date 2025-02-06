@@ -1,8 +1,7 @@
 local awful = require('awful')
+local binds = require('client.binds')
 
-local cbinds = require('client.binds')
-
-local __client_rules =  {
+return {
   { -- Global rules
     rule = {},
     properties = {
@@ -10,8 +9,8 @@ local __client_rules =  {
       raise = true,
       screen = awful.screen.preferred,
       placement = awful.placement.no_overlap+awful.placement.no_offscreen,
-      buttons = cbinds.buttons,
-      keys = cbinds.keys,
+      buttons = binds.buttons,
+      keys = binds.keys,
     },
   },
   { -- Titlebar rule
@@ -53,15 +52,12 @@ local __client_rules =  {
     }
   },
   { -- Hydrus media viewer fullscreen override
-    rule_any = {
-      name = {
-        "hydrus client media viewer"
-      }
+    rule = {
+      name = "hydrus client media viewer",
     },
     properties = {
-      fullscreen = true,
+      fullscreen = false,
       placement = awful.placement.centered,
-      floating = true,
     }
   },
   { -- Always floating
@@ -105,11 +101,3 @@ local __client_rules =  {
     }
   },
 }
-
-local _M = {}
-
-function _M.get()
-  return __client_rules
-end
-
-return _M

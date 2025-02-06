@@ -30,7 +30,7 @@ function _M.new(args)
   local geom  = screen.geometry
   local gap   = panel_gap(floating)
 
-  -- Panel settings
+  -- Create wibox
   local widget = wibox {
     type         = 'dock',
     screen       = screen,
@@ -89,7 +89,7 @@ function _M.new(args)
     systray.update_screen(self.screen)
   end
 
-  -- Taglist
+  -- Setup wibox contents
   widget:setup {
     layout = wibox.layout.align.horizontal,
     {

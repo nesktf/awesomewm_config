@@ -50,7 +50,7 @@ function _M.new(args)
     visible = true,
     buttons = gears.table.join(
       awful.button({ }, 1, function()
-        _systray:update_screen(awful.screen.focused())
+        _M.update_screen(awful.screen.focused())
       end)
     )
   }
