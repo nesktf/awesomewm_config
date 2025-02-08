@@ -8,7 +8,7 @@ local systray    = require('widget.systray')
 local sensors    = require('widget.sensors')
 local text_focus = theme.util.markdown_fg_focus
 -- local sound = require('widget.sound')
--- local mpris = require('widget.mpris')
+local mpris = require('widget.mpris')
 
 local function panel_gap(is_floating) 
   return is_floating and theme.panel_gap*2 or 0 
@@ -277,17 +277,32 @@ function _M.new(args)
       right = 5,
       {
         layout = wibox.layout.fixed.horizontal,
-        (function()
-          local clock = wibox.widget {
-            widget = wibox.container.margin,
-            right = 4,
+        {
+          widget = wibox.container.margin,
+          right = 4,
+          {
+            layout = wibox.layout.fixed.horizontal,
+            spacing = 6,
+            sensors {
+              spacing = 6,
+            },
             {
               layout = wibox.layout.fixed.horizontal,
-              spacing = 6,
-              sensors {
-                spacing = 6,
-              },
+              spacing = 2,
               {
+                widget = wibox.widget.imagebox,
+                image = theme.icon_panel_mpris,
+              },
+              -- {
+              --   layout = wibox.container.scroll.horizontal,
+              --   max_size = 140,
+              --   step_function = wibox.container.scroll.step_functions.linear_back_and_forth,
+              --   speed = 20,
+                mpris.new(screen),
+              -- },
+            },
+            (function()
+              local clock = wibox.widget{
                 layout = wibox.layout.fixed.horizontal,
                 spacing = 2,
                 {
@@ -297,16 +312,16 @@ function _M.new(args)
                 {
                   widget = wibox.widget.textclock,
                   format = text_focus("%H:%M"),
-                  -- format = fg_text("%y-%m-%d %H:%M"),
                 }
-              },
-            },
-          }
-          local calendar = awful.widget.calendar_popup.month()
-          calendar:attach(clock, "tr")
+              }
 
-          return clock
-        end)(),
+              local cal = awful.widget.calendar_popup.month()
+              cal:attach(clock, "tr")
+
+              return clock
+            end)(),
+          }
+        },
         {
           layout = wibox.layout.fixed.horizontal,
           spacing = 3,

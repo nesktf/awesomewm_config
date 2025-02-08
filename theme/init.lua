@@ -139,6 +139,8 @@ _conf.icon_panel_tray_open =
   icon_file("panel-tray-open.png")
 _conf.icon_panel_tray_close =
   icon_file("panel-tray-close.png")
+_conf.icon_panel_mpris =
+  icon_file("panel-mpris.png")
 _conf.awesome_icon =
   theme_assets.awesome_icon(_conf.menu_height, _conf.bg_focus, _conf.fg_focus)
 
@@ -155,6 +157,8 @@ _conf.icon_arrow_left =
   icon_file("arrow_left.png")
 _conf.icon_application_menu =
   icon_file("application_menu.png")
+_conf.mpris_default_icon =
+  icon_file("mpris-default.png")
 
 return setmetatable({
   get = function()
