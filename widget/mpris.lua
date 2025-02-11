@@ -43,14 +43,14 @@ local state = {
     bg = theme.titlebar_bg_focus,
   },
   worker_list = {},
-  player_state = { po = "-" },
+  player_state = { ln = "-" },
 
   update = function(self)
     awful.spawn.easy_async_with_shell(
       string.format("playerctl -p mpd -f '%s' metadata", state_format),
-      function(stdout, _, _, stderr)
-        if (stderr ~= 0) then
-          self.player_state.po = "-"
+      function(stdout, _, _, exit_code)
+        if (exit_code ~= 0) then
+          self.player_state.ln = "-"
         end
         parse_query(self.player_state, stdout)
         for _, worker in pairs(self.worker_list) do
@@ -97,6 +97,10 @@ local state = {
           {
             widget = wibox.widget.textbox,
             text = string.format("Track: %s", self.player_state.tr)
+          },
+          {
+            widget = wibox.widget.textbox,
+            text = string.format("Album: %s", self.player_state.al)
           },
           {
             widget = wibox.widget.textbox,
