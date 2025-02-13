@@ -1,0 +1,20 @@
+[Desktop Entry]
+Categories=FileTools;Utility;
+Comment[en_GB]=A booru-like media organizer for the desktop
+Comment=A booru-like media organizer for the desktop
+Exec=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=hydrus_client io.github.hydrusnetwork.hydrus --db_dir=/sdr/media/hydrus/
+GenericName[en_GB]=
+GenericName=
+Icon=io.github.hydrusnetwork.hydrus
+MimeType=
+Name[en_GB]=Hydrus Client
+Name=Hydrus Client
+Path=
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+Version=1.0
+X-Flatpak=io.github.hydrusnetwork.hydrus
+X-KDE-SubstituteUID=false
+X-KDE-Username=

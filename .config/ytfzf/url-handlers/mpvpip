@@ -1,0 +1,26 @@
+#!/bin/sh
+
+IFS="$(printf '\t')"
+read -r ytdl_pref is_audio_only is_detach video_pref audio_pref url_handler_opts _
+
+die () {
+    printf "\033[31m$2\033[0m"
+    exit "$1"
+}
+command_exists () {
+    command -v "$1" > /dev/null 2>&1
+}
+detach_cmd() {
+	nohup "$@" >"/dev/null" 2>&1 &
+}
+
+command_exists "mpv" || die 3 "mpv must be installed for the vlc url handler\n"
+
+
+unset IFS
+
+set -f
+case "$is_detach" in
+    0) mpv --x11-name=mpvpip --ytdl-format="22/21/20/19/18/17/16/best" --loop=inf "$@" ;;
+    1) detach_cmd mpv --x11-name=mpvpip --ytdl-format="22/21/20/19/18/17/16/best" --loop=inf "$@" ;;
+esac

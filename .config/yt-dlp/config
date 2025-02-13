@@ -1,0 +1,10 @@
+-o "/sdr/media/.queue/ytdlp/%(title)s.%(ext)s"
+
+
+#--downloader aria2c
+#--downloader-args aria2c:'-c -j 8 -x 8 -s 5 -k 1M'
+
+# --retries=infinite
+# --file-access-retries=infinite
+# --fragment-retries=infinite
+# --extractor-retries=infinite

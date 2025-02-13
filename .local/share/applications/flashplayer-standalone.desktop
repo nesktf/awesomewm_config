@@ -1,0 +1,17 @@
+[Desktop Entry]
+Categories=Audio;AudioVideo;Graphics;GTK;Player;Video;Viewer;
+Comment=Player for using content created on the Adobe Flash platform
+Exec=/usr/bin/flashplayer
+GenericName=Flash Player
+Icon=6CC5_flashplayer_32_sa.0
+MimeType=application/x-shockwave-flash;image/gif;image/jpg;image/png;
+Name=Adobe Flash Player Standalone
+NoDisplay=true
+Path=
+StartupNotify=false
+Terminal=false
+TerminalOptions=
+Type=Application
+Version=1.0
+X-KDE-SubstituteUID=false
+X-KDE-Username=

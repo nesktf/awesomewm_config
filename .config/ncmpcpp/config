@@ -1,0 +1,40 @@
+## NCMPCPP CONFIG -> ~/.config/ncmpcpp/config ##
+
+# Formatting #
+song_columns_list_format = "(2f)[white]{: }(45)[white]{t|f:Title}(25)[cyan]{b:Album}(45)[blue]{a:Artist}(7f)[magenta]{l}"
+current_item_prefix = "$r"
+current_item_suffix = "$/r"
+
+# Browser #
+browser_display_mode = "columns"
+
+# Status Bar #
+progressbar_look = "▃▃▃"
+song_status_format = "$b$7♫ $6%t $4⟫$3⟫ $5%b "
+now_playing_prefix = "$b"
+now_playing_suffix = "$/b"
+
+# Header (overwrites status bar) #
+#user_interface = "alternative"
+alternative_header_first_line_format = "{%t}|{%f}"
+alternative_header_second_line_format = "{%a - %b}"
+
+# Media Library #
+media_library_primary_tag = "genre"
+media_library_hide_album_dates = "yes"
+media_library_albums_split_by_date = "no"
+
+# Visualizer #
+visualizer_data_source = "/tmp/mpd.fifo"
+visualizer_output_name = "my_fifo"
+visualizer_in_stereo = "yes"
+visualizer_type = "spectrum"
+
+# Misc #
+connected_message_on_startup = "no"
+mouse_support = "yes"
+mouse_list_scroll_whole_page = "yes"
+lines_scrolled = "1"
+cyclic_scrolling = "yes"
+screen_switcher_mode = playlist, media_library, browser
+mpd_crossfade_time = 5

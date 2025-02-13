@@ -1,0 +1,57 @@
+{
+	"extractor": {
+		"base-directory": "/sdr/media/downloads/media_queue/galleries/",
+		"extension-map": {
+			"jpeg": "jpg",
+			"jpe":	"jpg",
+			"jfif": "jpg",
+			"jif": "jpg",
+			"jfi": "jpg"
+		},
+
+		"postprocessors": [ {
+			"name": "classify",
+			"blacklist": ["mangadex"],
+			"mapping": {
+				"pictures": ["jpg", "jpeg", "png", "gif", "bmp", "svg", "webp"],
+				"video": ["flv", "ogv", "avi", "mp4", "mpg", "mpeg", "3gp", "mkv", "webm", "vob", "wmv"]
+			}
+		}],
+
+		"4chan": {
+			"directory": ["[{category}_{board}_{thread}] {title}"]
+		},
+		"mangadex": {
+			"base-directory": "/sdr/media/galleries/",
+			"directory": ["{manga}","[Vol {volume}]","[Ch {chapter}] {title}"],
+			"chapter-filter": "lang == 'en'",
+      "postprocessors": [
+        {
+          "name": "zip",
+          "keep-files": false,
+          "compression": "zip"
+        }
+      ]
+		}
+	},
+	"downloader": {
+		"filesize-min": null,
+		"filesize-max": null,
+		"mtime": true,
+		"part": true,
+		"part-directory": null,
+		"rate": null,
+		"retries": 4,
+		"timeout": 30.0,
+		"verify": true
+	},
+	"output": {
+		"mode": "auto",
+		"progress": true,
+		"shorten": true,
+		"skip": true,
+		"log": "[{name}][{levelname}] {message}",
+		"logfile": null,
+		"unsupportedfile": null
+	}
+}

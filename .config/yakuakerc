@@ -1,0 +1,12 @@
+[Appearance]
+Skin=monochrome
+SkinInstalledWithKns=true
+
+[Dialogs]
+FirstRun=false
+
+[Window]
+Height=60
+KeepOpen=false
+ShowSystrayIcon=false
+ShowTabBar=false

@@ -1,0 +1,15 @@
+{
+  "diagnostics.globals": [
+    "awesome",
+    "client",
+    "tag",
+    "screen",
+    "root",
+    "mouse",
+    "keygrabber"
+  ],
+  "diagnostics.disable": [
+    "lowercase-global",
+    "trailing-space"
+  ]
+}

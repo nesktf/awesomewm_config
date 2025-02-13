@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE gui SYSTEM 'kpartgui.dtd'>
+<gui name="externaltools" translationDomain="kateexternaltoolsplugin" version="6">
+ <MenuBar>
+  <Menu name="tools">
+   <text>&amp;Tools</text>
+   <Action name="tools_external" group="tools_operations3"/>
+  </Menu>
+ </MenuBar>
+ <ToolBar name="mainToolBar" noMerge="1">
+  <text>Main Toolbar</text>
+ </ToolBar>
+ <ActionProperties/>
+</gui>

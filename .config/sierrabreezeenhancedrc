@@ -1,0 +1,16 @@
+[Common]
+ShadowSize=ShadowSmall
+ShadowSizeInactiveWindows=ShadowSmallInactiveWindows
+
+[Windeco]
+BackgroundOpacity=95
+ButtonHOffset=5
+ButtonPadding=0
+ButtonStyle=plasma
+CornerRadius=4
+DrawBackgroundGradient=false
+DrawTitleBarSeparator=false
+HideTitleBar=MaximizedWindows
+TitleAlignment=AlignLeft
+UnisonHovering=false
+hOffset=5

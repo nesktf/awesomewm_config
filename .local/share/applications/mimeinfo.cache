@@ -1,0 +1,13 @@
+[MIME Cache]
+application/json=librewolf_work.desktop;
+application/pdf=librewolf_work.desktop;
+application/x-shockwave-flash=flashplayer-standalone.desktop;ruffle.desktop;
+application/x-xpinstall=librewolf_work.desktop;
+application/xhtml+xml=librewolf_work.desktop;
+image/gif=flashplayer-standalone.desktop;ruffle.desktop;
+image/jpg=flashplayer-standalone.desktop;ruffle.desktop;
+image/png=flashplayer-standalone.desktop;ruffle.desktop;
+text/html=librewolf_work.desktop;
+text/xml=librewolf_work.desktop;
+x-scheme-handler/http=librewolf_work.desktop;
+x-scheme-handler/https=librewolf_work.desktop;
